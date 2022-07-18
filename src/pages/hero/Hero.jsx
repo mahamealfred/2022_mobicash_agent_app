@@ -4,7 +4,7 @@ import TopNav from '../../components/topNav/TopNav';
 // import Buttons from '../../components/button/Buttons';
 // import { useHistory } from 'react-router-dom';
 
-
+import {Link} from "react-router-dom";
 const Hero = () => {
   // const  history=useHistory();
   return (
@@ -20,7 +20,7 @@ const Hero = () => {
         From shopping at your local store to paying online and even donating to charity by.
         </p>
         <div className="buttons">   
-      <a href="/login">Get Started</a>
+      <Link to="/login">Get Started</Link>
     </div>
       </header>
     </>
