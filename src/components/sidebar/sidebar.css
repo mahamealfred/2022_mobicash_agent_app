@@ -1,0 +1,13 @@
+.sidebar{
+    flex: 0.3;
+    height: auto;
+    /* height: calc(100vh - 50px); */
+    /* background-color:rgb(206, 204, 204); */
+    /* background-color:#F9842C; */
+    /* background-color:#666565; */
+    background-color:#ffff; 
+    position:static;
+    top: 4px;
+    margin-top: 20px;
+    border-radius: 5px;
+}

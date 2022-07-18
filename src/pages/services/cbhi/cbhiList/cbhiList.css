@@ -1,0 +1,8 @@
+.transfer{
+    flex:4;
+    padding: 4px;
+    margin-top: 1.2em;
+    background-color:#ffff;
+    border-radius: 12px;
+    font-size:20px;
+}

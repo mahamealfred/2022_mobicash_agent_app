@@ -1,0 +1,89 @@
+.widgetLarge{
+    flex: 3;
+    background-color:#ffff;
+    /* height: calc(83vh - 50px); */
+    height: auto;
+    border-radius: 8px;
+    -webkit-box-shadow: 5px 5px 15px 5px #000000; 
+    box-shadow: 0px 0px 15px -10px rgba(0,0,0,0.75);
+    padding: 20px;
+}
+.widgetLargeTitle{
+    font-size: 22px;
+    font-weight: 600;
+    color: #0474BA;
+}
+.btnImage{
+    width: 180px;
+    height: 160px;
+    cursor: pointer;
+}
+.images{
+object-fit: contain;
+width: 170;
+height: 150;
+}
+/* @media screen and (min-width: 1200px) {
+    .btnImage{
+        width: 180px;
+        height: 160px;   
+    }
+    .images{
+        
+        width: 100;
+        height: 90;
+        }
+} */
+@media screen and  (max-width: 400px) {
+    .btnImage{
+        width: 120px;
+        height: 100px;
+        
+    }
+    .images{
+
+        width: 100;
+        height: 90;
+        }
+
+  }
+  @media screen and  (min-width: 401px) and (max-width: 500px) {
+    .btnImage{
+        width: 100px;
+        height: 90px; 
+    }
+    .images{
+        width: 120;
+        height: 90;
+        }
+        .widgetLarge{
+            flex: 4
+        }
+        
+        
+  }
+  @media screen and  (min-width: 501px) and (max-width: 800px) {
+    .btnImage{
+        width: 90px;
+        height: 90px; 
+    }
+    .images{
+      
+        width: 100;
+        height: 90;
+        }
+      
+  }
+  @media screen and  (min-width: 801px) {
+    .btnImage{
+        width: 175px;
+        height: 100px;
+        
+    }
+    .images{
+        width: 180;
+        height: 170;
+        }
+        
+  }
+ 

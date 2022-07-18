@@ -1,0 +1,9 @@
+
+.linkStyle{
+    color:#fff;
+    text-decoration:none;
+}
+.linkStyle:active {
+    color: black;
+   
+  }
