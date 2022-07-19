@@ -7,6 +7,9 @@ import Snippets from "../pages/snippets/Snippets";
 import Electricity from "../pages/services/electricity/Electricity";
 import ElectricityPayment from "../pages/services/electricity/electricityPayment/ElectricityPayament";
 import Cbhi from "../pages/services/cbhi/Cbhi";
+import CbhiPayment from "../pages/services/cbhi/cbhiPayment/CbhiPayment";
+import CbhiDisplayDetails from "../pages/services/cbhi/cbhiDisplayDetails/CbhiDisplayDetails";
+import ElectricityDisplayDetails from "../pages/services/electricity/electricityDisplayDetails/ElectricityDisplayDetails";
 
 
 function App() {
@@ -44,6 +47,17 @@ function App() {
             </>
           )}
         />
+        <Route
+        component={({ match }) => (
+          <>
+            <PrivateRoute
+              exact
+              path={`${path}/electricity-payment-details`}
+              component={ElectricityDisplayDetails}
+            />
+          </>
+        )}
+      />
          <Route
           component={({ match }) => (
             <>
@@ -61,7 +75,18 @@ function App() {
               <PrivateRoute
                 exact
                 path={`${path}/cbhi-payment`}
-                component={ElectricityPayment}
+                component={CbhiPayment}
+              />
+            </>
+          )}
+        />
+         <Route
+          component={({ match }) => (
+            <>
+              <PrivateRoute
+                exact
+                path={`${path}/cbhi-payment-details`}
+                component={CbhiDisplayDetails}
               />
             </>
           )}

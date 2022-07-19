@@ -1,6 +1,6 @@
 import React from 'react'
 import Header from '../../../../components/header/Header';
-import './electricityPayment.css';
+import './cbhiPayment.css';
 import { styled } from '@mui/material/styles';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
@@ -10,25 +10,32 @@ import Button from "@mui/material/Button";
 import { ButtonGroup, Box,TextField } from "@mui/material";
 import MenuItem from "@mui/material/MenuItem";
 import { useHistory } from 'react-router-dom';
-
+const members=[{
+  
+  name:"Bwiza Leatitia"
+},{
+  name:"Mahame Alfred"
+},
+{
+    name:"Rushema Kanuma Prince"
+  }
+]
 const Img = styled('img')({
     margin: 'auto',
     display: 'block',
     maxWidth: '100%',
     maxHeight: '100%',
   });
- 
-const ElectricityPayment= () => {
+const CbhiPayment = () => {
   const history=useHistory();
-  const handleCancel=()=>{
-    history.push('/dashboard/electricity',{push:true}) 
-  }
   const handleSubmit=()=>{
-    history.push('/dashboard/electricity-payment-details',{push:true}) 
+history.push('/dashboard/cbhi-payment-details',{push:true})
   }
- 
+  const handleCancel=()=>{
+    history.push('/dashboard/cbhi',{push:true}) 
+  }
   return (
-    <div className='electricityPayamentContainer'>
+    <div className='cbhiPayment'>
         <Header/>
         <Paper
       sx={{
@@ -50,22 +57,70 @@ const ElectricityPayment= () => {
           <Grid item xs container direction="column" spacing={2}>
             <Grid item xs>
               <Typography gutterBottom variant="subtitle1" component="div" mt={4} sx={{ fontSize: "28px", fontWeight: "bold" }}>
-              Electricity Service
+              Mutuwel Service
               </Typography>
               <Typography variant="body2" mt={1} sx={{ fontSize: "14px", fontWeight: "bold" }} gutterBottom>
-               Payer Name
+               Name
               </Typography>
               <Typography variant="body3" sx={{ fontSize: "20px", fontWeight: "bold" }} color="text.secondary">
-                Uwase Liliane
+                Mahame Alfred
               </Typography>
               <Typography mt={1} sx={{ fontSize: "14px", fontWeight: "bold" }}  variant="body2" gutterBottom>
-                Meter 
+                House Hold NID
               </Typography>
               <Typography variant="body3" sx={{ fontSize: "20px", fontWeight: "bold" }} color="text.secondary">
-                045678388389
+                1199029299282828
               </Typography>
               <Typography mt={1} sx={{ fontSize: "14px", fontWeight: "bold" }}  variant="body2" gutterBottom>
-                Phone
+                Year of payment
+              </Typography>
+              <Typography variant="body3" sx={{ fontSize: "20px", fontWeight: "bold" }} color="text.secondary">
+                201
+              </Typography>
+              <Typography mt={1} sx={{ fontSize: "14px", fontWeight: "bold" }}  variant="body2" gutterBottom>
+                Total Premium 
+              </Typography>
+              <Typography  variant="body3" sx={{ fontSize: "20px", fontWeight: "bold" }} color="text.secondary">
+                12000
+              </Typography>
+              <Typography mt={1} sx={{ fontSize: "14px", fontWeight: "bold" }}  variant="body2" gutterBottom>
+                House Hold Category 
+              </Typography>
+              <Typography variant="body3" sx={{ fontSize: "20px", fontWeight: "bold" }} color="text.secondary">
+                3
+              </Typography>
+              <Typography mt={1} sx={{ fontSize: "14px", fontWeight: "bold" }}  variant="body2" gutterBottom>
+                Number Of Members 
+              </Typography>
+              <Typography variant="body3" sx={{ fontSize: "20px", fontWeight: "bold" }} color="text.secondary">
+                4
+              </Typography>
+              <Typography mt={1} sx={{ fontSize: "14px", fontWeight: "bold" }}  variant="body2" gutterBottom>
+                Name Of Members 
+              </Typography>
+              <Typography variant="body3" sx={{ fontSize: "20px", fontWeight: "bold" }} color="text.secondary">
+              <TextField
+                    id="standard-select-currency"
+                    select
+                    // value={paymentYear}
+                    fullWidth
+                    // onChange={handleChange}
+                    helperText="Please Check Name Of Members"
+                    variant="standard"
+                  >
+                    {members.map((option) => (
+                      <MenuItem disabled key={option.name} value={option.name}>{option.name}</MenuItem>
+                    ))}
+                  </TextField>
+              </Typography>
+              <Typography mt={1} sx={{ fontSize: "14px", fontWeight: "bold" }}  variant="body2" gutterBottom>
+                Already Paid
+              </Typography>
+              <Typography variant="body3" sx={{ fontSize: "20px", fontWeight: "bold" }} color="text.secondary">
+                12000 Rwf
+              </Typography>
+              <Typography mt={1} sx={{ fontSize: "14px", fontWeight: "bold" }}  variant="body2" gutterBottom>
+                Payer Phone 
               </Typography>
               <Typography variant="body3" sx={{ fontSize: "20px", fontWeight: "bold" }} color="text.secondary">
               <TextField
@@ -79,9 +134,9 @@ const ElectricityPayment= () => {
                   />
               </Typography>
               <Typography mt={1} sx={{ fontSize: "14px", fontWeight: "bold" }}  variant="body2" gutterBottom>
-                Amount
+                Amount 
               </Typography>
-              <Typography  variant="body3" sx={{ fontSize: "20px", fontWeight: "bold" }} color="text.secondary">
+              <Typography variant="body3" sx={{ fontSize: "20px", fontWeight: "bold" }} color="text.secondary">
               <TextField
                     label="Amount"
                     name="amount"
@@ -92,8 +147,6 @@ const ElectricityPayment= () => {
                     required
                   />
               </Typography>
-              
-             
               <Typography mt={1} sx={{ fontSize: "14px", fontWeight: "bold" }}  variant="body2" gutterBottom>
                 Agent PIN
               </Typography>
@@ -146,7 +199,7 @@ const ElectricityPayment= () => {
           </Grid>
           <Grid item>
             <Typography variant="subtitle1" component="div">
-              Electricity Service
+              Mutuwel Service
             </Typography>
           </Grid>
         </Grid>
@@ -156,4 +209,4 @@ const ElectricityPayment= () => {
   )
 }
 
-export default ElectricityPayment
+export default CbhiPayment
