@@ -1,12 +1,12 @@
 /* @import url("https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@400;600&display=swap"); */
-/* 
+
 *,
 :after,
 :before {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-} */
+}
 
 :root {
   /* Primary color */
@@ -167,10 +167,9 @@ li{
   width: auto;
   margin-bottom: 0;
 }
-
 @media screen and (min-width:1024px) {
   html{
-    font-size: 100%;
+    font-size: 90%;
   }
   .main{
     max-width: 1440px;
@@ -189,7 +188,7 @@ li{
 
   .snippets__body{
     display: flex;
-    gap: 20%;
+    gap: 15%;
   }
 
   .snippets__body__text{
