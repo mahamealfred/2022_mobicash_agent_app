@@ -115,7 +115,7 @@ li{
 .buttons a {
   text-decoration: none;
   color: #fff;
-  font-size: 1.8rem;
+  font-size: 1rem;
   font-weight: 600;
   display: block;
   padding: 1em 0;
@@ -155,7 +155,7 @@ li{
 }
 
 .content{
-  margin-bottom: 4em;
+  margin-bottom: 3em;
 }
 
 .social a{
@@ -265,6 +265,6 @@ li{
 
 @media only screen and (max-device-width: 480px) {
   html{
-    font-size: 85%;
+    font-size: 80%;
   }
 }
