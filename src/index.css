@@ -245,3 +245,26 @@ li{
     margin-right: auto;
   }
 }
+@media screen and (min-width:500px) {
+  html{
+    font-size: 85%;
+  }
+}
+@media screen and (min-width: 769px) {
+  html{
+    font-size: 85%;
+  }
+}
+
+@media screen and (min-device-width: 481px) and (max-device-width: 768px) { 
+  
+  html{
+    font-size: 80%;
+  }
+}
+
+@media only screen and (max-device-width: 480px) {
+  html{
+    font-size: 85%;
+  }
+}
