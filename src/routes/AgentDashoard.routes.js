@@ -10,6 +10,10 @@ import Cbhi from "../pages/services/cbhi/Cbhi";
 import CbhiPayment from "../pages/services/cbhi/cbhiPayment/CbhiPayment";
 import CbhiDisplayDetails from "../pages/services/cbhi/cbhiDisplayDetails/CbhiDisplayDetails";
 import ElectricityDisplayDetails from "../pages/services/electricity/electricityDisplayDetails/ElectricityDisplayDetails";
+import Rra from "../pages/services/rra/Rra";
+import RraPayment from "../pages/services/rra/rraPayment/RraPayment";
+import RraDisplayDetails from "../pages/services/rra/rraDisplayDetails/RraDisplayDetails";
+import ChangePin from "../pages/changepin/ChangePin";
 
 
 function App() {
@@ -91,6 +95,50 @@ function App() {
             </>
           )}
         />
+         <Route
+          component={({ match }) => (
+            <>
+              <PrivateRoute
+                exact
+                path={`${path}/rra`}
+                component={Rra}
+              />
+            </>
+          )}
+        />
+         <Route
+          component={({ match }) => (
+            <>
+              <PrivateRoute
+                exact
+                path={`${path}/rra-payment`}
+                component={RraPayment}
+              />
+            </>
+          )}
+        />
+         <Route
+        component={({ match }) => (
+          <>
+            <PrivateRoute
+              exact
+              path={`${path}/rra-payment-details`}
+              component={RraDisplayDetails}
+            />
+          </>
+        )}
+      />
+       <Route
+        component={({ match }) => (
+          <>
+            <PrivateRoute
+              exact
+              path={`${path}/change-pin`}
+              component={ChangePin}
+            />
+          </>
+        )}
+      />
       </AgentDashboard>
     </Switch>
   );

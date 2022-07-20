@@ -47,7 +47,6 @@ import TopNav from "../../components/topNav/TopNav";
       password: Yup.string().required("Required"),
     });
     const onSubmit = (values, props) => {
-      
      history.push('/dashboard',{push:true})
     };
     return (

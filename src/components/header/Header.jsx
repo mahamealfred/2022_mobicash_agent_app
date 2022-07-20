@@ -39,7 +39,7 @@ const Header= () => {
       }
     else if(event==="Change PIN"){
     
-      history.push("/dashboard/changepin",{ push: true })
+      history.push("/dashboard/change-pin",{ push: true })
     }
     else{
       setAnchorElNav(null);
