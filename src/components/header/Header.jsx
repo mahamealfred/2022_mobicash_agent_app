@@ -47,7 +47,7 @@ const Header= () => {
   };
   const handleSettings=(event)=>{
     if(event==="Logout"){
-      history.push("/",{ push: true })
+      history.push("/",{ push: true });
     }
    
     else{
