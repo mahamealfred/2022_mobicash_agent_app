@@ -1,4 +1,4 @@
-import React from 'react'
+import React ,{useRef} from 'react'
 import Header from '../../../../components/header/Header';
 import './cbhiDisplayDetails.css';
 import { styled } from '@mui/material/styles';
@@ -9,6 +9,7 @@ import ButtonBase from '@mui/material/ButtonBase';
 import Button from "@mui/material/Button";
 import { ButtonGroup, Box,TextField } from "@mui/material";
 import MenuItem from "@mui/material/MenuItem";
+import ReactToPrint from "react-to-print";
 import { useHistory } from 'react-router-dom';
 const members=[{
   
@@ -29,14 +30,30 @@ const Img = styled('img')({
   });
 const CbhiDisplayDetails = () => {
     const history=useHistory();
+    const componentRef = useRef();
+
 
     const handleNewPayment=()=>{
 history.push('/dashboard/cbhi',{push:true})
     }
   return (
     <div className='cbhiDisplayContainer'>
+     
+    
+      
+    
+     {/* <ReactToPrint 
+trigger={()=>{
+  return <Button>Print form</Button>
+}}
+content={()=>this.componentRef}
+documentTitle='new document'
+pageStyle='print'
+
+/> */}
     <Header/>
     <Paper
+     
   sx={{
     p: 4,
     margin: 'auto',
@@ -52,9 +69,10 @@ history.push('/dashboard/cbhi',{push:true})
         <Img alt="complex" src="../../images/electricity.png" />
       </ButtonBase> */}
     </Grid>
-    <Grid item xs={12} sm container>
+    
+    <Grid item xs={12} sm container >
       <Grid item xs container direction="column" spacing={2}>
-        <Grid item xs>
+        <Grid item xs ref={componentRef} >
           <Typography gutterBottom variant="subtitle1" component="div" mt={4} sx={{ fontSize: "28px", fontWeight: "bold" }}>
           Mutuwel Service Transaction Details
           </Typography>
@@ -134,13 +152,17 @@ history.push('/dashboard/cbhi',{push:true})
                   >
                     New Payment
                   </Button>
-                  <Button
-                    variant="contained"
-                    sx={{ backgroundColor: "#F9842C" }}
-                    className="buttonGroup"
-                  >
-                    Print
-                  </Button>
+                  <ReactToPrint
+              trigger={() => <Button
+             variant="contained"
+            sx={{ backgroundColor: "#F9842C" }}
+             className="buttonGroup"
+            >
+          Print
+        </Button>}
+        content={() => componentRef.current}
+        documentTitle='new document'
+      />     
                 </ButtonGroup>
               </Box>
           </Typography>
@@ -153,7 +175,8 @@ history.push('/dashboard/cbhi',{push:true})
       </Grid>
     </Grid>
   </Grid>
-</Paper>
+</Paper>           
+                 
     </div>
   )
 }
