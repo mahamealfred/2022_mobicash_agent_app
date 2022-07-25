@@ -39,6 +39,7 @@ const handelSubmit= async()=>{
   }));
   setHouseHoldNID("")
   setPaymentYear("")
+  history.push('/dashboard/cbhi-payment',{push:true})
   
 }
 const handleCancel=()=>{

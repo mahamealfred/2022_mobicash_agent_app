@@ -32,7 +32,7 @@ export const getNidDetailsAction = (details,history) => async (dispatch) => {
     const {data} = await res;
     dispatch(getNidDetailsSuccess(data));
     console.log("data from Nid",data);
-   history.push('/dashboard/cbhi-payment',{push:true})
+  // history.push('/dashboard/cbhi-payment',{push:true})
   } catch (err) {
     if (err.response) {
       const errorMessage = await err.response.data.message;
