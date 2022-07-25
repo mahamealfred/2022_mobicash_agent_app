@@ -32,14 +32,14 @@ const Cbhi = () => {
   const history=useHistory();
   
 const handelSubmit= async()=>{
- 
+  history.push('/dashboard/cbhi-payment',{push:true})
   await dispach(getNidDetailsAction({
     houseHoldNID,
     paymentYear
   }));
   setHouseHoldNID("")
   setPaymentYear("")
-  history.push('/dashboard/cbhi-payment',{push:true})
+ 
   
 }
 const handleCancel=()=>{
