@@ -7,9 +7,9 @@ import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import { Typography, ButtonGroup, TextField } from "@mui/material";
-//import { useDispatch, useSelector } from "react-redux";
-// import { getYearAction } from "../../../redux/actions/getYearAction";
-// import { getNidDetailsAction } from "../../../redux/actions/getNidDetailsAction";
+import { useDispatch, useSelector } from "react-redux";
+ import { getYearAction } from "../../../redux/actions/getYearAction";
+ import { getNidDetailsAction } from "../../../redux/actions/getNidDetailsAction";
 import MenuItem from "@mui/material/MenuItem";
 import { useHistory } from "react-router-dom";
 import CbhiList from "./cbhiList/CbhiList";
@@ -23,8 +23,8 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 const Cbhi = () => {
-//   const dispach = useDispatch();
-//   const getYear = useSelector((state) => state.getYear);
+  const dispach = useDispatch();
+  const getYear = useSelector((state) => state.getYear);
 //   const getNidDetails=useSelector((state)=>state.getNidDetails);
   const [years, setYears] = React.useState([]);
   const [paymentYear, setPaymentYear] = useState("");
@@ -32,29 +32,29 @@ const Cbhi = () => {
   const history=useHistory();
   
 const handelSubmit= async()=>{
-  history.push('/dashboard/cbhi-payment',{push:true})
-  // await dispach(getNidDetailsAction({
-  //   houseHoldNID,
-  //   paymentYear
-  // }));
-  // setHouseHoldNID("")
-  // setPaymentYear("")
+ 
+  await dispach(getNidDetailsAction({
+    houseHoldNID,
+    paymentYear
+  }));
+  setHouseHoldNID("")
+  setPaymentYear("")
   
 }
 const handleCancel=()=>{
   history.push('/dashboard',{push:true}) 
 }
-//   useEffect(() => {
-//     async function fetchData() {
-//       await dispach(getYearAction());
-//       if (!getYear.loading) {
-//         if (getYear.years.return) {
-//           setYears(getYear.years.return);
-//         }
-//       }
-//   }
-//     fetchData();
-//   }, [!getYear.years.return]); 
+  useEffect(() => {
+    async function fetchData() {
+      await dispach(getYearAction());
+      if (!getYear.loading) {
+        if (getYear.years.return) {
+          setYears(getYear.years.return);
+        }
+      }
+  }
+    fetchData();
+  }, [!getYear.years.return]); 
   const handleChange = (event) => {
     setPaymentYear(event.target.value);
   };

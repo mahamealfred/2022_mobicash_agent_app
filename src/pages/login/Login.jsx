@@ -13,12 +13,16 @@ import {
   import { useHistory } from "react-router-dom";
   import {Link} from "react-router-dom"
 import IMAGES from "../../Assets/Images";
+import { useDispatch ,useSelector} from "react-redux";
 // import {Link} from "react-router-dom"
 import "./login.css"
+import { loginAction } from "../../redux/actions/loginAction";
 import TopNav from "../../components/topNav/TopNav";
   export default function Login() {
- 
+    const dispatch = useDispatch();
+    const userLogin=useSelector((state)=>state.login)
     const history = useHistory();
+    
     console.log(window)
     const avatarStyle = {
         backgroundColor: "#FFFF",
@@ -47,7 +51,8 @@ import TopNav from "../../components/topNav/TopNav";
       password: Yup.string().required("Required"),
     });
     const onSubmit = (values, props) => {
-     history.push('/dashboard',{push:true})
+      dispatch(loginAction(values, history));
+    // history.push('/dashboard',{push:true})
     };
     return (
       <Grid>
@@ -106,7 +111,7 @@ import TopNav from "../../components/topNav/TopNav";
                     style={btnStyle}
                     // disabled={props.isSubmitting}
                   >   
-                   Sign In
+                   {userLogin.loading?"loading":"Sign In"}
                   </Button>
                 </Form>
     )}

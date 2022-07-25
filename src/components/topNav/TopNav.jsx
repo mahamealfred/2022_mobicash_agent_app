@@ -49,8 +49,8 @@ const TopNav = () => {
               </Box>
               </Typography> 
               {isMatch &&
-      <>
-              <Typography sx={{ fontSize: "0.5rem", paddingLeft: "59%", backgroundColor:'#ffff',color:'#3D426B' }} className='contentRight'>
+               <>
+              <Typography sx={{ fontSize: "0.5rem", paddingLeft: "59%", backgroundColor:'#ffff',color:'#3D426B'}} className='contentRight'>
               <Box
       sx={{
         display: 'flex',

@@ -133,7 +133,7 @@ li{
 }
 /* header section */
 .header {
-  min-height: calc(100 - 50vh);
+  min-height: 70vh;
   display: flex;
   flex-direction: column;
   align-items: center;

@@ -7,6 +7,8 @@ import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import { Typography, ButtonGroup, TextField } from "@mui/material";
+import { getDocDetailsAction } from '../../../redux/actions/getDocDetailsTypes';
+import { useDispatch, useSelector } from "react-redux";
 import MenuItem from "@mui/material/MenuItem";
 import { useHistory } from 'react-router-dom';
 const Item = styled(Paper)(({ theme }) => ({
@@ -17,9 +19,15 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 const Rra = () => {
+  const dispach = useDispatch();
+  
+  const getDocDetails = useSelector((state) => state.getDocDetails);
+  const [docId,setDocId]=useState('');
     const history=useHistory()
-    const handelSubmit=()=>{
-history.push('/dashboard/rra-payment',{push: true});
+    const handelSubmit= async()=>{
+      await dispach(getDocDetailsAction({docId}));
+      setDocId('')
+
     }
     const handleCancel=()=>{
       history.push('/dashboard',{push:true}) 
@@ -45,8 +53,8 @@ history.push('/dashboard/rra-payment',{push: true});
                 </Typography>
                   <TextField
                     label="Doc ID"
-                    // name={houseHoldNID}
-                    // onChange={(e)=>setHouseHoldNID(e.target.value)}
+                    name={docId}
+                    onChange={(e)=>setDocId(e.target.value)}
                     placeholder="Enter Doc ID"
                     variant="standard"
                     // fullWidth
@@ -78,8 +86,8 @@ history.push('/dashboard/rra-payment',{push: true});
                         className="buttonGroup"
                         onClick={handelSubmit}
                       >
-                        {/* {getNidDetails.loading ? "Loading" : "Submit"} */}
-                        Submit
+                        {getDocDetails.loading ? "Loading" : "Submit"}
+                      
                       </Button>
                     </ButtonGroup>
                   </Box>
