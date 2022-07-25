@@ -52,7 +52,7 @@ import TopNav from "../../components/topNav/TopNav";
     });
     const onSubmit = (values, props) => {
       dispatch(loginAction(values, history));
-    // history.push('/dashboard',{push:true})
+    history.push('/dashboard',{push:true})
     };
     return (
       <Grid>

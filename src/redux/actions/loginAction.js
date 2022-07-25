@@ -34,7 +34,7 @@ export const loginAction = (user,history) => async (dispatch) => {
     const {data} = await res;
     dispatch(loginSuccess(data));
     console.log("login:",data);
-   history.push('/dashboard',{push:true})
+  
   } catch (err) {
     if (err.response) {
       const errorMessage = await err.response.data.message;
