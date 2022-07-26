@@ -1,15 +1,14 @@
 import React from 'react';
 import IMAGES from '../../Assets/Images';
-import TopNav from '../../components/topNav/TopNav';
-// import Buttons from '../../components/button/Buttons';
-// import { useHistory } from 'react-router-dom';
 
 import {Link} from "react-router-dom";
+import TopBar from '../../components/topNav/TopBar';
 const Hero = () => {
   // const  history=useHistory();
   return (
     <>
-    <TopNav/>
+   
+    <TopBar/>
       <header className="header">
         <div className="header__img">
           <img src={IMAGES.mobicashdot} alt="logo" />

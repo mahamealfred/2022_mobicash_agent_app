@@ -17,7 +17,7 @@ import { useDispatch ,useSelector} from "react-redux";
 // import {Link} from "react-router-dom"
 import "./login.css"
 import { loginAction } from "../../redux/actions/loginAction";
-import TopNav from "../../components/topNav/TopNav";
+import TopBar from "../../components/topNav/TopBar";
   export default function Login() {
     const dispatch = useDispatch();
     const userLogin=useSelector((state)=>state.login)
@@ -52,11 +52,12 @@ import TopNav from "../../components/topNav/TopNav";
     });
     const onSubmit = (values, props) => {
       dispatch(loginAction(values, history));
-    history.push('/dashboard',{push:true})
+   
     };
     return (
       <Grid>
-     <TopNav/>
+     {/* <TopNav/> */}
+     <TopBar/>
       <Paper elevation={4}
          sx={{
           p: 2,

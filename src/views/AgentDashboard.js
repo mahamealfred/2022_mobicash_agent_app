@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import TopNav from "../components/topNav/TopNav";
 import Sidebar from "../components/sidebar/Sidebar";
 import "../App.css";
+import TopBar from "../components/topNav/TopBar";
 
 
 export default class AgentDashboard extends Component {
@@ -9,7 +9,7 @@ export default class AgentDashboard extends Component {
    
     return (
       <div>
-        <TopNav />
+        <TopBar/>
         <div className="container">
         <Sidebar/>
           {this.props.children}

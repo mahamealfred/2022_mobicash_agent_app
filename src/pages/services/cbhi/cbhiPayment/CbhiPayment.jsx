@@ -10,15 +10,17 @@ import Button from "@mui/material/Button";
 import { ButtonGroup, Box,TextField } from "@mui/material";
 import MenuItem from "@mui/material/MenuItem";
 import { useHistory } from 'react-router-dom';
-const members=[{
+const members=[
+  {
   
   name:"Bwiza Leatitia"
-},{
+},
+{
   name:"Mahame Alfred"
 },
 {
-    name:"Rushema Kanuma Prince"
-  }
+ name:"Rushema Kanuma Prince"
+}
 ]
 const Img = styled('img')({
     margin: 'auto',
@@ -75,7 +77,7 @@ history.push('/dashboard/cbhi-payment-details',{push:true})
                 Year of payment
               </Typography>
               <Typography variant="body3" sx={{ fontSize: "20px", fontWeight: "bold" }} color="text.secondary">
-                201
+                2022
               </Typography>
               <Typography mt={1} sx={{ fontSize: "14px", fontWeight: "bold" }}  variant="body2" gutterBottom>
                 Total Premium 

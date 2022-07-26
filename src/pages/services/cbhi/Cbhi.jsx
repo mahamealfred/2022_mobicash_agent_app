@@ -39,8 +39,6 @@ const handelSubmit= async()=>{
   }));
   setHouseHoldNID("")
   setPaymentYear("")
- 
-  
 }
 const handleCancel=()=>{
   history.push('/dashboard',{push:true}) 

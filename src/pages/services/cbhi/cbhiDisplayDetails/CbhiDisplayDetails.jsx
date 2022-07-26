@@ -69,7 +69,6 @@ pageStyle='print'
         <Img alt="complex" src="../../images/electricity.png" />
       </ButtonBase> */}
     </Grid>
-    
     <Grid item xs={12} sm container >
       <Grid item xs container direction="column" spacing={2}>
         <Grid item xs ref={componentRef} >
@@ -153,16 +152,17 @@ pageStyle='print'
                     New Payment
                   </Button>
                   <ReactToPrint
-              trigger={() => <Button
-             variant="contained"
-            sx={{ backgroundColor: "#F9842C" }}
-             className="buttonGroup"
-            >
-          Print
-        </Button>}
-        content={() => componentRef.current}
-        documentTitle='new document'
-      />     
+                  trigger={() => <Button
+                  variant="contained"
+                  sx={{ backgroundColor: "#F9842C" }}
+                  className="buttonGroup"
+                  >
+                  Print
+                  </Button>
+              }
+                 content={() => componentRef.current}
+                 documentTitle='new document'
+               />     
                 </ButtonGroup>
               </Box>
           </Typography>
@@ -170,7 +170,7 @@ pageStyle='print'
       </Grid>
       <Grid item>
         <Typography variant="subtitle1" component="div">
-          Mutuwel Service
+          Mutuwel Service 
         </Typography>
       </Grid>
     </Grid>

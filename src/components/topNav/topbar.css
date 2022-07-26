@@ -1,0 +1,18 @@
+
+.linkStyle{
+    color:#fff;
+    text-decoration:none;
+}
+.linkStyle:active {
+    color: black;
+   
+  }
+.content{
+    justify-content: space-around;  
+}
+.topAvatar{
+    width: 220px;
+    height: 75px;
+    transition: transform .2s;
+    object-fit: contain;
+}

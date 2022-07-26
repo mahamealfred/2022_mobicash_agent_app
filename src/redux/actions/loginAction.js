@@ -20,9 +20,9 @@ export const loginAction = (user,history) => async (dispatch) => {
     headers:{
     "Accept":"application/json",
     "Content-Type": "application/json",
-    "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Methods":"POST, GET, OPTIONS, PUT, DELETE",
-    "Access-Control-Allow-Headers":"Content-Type, X-Auth-Token, Origin, Authorization",
+    // "Access-Control-Allow-Origin": "*",
+    // "Access-Control-Allow-Methods":"POST, GET, OPTIONS, PUT, DELETE",
+    // "Access-Control-Allow-Headers":"Content-Type, X-Auth-Token, Origin, Authorization",
   },
   auth: {
     username,
@@ -33,7 +33,7 @@ export const loginAction = (user,history) => async (dispatch) => {
    console.log("Response from Login:",res)
     const {data} = await res;
     dispatch(loginSuccess(data));
-    console.log("login:",data);
+    history.push('/dashboard',{push:true})
   
   } catch (err) {
     if (err.response) {

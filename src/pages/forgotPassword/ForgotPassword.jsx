@@ -1,23 +1,18 @@
 import React from "react";
 import {
-    Avatar,
     Button,
-    Checkbox,
-    Link,
-    FormControlLabel,
     Grid,
     Paper,
     TextField,
-    Typography,
+   
   } from "@mui/material";
-  import Alert from '@mui/material/Alert';
-  import Stack from '@mui/material/Stack';
-  import LoginIcon from '@mui/icons-material/Login';
+
   import { Formik, Form, Field, ErrorMessage } from "formik";
   import * as Yup from "yup";
   
   import { useHistory } from "react-router-dom";
-import TopNav from "../../components/topNav/TopNav";
+
+import TopBar from "../../components/topNav/TopBar";
 
   
   export default function ForgotPassword() {
@@ -62,7 +57,7 @@ import TopNav from "../../components/topNav/TopNav";
     }
     return (
       <Grid>
-      <TopNav/>
+      <TopBar/>
         <Paper elevation={4}
          sx={{
           p: 2,

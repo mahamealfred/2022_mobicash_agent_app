@@ -17,7 +17,8 @@ import {
   import * as Yup from "yup";
   
   import { useHistory } from "react-router-dom";
-import TopNav from "../../components/topNav/TopNav";
+
+import TopBar from "../../components/topNav/TopBar";
 
   
   export default function ResetPassword() {
@@ -57,7 +58,7 @@ import TopNav from "../../components/topNav/TopNav";
     };
     return (
       <Grid>
-      <TopNav/>
+      <TopBar/>
         <Paper elevation={4}
          sx={{
           p: 2,
