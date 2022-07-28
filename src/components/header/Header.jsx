@@ -47,7 +47,8 @@ const Header= () => {
   };
   const handleSettings=(event)=>{
     if(event==="Logout"){
-      history.push("/",{ push: true });
+      localStorage.removeItem("mobicashAuth");
+      history.push("/", { push: true });
     }
    
     else{
@@ -58,7 +59,7 @@ const Header= () => {
     setAnchorElUser(null);
   };
   return (
-    <AppBar position="static" sx={{backgroundColor:'#F9842C'}} >
+    <AppBar position="static" sx={{backgroundColor:'#F9842C',position:"sticky",top:"0",Zindex:"999"}} >
       <Container maxwidth="xl" minwidth="sm">
         <Toolbar disableGutters>
           <HomeIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />

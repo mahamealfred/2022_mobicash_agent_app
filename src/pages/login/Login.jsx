@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
     Avatar,
     Button,
@@ -7,7 +7,8 @@ import {
     TextField,
     Typography,
   } from "@mui/material";
-
+  import Alert from '@mui/material/Alert';
+  import Stack from '@mui/material/Stack';
   import { Formik, Form, Field, ErrorMessage } from "formik";
   import * as Yup from "yup";
   import { useHistory } from "react-router-dom";
@@ -21,7 +22,9 @@ import TopBar from "../../components/topNav/TopBar";
   export default function Login() {
     const dispatch = useDispatch();
     const userLogin=useSelector((state)=>state.login)
+    const [agentDetails,setAgentDetails]=useState('')
     const history = useHistory();
+ 
     
     console.log(window)
     const avatarStyle = {
@@ -54,6 +57,14 @@ import TopBar from "../../components/topNav/TopBar";
       dispatch(loginAction(values, history));
    
     };
+
+    useEffect(()=>{
+      const isAuth=localStorage.getItem("mobicashAuth")
+      console.log("ssss",isAuth)
+    if(isAuth){
+      history.push('/dashboard',{push:true})
+    }
+    },[])
     return (
       <Grid>
      {/* <TopNav/> */}
@@ -103,7 +114,15 @@ import TopBar from "../../components/topNav/TopBar";
                     fullWidth
                     required
                     helperText={<ErrorMessage name="password" />}
-                  />          
+                  />   
+                   {
+                  !userLogin.error? null:
+                  <Stack sx={{ width: '100%' }} spacing={2}>
+                <Alert variant="filled" severity="error">
+                  {userLogin.error}
+                   </Alert>
+                   </Stack>
+                }       
                   <Button
                     type="submit"
                     color="primary"

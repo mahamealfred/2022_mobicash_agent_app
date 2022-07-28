@@ -14,11 +14,34 @@ import Rra from "../pages/services/rra/Rra";
 import RraPayment from "../pages/services/rra/rraPayment/RraPayment";
 import RraDisplayDetails from "../pages/services/rra/rraDisplayDetails/RraDisplayDetails";
 import ChangePin from "../pages/changepin/ChangePin";
-
-
+import {useEffect} from "react";
+import jwt from "jsonwebtoken";
+import { useHistory } from 'react-router-dom';
 function App() {
   const { path } = useRouteMatch();
+  const decode= (token) => {
+    const JWT_SECRET="tokensecret";
+    const payload =jwt.verify(token, JWT_SECRET);
+     return payload;
+  }
+  const history= useHistory();
+  useEffect(() => {
+  
+    const token =localStorage.getItem('mobicashAuth');
+    if (token) {
+    const {exp}=decode(token);
+    console.log(history)
+    if(Date.now()>=exp*1000){
+      localStorage.removeItem("mobicashAuth")
+     return history.push('/', { push: true })
+    }
+    else{
+      return null
+    }
+  }
+  return history.push('/', { push: true })
 
+  }, [])
   return (
     <Switch>
       <AgentDashboard>

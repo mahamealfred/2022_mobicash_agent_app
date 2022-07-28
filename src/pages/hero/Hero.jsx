@@ -1,10 +1,17 @@
-import React from 'react';
+import React,{useEffect} from 'react';
 import IMAGES from '../../Assets/Images';
 
 import {Link} from "react-router-dom";
 import TopBar from '../../components/topNav/TopBar';
+import { useHistory } from 'react-router-dom';
 const Hero = () => {
-  // const  history=useHistory();
+  const  history=useHistory();
+  useEffect(()=>{
+    const isAuth=localStorage.getItem("mobicashAuth")
+  if(isAuth){
+    history.push('/dashboard',{push:true})
+  }
+  },[])
   return (
     <>
    

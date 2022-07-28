@@ -12,6 +12,9 @@ import PersonIcon from '@mui/icons-material/Person';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import EmailIcon from '@mui/icons-material/Email';
 import IMAGES from '../../Assets/Images';
+import { useDispatch ,useSelector} from "react-redux";
+import {useEffect,useState} from "react";
+import { useHistory } from 'react-router-dom';
 import {
 
     ButtonGroup,
@@ -19,14 +22,41 @@ import {
     useTheme,
   } from "@mui/material";
 import './topbar.css'
+import jwt from "jsonwebtoken";
+  import dotenv from "dotenv";
+  dotenv.config();
 
 const TopBar= () => {
     const theme = useTheme();
     const isMatch = useMediaQuery(theme.breakpoints.up("sm"));
+    const userLogin=useSelector((state)=>state.login)
+    const isAuth = localStorage.getItem("mobicashAuth");
+    const [agentName,setAgentName]=useState('')
+
+    const decode= (token) => {
+      const JWT_SECRET="tokensecret";
+      const payload =jwt.verify(token, JWT_SECRET);
+       return payload;
+    }
+    const history= useHistory();
+    useEffect(() => {
+    
+      const token =localStorage.getItem('mobicashAuth');
+      if (token) {
+      const {name}=decode(token);
+      setAgentName(name)
+    }
   
+    }, [])
+
+    const handleLogout = () => {
+      localStorage.removeItem("mobicashAuth");
+      history.push("/", { push: true });
+    };
+
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static" sx={{backgroundColor:"#ffff"}}>
+    // <Box sx={{ flexGrow: 1 }}>
+      <AppBar  sx={{backgroundColor:"#ffff",position:"sticky",top:"0",Zindex:"999",}}>
         <Toolbar>
           <Typography
             variant="h6"
@@ -46,8 +76,10 @@ const TopBar= () => {
     >
 <img src={IMAGES.logo} alt="" className="topAvatar"/>
     </Box>
-           
           </Typography>
+          {
+            !isAuth?null:
+            <>
           {isMatch &&
           <Box
       sx={{
@@ -62,14 +94,17 @@ const TopBar= () => {
       <ButtonGroup variant="text" aria-label="text button group">
       <Button className="buttonGroup"><EmailIcon/></Button>
         <Button className="buttonGroup"><NotificationsIcon/></Button>
-        <Button className="buttonGroup"><PersonIcon/>MobicoreAdmin</Button>
-        <Button  className="buttonGroup"><LogoutIcon/>Logout</Button>
+        <Button className="buttonGroup"><PersonIcon/>{agentName}</Button>
+        <Button  className="buttonGroup" onClick={handleLogout}><LogoutIcon/>Logout</Button>
       </ButtonGroup>
     </Box>
 }
+</>
+}
         </Toolbar>
+        
       </AppBar>
-    </Box>
+    //</Box>
   );
 };
 export default TopBar;

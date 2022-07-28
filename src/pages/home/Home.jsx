@@ -11,7 +11,6 @@ const Home = () => {
       <WidgetSmall/> */}
       <Snippets/>
       </div>
-     
       </div>
   )
 }

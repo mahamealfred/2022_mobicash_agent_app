@@ -12,26 +12,31 @@ export const getNidDetailsAction = (details,history) => async (dispatch) => {
     dispatch(getNidDetailsRequest());
     const houseHoldNID={details}
     const paymentYear={details}
-    console.log("details ...:",details)
+    const dt=JSON.stringify(details)
     const Url ='http://52.36.87.202:105/api/agent/goverment-services/cbhi/rest/v.4.14.01/nid-validation'
-//    const res = await axios.post(Url,{
-//     details
-//    });
-   const res = await axios.post(Url,{
-    // houseHoldNID:houseHoldNID,
-    // paymentYear:paymentYear
-    details
-   }, {
+  //  const res = await axios.post(Url,{
+  //   details
+  //  });
+  const token = document.querySelector('meta[name="csrf-token"]');
+  console.log("token..:",token.content)
+   const res = await axios.post(Url,{},{
     withCredentials: true,
     headers:{
       "Accept":"application/json",
       "Content-Type": "application/json",
-    
+      'X-CSRF-TOKEN': token.content,
   },
+  body:dt
    });
+  //  const res=await axios.post(Url, dt).then(({data})=>{
+    
+  //  console.log(data)
+  // }).catch(({response})=>{
+  //  console.log(response)
+  // })
+
     const {data} = await res;
     dispatch(getNidDetailsSuccess(data));
-    console.log("data from Nid",data);
   // history.push('/dashboard/cbhi-payment',{push:true})
   } catch (err) {
     if (err.response) {

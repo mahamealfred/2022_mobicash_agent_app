@@ -1,4 +1,4 @@
-import React from "react";
+import React ,{useEffect}from "react";
 import {
     Button,
     Grid,
@@ -6,20 +6,22 @@ import {
     TextField,
    
   } from "@mui/material";
-
-  import { Formik, Form, Field, ErrorMessage } from "formik";
-  import * as Yup from "yup";
-  
-  import { useHistory } from "react-router-dom";
-
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
+import { useHistory } from "react-router-dom";
 import TopBar from "../../components/topNav/TopBar";
 
   
   export default function ForgotPassword() {
   
     const history = useHistory();
-
-    console.log(window)
+    
+    useEffect(()=>{
+      const isAuth=localStorage.getItem("mobicashAuth")
+    if(isAuth){
+      history.push('/dashboard',{push:true})
+    }
+    },[])
   
     const avatarStyle = {
       backgroundColor: "#3D426B",

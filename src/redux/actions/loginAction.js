@@ -1,12 +1,15 @@
 import axios from "axios";
-
-
+import {encode,decode} from "../../helpers/jwtTokenizer";
 import {
     LOGIN_REQUEST,
     LOGIN_SUCCESS,
     LOGIN_FAILURE,
   } from "../types/loginTypes";
   
+  import jwt from "jsonwebtoken";
+  import dotenv from "dotenv";
+  dotenv.config();
+
 
 export const loginAction = (user,history) => async (dispatch) => {
   try {
@@ -14,30 +17,40 @@ export const loginAction = (user,history) => async (dispatch) => {
     const {username}=user
     const {password}=user 
     //const encodedBase64Token = Buffer.from(`${username}:${password}`).toString('base64');
-    const Url='http://52.36.87.202:105/api/agent/user/rest/v.4.14.01/auth';
+    let basicAuth='Basic ' + btoa(username + ':' + password);
+    const Url='http://52.36.87.202:107/api/agent/user/rest/v.4.14.01/auth';
    const res = await axios.post(Url,{}, {
-    withCredentials: true,
+     withCredentials: true,
     headers:{
     "Accept":"application/json",
     "Content-Type": "application/json",
-    // "Access-Control-Allow-Origin": "*",
-    // "Access-Control-Allow-Methods":"POST, GET, OPTIONS, PUT, DELETE",
-    // "Access-Control-Allow-Headers":"Content-Type, X-Auth-Token, Origin, Authorization",
-  },
+  //'Authorization': + basicAuth,
+ },
   auth: {
     username,
     password
   }
    });
-   console.log("Username and Pin:",username, password);
-   console.log("Response from Login:",res)
     const {data} = await res;
-    dispatch(loginSuccess(data));
-    history.push('/dashboard',{push:true})
-  
+    const jwt_secret="tokensecret"
+    console.log("response",)
+    if(res.data.code==200){
+      const userId=res.data.id
+      const name=res.data.display
+      const role=res.data.brokering
+      console.log(userId,name,role)
+      const claims={userId,name,role,username}
+      const token= jwt.sign(claims,jwt_secret, { expiresIn: "7d"});
+      dispatch(loginSuccess(data));
+      history.push('/dashboard',{push:true})
+      return localStorage.setItem('mobicashAuth',token);
+    }else{
+     history.push('/',{push:true})
+    }
   } catch (err) {
     if (err.response) {
-      const errorMessage = await err.response.data.message;
+      //const errorMessage = await err.response.data.responseMessage;
+      const errorMessage = 'Invalide Username and Pin'
       dispatch(loginFailure(errorMessage));
     } else {
       dispatch(loginFailure("Network Error"));

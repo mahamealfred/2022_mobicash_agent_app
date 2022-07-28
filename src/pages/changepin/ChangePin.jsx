@@ -1,6 +1,8 @@
-import React from 'react'
+import React ,{useState,useEffect} from 'react'
 import Header from '../../components/header/Header'
-import './changePin.css'
+import './changePin.css';
+import { useHistory } from 'react-router-dom';
+import jwt  from 'jsonwebtoken';
 import {
   Avatar,
   Button,
@@ -19,10 +21,14 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
+import { changePinAction } from '../../redux/actions/changePinAction';
+import { useSelector,useDispatch } from 'react-redux';
 const Alerts = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 const ChangePin = () => {
+  const dispatch=useDispatch()
+  const changePin=useSelector(state=>state.changePin);
   const [open, setOpen] = React.useState(false);
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
@@ -31,6 +37,25 @@ const ChangePin = () => {
 
     setOpen(false);
   };
+  const isAuth = localStorage.getItem("mobicashAuth");
+  const [username,setUsername]=useState('')
+
+  const decode= (token) => {
+    const JWT_SECRET="tokensecret";
+    const payload =jwt.verify(token, JWT_SECRET);
+     return payload;
+  }
+  const history= useHistory();
+  useEffect(() => {
+  
+    const token =localStorage.getItem('mobicashAuth');
+    if (token) {
+    const {username}=decode(token);
+    setUsername(username)
+  }
+
+  }, [])
+
  
   const btnStyle = {
    backgroundColor: "#F9842C",
@@ -43,20 +68,21 @@ const ChangePin = () => {
   };
  
   const initialValues = {
-    oldPin: "",
-    newPin: "",
-    confirmPin:"",
+    oldPassword: "",
+    newPassword: "",
+    newPasswordConfirmation:"",
    
   };
   const validationSchema = Yup.object().shape({
-    oldPin: Yup.string().required("Required"),
-    newPin: Yup.string().required("Required"),
-    confirmPin: Yup.string().required("Required"),
+    oldPassword: Yup.string().required("Required"),
+    newPassword: Yup.string().required("Required"),
+    newPasswordConfirmation:Yup.string()
+    .oneOf([Yup.ref('newPassword'), null], 'Pin must match')
   });
 
   const onSubmit = (values, props) => {
-    console.log("values",values)
-    // dispatch(loginAction(values, history));
+    console.log("values .....::",values)
+     dispatch(changePinAction(values,username, history));
     setOpen(true);
     
   };
@@ -100,43 +126,43 @@ const ChangePin = () => {
                   <Field
                     as={TextField}
                     label="Enter Old PIN"
-                    name="oldPin"
+                    name="oldPassword"
                     placeholder="Enter Old PIN"
                     variant="standard"
                     fullWidth
                     required
-                    helperText={<ErrorMessage name="oldPin" />}
+                    helperText={<ErrorMessage name="oldPassword" />}
                   />
                   <Field
                     as={TextField}
                     label="Enter New PIN"
-                    name="newPin"
+                    name="newPassword"
                     placeholder="Enter New PIN"
                     variant="standard"
                     fullWidth
                     required
-                    helperText={<ErrorMessage name="newPin" />}
+                    helperText={<ErrorMessage name="newPassword" />}
                   />
                    <Field
                     as={TextField}
                     label="Confirm New PIN"
-                    name="confirmPin"
+                    name="newPasswordConfirmation"
                     placeholder="Confirm New PIN"
                     variant="standard"
                     fullWidth
                     required
-                    helperText={<ErrorMessage name="confirmPin" />}
+                    helperText={<ErrorMessage name="newPasswordConfirmation" />}
                   />
-                  {/* {
-                    !userLogin.error? null:
+                   {
+                    !changePin.error? null:
                     <Stack sx={{ width: '100%' }} spacing={2}>
                 <Alert variant="filled" severity="error">
-                    {userLogin.error}
+                    {changePin.error}
                      </Alert>
                      </Stack>
                   }
-                   {/* <p>{userLogin.error}</p>
-                  */} 
+                   {/* {/* <p>{userLogin.error}</p>
+                    */}
                   <Button
                     type="submit"
                     color="primary"
@@ -145,8 +171,8 @@ const ChangePin = () => {
                     style={btnStyle}
                     // disabled={props.isSubmitting}
                   >
-                      Submit
-                    {/* {userLogin.loading ? "Loading" : "Sign in"} */}
+  
+                    {changePin.loading ? "Loading" : "Sign in"}
                   </Button>
                 </Form>
     )}

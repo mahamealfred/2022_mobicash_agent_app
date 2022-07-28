@@ -6,6 +6,7 @@
     background-color:rgb(255, 255, 255);
     border-radius: 12px;
     width: 100%;
+    position:'sticky';
 }
 .homeWidgets{
     display: flex;
@@ -14,13 +15,10 @@
 @media screen and (min-width: 769px) {
     .home{
         padding: 3px;
-        width: 80%;
-        
+        width: 80%; 
     }
 }
-
 @media screen and (min-device-width: 481px) and (max-device-width: 768px) { 
-    
     .home{
         padding: 2px;
         width: 50%;

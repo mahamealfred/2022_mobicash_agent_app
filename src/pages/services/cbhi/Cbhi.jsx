@@ -25,20 +25,33 @@ const Item = styled(Paper)(({ theme }) => ({
 const Cbhi = () => {
   const dispach = useDispatch();
   const getYear = useSelector((state) => state.getYear);
-//   const getNidDetails=useSelector((state)=>state.getNidDetails);
+  const getNidDetails=useSelector((state)=>state.getNidDetails);
   const [years, setYears] = React.useState([]);
   const [paymentYear, setPaymentYear] = useState("");
   const [houseHoldNID,setHouseHoldNID]=useState("");
   const history=useHistory();
   
 const handelSubmit= async()=>{
-  history.push('/dashboard/cbhi-payment',{push:true})
+ 
   await dispach(getNidDetailsAction({
     houseHoldNID,
     paymentYear
   }));
+//   const formData={houseHoldNID,paymentYear}
+//   console.log("data..:",JSON.stringify(formData))
+//   const response = await fetch('http://52.36.87.202:105/api/agent/goverment-services/cbhi/rest/v.4.14.01/nid-validation', {
+//     method: 'POST',
+//     headers: { 
+//         'Content-Type': 'application/json',
+//      },
+//     body: JSON.stringify(formData)
+// });
+
+// const result = await response.json();
+// console.log("National id details:",result)
   setHouseHoldNID("")
   setPaymentYear("")
+  history.push('/dashboard/cbhi-payment',{push:true})
 }
 const handleCancel=()=>{
   history.push('/dashboard',{push:true}) 
@@ -129,8 +142,8 @@ const handleCancel=()=>{
                         className="buttonGroup"
                         onClick={handelSubmit}
                       >
-                        {/* {getNidDetails.loading ? "Loading" : "Submit"} */}
-                        Submit
+                        {getNidDetails.loading ? "Loading" : "Submit"}
+                      
                       </Button>
                     </ButtonGroup>
                   </Box>

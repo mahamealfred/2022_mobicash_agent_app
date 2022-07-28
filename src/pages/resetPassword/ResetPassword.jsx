@@ -1,4 +1,4 @@
-import React from "react";
+import React ,{useEffect}from "react";
 import {
     Avatar,
     Button,
@@ -15,17 +15,18 @@ import {
   import LoginIcon from '@mui/icons-material/Login';
   import { Formik, Form, Field, ErrorMessage } from "formik";
   import * as Yup from "yup";
-  
-  import { useHistory } from "react-router-dom";
-
 import TopBar from "../../components/topNav/TopBar";
-
+import { useHistory } from "react-router-dom";
   
   export default function ResetPassword() {
-    
     const history = useHistory();
-
-    console.log(window)
+    
+    useEffect(()=>{
+      const isAuth=localStorage.getItem("mobicashAuth")
+    if(isAuth){
+      history.push('/dashboard',{push:true})
+    }
+    },[])
   
     const avatarStyle = {
       backgroundColor: "#3D426B",

@@ -7,20 +7,28 @@ import Login from '../pages/login/Login';
 
 import AgentDashboardRoute from "./AgentDashoard.routes"
 
-
+import { useHistory } from 'react-router-dom';
 
 
 
 export default class index extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      isAuth:localStorage.getItem("mobicasAuth")
+    };
+  }
     render() {
         return (
-            <Switch>
-         <Route exact path="/" component={Hero}/>
+          
+          <Switch>
+          <Route exact path="/" component={Hero}/>
+             <Route path="/dashboard">
+             <AgentDashboardRoute />
+              </Route>
           <Route path="/login">
             <Login />
-          </Route>
-          <Route path="/dashboard">
-            <AgentDashboardRoute />
           </Route>
           <Route path="/forgot-pin">
           <ForgotPassword/>
@@ -28,7 +36,8 @@ export default class index extends Component {
           <Route path="/reset-pin">
           <ResetPassword/>
           </Route>
-            </Switch>
+         </Switch>
+          
         )
     }
 }

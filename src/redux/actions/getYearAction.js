@@ -6,12 +6,11 @@ import {
     GET_YEAR_FAILURE,
   } from "../types/getYearTypes";
   
-
 export const getYearAction = (history) => async (dispatch) => {
   try {
     dispatch(getYearRequest());
-    
     const Url ='http://apiagent.mobicash.rw/api/agent/utilities/cbhi/rest/v.4.14.01/year-of-collection'
+    const urll='http://52.36.87.202:105/api/agent/utilities/user/rest/v.4.14.01/cbhi-daily-collection'
    const res = await axios.get(Url);
     const {data} = await res;
     dispatch(getYearSuccess(data));
