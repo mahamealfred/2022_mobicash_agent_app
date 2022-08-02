@@ -23,6 +23,9 @@ import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 import { changePinAction } from '../../redux/actions/changePinAction';
 import { useSelector,useDispatch } from 'react-redux';
+import Collapse from '@mui/material/Collapse';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
 const Alerts = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
@@ -30,6 +33,7 @@ const ChangePin = () => {
   const dispatch=useDispatch()
   const changePin=useSelector(state=>state.changePin);
   const [open, setOpen] = React.useState(false);
+  const [openSnackbar,setOpenSnackbar]=React.useState(false);
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
       return;
@@ -81,15 +85,21 @@ const ChangePin = () => {
   });
 
   const onSubmit = (values, props) => {
-    console.log("values .....::",values)
      dispatch(changePinAction(values,username, history));
-    setOpen(true);
+    if(changePin.users){
+      setOpenSnackbar(true)
+    }
+    if(changePin.error){
+      setOpen(true)
+    }
     
   };
   return (
     <div className='changePin'>
       <Header/>
-      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+      {
+        changePin.error? null:
+        <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={handleClose}>
             <Alerts
               onClose={handleClose}
               severity="success"
@@ -101,6 +111,8 @@ const ChangePin = () => {
              Pin Changed successfull
             </Alerts>
           </Snackbar>
+      }
+      
       <Grid>
         <Paper elevation={4}
          sx={{
@@ -115,6 +127,30 @@ const ChangePin = () => {
           <Grid align="center" sx={{fontSize:'20px', fontWeight:'bold'}}>
             Please Change Your PIN.
           </Grid>
+          {
+                  !changePin.error? null:
+                   <Collapse in={open}>
+                   <Alert
+                   severity="error"
+                     action={
+                       <IconButton
+                         aria-label="close"
+                         color="inherit"
+                         size="small"
+                         onClick={handleClose}
+                        //  onClick={() => {
+                        //    setOpen(false);
+                        //  }}
+                       >
+                         <CloseIcon fontSize="inherit" />
+                       </IconButton>
+                     }
+                     sx={{ mb: 0.2 }}
+                   >
+                    {changePin.error}
+                   </Alert>
+                 </Collapse>
+                }    
           <Grid style={textStyle}>
             <Formik
               initialValues={initialValues}
@@ -153,14 +189,14 @@ const ChangePin = () => {
                     required
                     helperText={<ErrorMessage name="newPasswordConfirmation" />}
                   />
-                   {
+                   {/* {
                     !changePin.error? null:
                     <Stack sx={{ width: '100%' }} spacing={2}>
                 <Alert variant="filled" severity="error">
                     {changePin.error}
                      </Alert>
                      </Stack>
-                  }
+                  } */}
                    {/* {/* <p>{userLogin.error}</p>
                     */}
                   <Button

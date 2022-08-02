@@ -1,13 +1,10 @@
 import axios from "axios";
 import {
-    CHANGE_PIN_REQUEST,
-    CHANGE_PIN_SUCCESS,
-    CHANGE_PIN_FAILURE,
-  } from "../types/changePinTypes";
-  
-  import jwt from "jsonwebtoken";
-  import dotenv from "dotenv";
-  dotenv.config();
+    GET_RNIT_DETAILS_REQUEST,
+    GET_RNIT_DETAILS_SUCCESS,
+    GET_RNIT_DETAILS_FAILURE,
+  } from "../types/getRnitDetailsTypes";
+ 
 
 
 export const changePinAction = (user,username,history) => async (dispatch) => {
@@ -59,19 +56,19 @@ export const changePinAction = (user,username,history) => async (dispatch) => {
 
 export const changePinRequest = () => {
   return {
-    type: CHANGE_PIN_REQUEST,
+    type: GET_RNIT_DETAILS_REQUEST,
   };
 };
 
 export const changePinSuccess = (users) => {
   return {
-    type: CHANGE_PIN_SUCCESS,
+    type: GET_RNIT_DETAILS_SUCCESS,
     payload: users,
   };
 };
 export const changePinFailure = (error) => {
   return {
-    type: CHANGE_PIN_FAILURE,
+    type: GET_RNIT_DETAILS_FAILURE,
     payload: error,
   };
 };

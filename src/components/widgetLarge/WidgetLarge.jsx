@@ -51,47 +51,47 @@ const handleRra=()=>{
         <Grid container justifyContent="center" style={styles.buttonGroup} className='btn' spacing={spacing}>
           <Grid  item>
           <Button onClick={handleElectricity} className="btnImage">
-            <img src={IMAGES.electricity} alt='' className="images" />
+            <img src="../../../Assets/images/electricity.png" alt='' className="images" />
 
               </Button>
             </Grid>
             <Grid  item>
           <Button onClick={handleRra} className="btnImage">
-            <img src={IMAGES.rra} alt='' className="images" />
+            <img src="../../../Assets/images/rra_img.png" alt='' className="images" />
 
               </Button>
             </Grid>
             <Grid  item>
           <Button  className="btnImage" >
-            <img src={IMAGES.rnit} alt='' className="images"/>
+            <img src="../../../Assets/images/rnit_img.png" alt='' className="images"/>
               
               </Button>
             </Grid>
             <Grid  item>
           <Button   className="btnImage"  >
-            <img src={IMAGES.ejoheza} alt='' className="images" />
+            <img src="../../../Assets/images/ejoHeza.png" alt='' className="images" />
               </Button>
             </Grid>
             <Grid  item>
           <Button onClick={handleCbhi} className="btnImage" >
-            <img src={IMAGES.rssb} alt=''className="images" />
+            <img src="../../../Assets/images/rssb.png" alt=''className="images" />
               </Button>
             </Grid>
             <Grid  item>
           <Button className="btnImage" >
-            <img src={IMAGES.canal} alt='' className="images"  />
+            <img src="../../../Assets/images/canal.png" alt='' className="images"  />
             
               </Button>
             </Grid>
             <Grid  item>
           <Button className="btnImage" >
-            <img src={IMAGES.startime}  className="images"alt='' />
+            <img src="../../../Assets/images/startime.png"  className="images"alt='' />
              
               </Button>
             </Grid>
             <Grid  item>
           <Button className="btnImage" >
-            <img src={IMAGES.logs} alt=''  className="images" />
+            <img src="../../../Assets/images/logs.png" alt=''  className="images" />
               </Button>
             </Grid>
         </Grid>

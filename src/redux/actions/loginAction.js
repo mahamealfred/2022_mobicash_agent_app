@@ -50,7 +50,7 @@ export const loginAction = (user,history) => async (dispatch) => {
   } catch (err) {
     if (err.response) {
       //const errorMessage = await err.response.data.responseMessage;
-      const errorMessage = 'Invalide Username and Pin'
+      const errorMessage = 'Invalid Username or Pin'
       dispatch(loginFailure(errorMessage));
     } else {
       dispatch(loginFailure("Network Error"));

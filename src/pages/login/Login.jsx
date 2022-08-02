@@ -18,15 +18,20 @@ import { useDispatch ,useSelector} from "react-redux";
 // import {Link} from "react-router-dom"
 import "./login.css"
 import { loginAction } from "../../redux/actions/loginAction";
+import Collapse from '@mui/material/Collapse';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
 import TopBar from "../../components/topNav/TopBar";
   export default function Login() {
+    const [open, setOpen] = React.useState(true);
     const dispatch = useDispatch();
     const userLogin=useSelector((state)=>state.login)
-    const [agentDetails,setAgentDetails]=useState('')
+    const [agentDetails,setAgentDetails]=useState('');
     const history = useHistory();
  
-    
-    console.log(window)
+    const handleClose=()=>{
+      setOpen(false)
+    }
     const avatarStyle = {
         backgroundColor: "#FFFF",
         margin: "6px 0px",
@@ -55,15 +60,16 @@ import TopBar from "../../components/topNav/TopBar";
     });
     const onSubmit = (values, props) => {
       dispatch(loginAction(values, history));
-   
+      if(userLogin.error){
+        setOpen(true);
+      }
     };
-
     useEffect(()=>{
       const isAuth=localStorage.getItem("mobicashAuth")
-      console.log("ssss",isAuth)
     if(isAuth){
       history.push('/dashboard',{push:true})
     }
+  
     },[])
     return (
       <Grid>
@@ -82,10 +88,33 @@ import TopBar from "../../components/topNav/TopBar";
           <Grid item xs={12} align="center">
             <Avatar style={avatarStyle}>
               {/* <LoginIcon /> */}
-              <img src={IMAGES.mobicashdot} alt="" className="topAvatarLogin" />
+              <img src="../../../Assets/images/mobicashdot.png" alt="" className="topAvatarLogin" />
             </Avatar>
-            
           </Grid>
+          {
+                  !userLogin.error? null:
+                   <Collapse in={open}>
+                   <Alert
+                   severity="error"
+                     action={
+                       <IconButton
+                         aria-label="close"
+                         color="inherit"
+                         size="small"
+                         onClick={handleClose}
+                        //  onClick={() => {
+                        //    setOpen(false);
+                        //  }}
+                       >
+                         <CloseIcon fontSize="inherit" />
+                       </IconButton>
+                     }
+                     sx={{ mb: 0.2 }}
+                   >
+                    {userLogin.error}
+                   </Alert>
+                 </Collapse>
+                }    
           <Grid style={textStyle}>
             <Formik
               initialValues={initialValues}
@@ -115,14 +144,15 @@ import TopBar from "../../components/topNav/TopBar";
                     required
                     helperText={<ErrorMessage name="password" />}
                   />   
-                   {
+                   {/* {
                   !userLogin.error? null:
                   <Stack sx={{ width: '100%' }} spacing={2}>
                 <Alert variant="filled" severity="error">
                   {userLogin.error}
                    </Alert>
                    </Stack>
-                }       
+                }    */}
+               
                   <Button
                     type="submit"
                     color="primary"

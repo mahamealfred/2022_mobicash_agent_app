@@ -10,11 +10,15 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { useHistory } from "react-router-dom";
 import TopBar from "../../components/topNav/TopBar";
-
-  
+import { forgotPasswordAction } from "../../redux/actions/forgotPasswordAction";
+import { useDispatch,useSelector } from "react-redux/es/exports";
+import Alert from '@mui/material/Alert';
+import Stack from '@mui/material/Stack';
   export default function ForgotPassword() {
   
     const history = useHistory();
+    const dispatch=useDispatch();
+    const forgotPassword=useSelector(state=>state.forgotPassword);
     
     useEffect(()=>{
       const isAuth=localStorage.getItem("mobicashAuth")
@@ -42,21 +46,21 @@ import TopBar from "../../components/topNav/TopBar";
     };
     const initialValues = {
       username: "",
-      password: "",
+      
      
     };
     const validationSchema = Yup.object().shape({
       username: Yup.string().required("Required"),
-      password: Yup.string().required("Required"),
+     
     });
-    const onSubmit = (values, props) => {
-
-     history.push('/reset-pin',{push:true})
+    const onSubmit = async(values, props) => {
+await dispatch(forgotPasswordAction(values,history))
+     
     };
-    const handleSubmit=(values, props)=>{
+    // const handleSubmit=(values, props)=>{
       
-        history.push('/reset-pin',{push:true})
-    }
+    //     history.push('/reset-pin',{push:true})
+    // }
     return (
       <Grid>
       <TopBar/>
@@ -71,8 +75,7 @@ import TopBar from "../../components/topNav/TopBar";
         }}
         >
             <Grid align="center" sx={{fontSize:'20px', fontWeight:'bold'}}>
-            Forgot Pin
-            
+            Forgot Password
           </Grid>
           <Grid style={textStyle}>
             <Formik
@@ -94,27 +97,27 @@ import TopBar from "../../components/topNav/TopBar";
                   />
                  
                   
-                  {/* {
-                    !userLogin.error? null:
+                 {
+                    !forgotPassword.error? null:
                     <Stack sx={{ width: '100%' }} spacing={2}>
                 <Alert variant="filled" severity="error">
-                    {userLogin.error}
+                    {forgotPassword.error}
                      </Alert>
                      </Stack>
                   }
-                   {/* <p>{userLogin.error}</p>
-                  */} 
+                   {/* {/* <p>{userLogin.error}</p>
+                   */}
                   <Button
                     type="submit"
                     color="primary"
                     variant="contained"
                     fullWidth
-                    onClick={handleSubmit}
+                    // onClick={onSubmit}
                     style={btnStyle}
                     // disabled={props.isSubmitting}
                   >     
-                    {/* {userLogin.loading ? "Loading" : "Sign in"} */}
-                    Forgot Password
+                    {forgotPassword.loading ? "Loading" : "Forgot Password"}
+                   
                   </Button>
                 </Form>
     )}

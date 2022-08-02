@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect,useState } from 'react'
 import Header from '../../../../components/header/Header';
 import './cbhiPayment.css';
 import { styled } from '@mui/material/styles';
@@ -10,26 +10,36 @@ import Button from "@mui/material/Button";
 import { ButtonGroup, Box,TextField } from "@mui/material";
 import MenuItem from "@mui/material/MenuItem";
 import { useHistory } from 'react-router-dom';
-const members=[
-  {
-  
-  name:"Bwiza Leatitia"
-},
-{
-  name:"Mahame Alfred"
-},
-{
- name:"Rushema Kanuma Prince"
-}
-]
+//import { headIdDetails } from '../Cbhi';
+import {useSelector} from "react-redux";
+
+
 const Img = styled('img')({
     margin: 'auto',
     display: 'block',
     maxWidth: '100%',
     maxHeight: '100%',
   });
+  
 const CbhiPayment = () => {
+  const [headIdDetails,setHeadIdDetails]=useState('');
   const history=useHistory();
+  const getNidDetails=useSelector((state)=>state.getNidDetails);
+  const getYear = useSelector((state) => state.getYear);
+  const [members,setMembers]=useState('');
+  
+  useEffect(()=>{
+    async function fetchData() {
+      if (!getNidDetails.loading) {
+        if (getNidDetails.details) {
+          await setHeadIdDetails(getNidDetails.details);
+         await setMembers(getNidDetails.details.members);
+        }
+      }
+    }
+    fetchData();
+  },[getNidDetails.details])
+
   const handleSubmit=()=>{
 history.push('/dashboard/cbhi-payment-details',{push:true})
   }
@@ -38,6 +48,7 @@ history.push('/dashboard/cbhi-payment-details',{push:true})
   }
   return (
     <div className='cbhiPayment'>
+  
         <Header/>
         <Paper
       sx={{
@@ -57,21 +68,25 @@ history.push('/dashboard/cbhi-payment-details',{push:true})
         </Grid>
         <Grid item xs={12} sm container>
           <Grid item xs container direction="column" spacing={2}>
+            
             <Grid item xs>
               <Typography gutterBottom variant="subtitle1" component="div" mt={4} sx={{ fontSize: "28px", fontWeight: "bold" }}>
               Mutuwel Service
               </Typography>
-              <Typography variant="body2" mt={1} sx={{ fontSize: "14px", fontWeight: "bold" }} gutterBottom>
+              {
+               getNidDetails.loading?("Loading"):getNidDetails.details?(
+                <>
+                 <Typography variant="body2" mt={1} sx={{ fontSize: "14px", fontWeight: "bold" }} gutterBottom>
                Name
               </Typography>
               <Typography variant="body3" sx={{ fontSize: "20px", fontWeight: "bold" }} color="text.secondary">
-                Mahame Alfred
+              {headIdDetails.headHouseHoldNames}
               </Typography>
               <Typography mt={1} sx={{ fontSize: "14px", fontWeight: "bold" }}  variant="body2" gutterBottom>
                 House Hold NID
               </Typography>
               <Typography variant="body3" sx={{ fontSize: "20px", fontWeight: "bold" }} color="text.secondary">
-                1199029299282828
+                {headIdDetails.headId}
               </Typography>
               <Typography mt={1} sx={{ fontSize: "14px", fontWeight: "bold" }}  variant="body2" gutterBottom>
                 Year of payment
@@ -83,44 +98,55 @@ history.push('/dashboard/cbhi-payment-details',{push:true})
                 Total Premium 
               </Typography>
               <Typography  variant="body3" sx={{ fontSize: "20px", fontWeight: "bold" }} color="text.secondary">
-                12000
+                {headIdDetails.totalAmount} Rwf
               </Typography>
               <Typography mt={1} sx={{ fontSize: "14px", fontWeight: "bold" }}  variant="body2" gutterBottom>
                 House Hold Category 
               </Typography>
               <Typography variant="body3" sx={{ fontSize: "20px", fontWeight: "bold" }} color="text.secondary">
-                3
+                {headIdDetails.houseHoldCategory}
               </Typography>
               <Typography mt={1} sx={{ fontSize: "14px", fontWeight: "bold" }}  variant="body2" gutterBottom>
                 Number Of Members 
               </Typography>
               <Typography variant="body3" sx={{ fontSize: "20px", fontWeight: "bold" }} color="text.secondary">
-                4
+                {headIdDetails.totalHouseHoldMembers}
               </Typography>
               <Typography mt={1} sx={{ fontSize: "14px", fontWeight: "bold" }}  variant="body2" gutterBottom>
                 Name Of Members 
               </Typography>
-              <Typography variant="body3" sx={{ fontSize: "20px", fontWeight: "bold" }} color="text.secondary">
-              <TextField
-                    id="standard-select-currency"
-                    select
-                    // value={paymentYear}
-                    fullWidth
-                    // onChange={handleChange}
-                    helperText="Please Check Name Of Members"
-                    variant="standard"
-                  >
-                    {members.map((option) => (
-                      <MenuItem disabled key={option.name} value={option.name}>{option.name}</MenuItem>
-                    ))}
-                  </TextField>
-              </Typography>
-              <Typography mt={1} sx={{ fontSize: "14px", fontWeight: "bold" }}  variant="body2" gutterBottom>
+              {
+                !members?null:
+                <Typography variant="body3" sx={{ fontSize: "20px", fontWeight: "bold" }} color="text.secondary">
+                <TextField
+                      id="standard-select-currency"
+                      select
+                      // value={paymentYear}
+                      fullWidth
+                      // onChange={handleChange}
+                      helperText="Please Check Name Of Members"
+                      variant="standard"
+                    >
+                      {members.map((option) => (
+                        <MenuItem disabled key={option.fullNames} value={option.fullNames}>{option.fullNames}</MenuItem>
+                      ))}
+                    </TextField>
+                </Typography>
+              }
+             {
+              headIdDetails.totalPaidAmount>0?<>
+               <Typography mt={1} sx={{ fontSize: "14px", fontWeight: "bold" }}  variant="body2" gutterBottom>
                 Already Paid
               </Typography>
               <Typography variant="body3" sx={{ fontSize: "20px", fontWeight: "bold" }} color="text.secondary">
-                12000 Rwf
+                {headIdDetails.totalPaidAmount} Rwf
               </Typography>
+              </>:null
+             }
+                </>
+               ):"No Details found"
+              }
+             
               <Typography mt={1} sx={{ fontSize: "14px", fontWeight: "bold" }}  variant="body2" gutterBottom>
                 Payer Phone 
               </Typography>

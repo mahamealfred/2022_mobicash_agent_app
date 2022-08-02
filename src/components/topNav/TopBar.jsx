@@ -74,7 +74,7 @@ const TopBar= () => {
         },
       }}
     >
-<img src={IMAGES.logo} alt="" className="topAvatar"/>
+<img src="../../../Assets/images/logo.png" alt="" className="topAvatar"/>
     </Box>
           </Typography>
           {

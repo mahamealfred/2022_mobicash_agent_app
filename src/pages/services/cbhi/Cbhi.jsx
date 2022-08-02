@@ -13,8 +13,13 @@ import { useDispatch, useSelector } from "react-redux";
 import MenuItem from "@mui/material/MenuItem";
 import { useHistory } from "react-router-dom";
 import CbhiList from "./cbhiList/CbhiList";
+import Collapse from '@mui/material/Collapse';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
 
-
+import Alert from '@mui/material/Alert';
+ export let headIdDetails=[]
+ export let paymentYear=[]
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
   ...theme.typography.body2,
@@ -29,29 +34,24 @@ const Cbhi = () => {
   const [years, setYears] = React.useState([]);
   const [paymentYear, setPaymentYear] = useState("");
   const [houseHoldNID,setHouseHoldNID]=useState("");
+  const [open, setOpen] = React.useState(true);
   const history=useHistory();
-  
+  const handleClose=()=>{
+    setOpen(false)
+  }
+ 
 const handelSubmit= async()=>{
  
-  await dispach(getNidDetailsAction({
-    houseHoldNID,
-    paymentYear
-  }));
-//   const formData={houseHoldNID,paymentYear}
-//   console.log("data..:",JSON.stringify(formData))
-//   const response = await fetch('http://52.36.87.202:105/api/agent/goverment-services/cbhi/rest/v.4.14.01/nid-validation', {
-//     method: 'POST',
-//     headers: { 
-//         'Content-Type': 'application/json',
-//      },
-//     body: JSON.stringify(formData)
-// });
-
-// const result = await response.json();
-// console.log("National id details:",result)
+  await dispach(getNidDetailsAction({ houseHoldNID, paymentYear },history));
+  if(getNidDetails.error){
+    setOpen(true)
+  }
   setHouseHoldNID("")
   setPaymentYear("")
-  history.push('/dashboard/cbhi-payment',{push:true})
+  paymentYear.push(paymentYear)
+  console.log("yeara",paymentYear)
+  
+ // history.push('/dashboard/cbhi-payment',{push:true})
 }
 const handleCancel=()=>{
   history.push('/dashboard',{push:true}) 
@@ -63,6 +63,11 @@ const handleCancel=()=>{
         if (getYear.years.return) {
           setYears(getYear.years.return);
         }
+      }
+
+      if(getNidDetails.details){
+        //setHeadIdDetails(getNidDetails.details)
+        headIdDetails.push(getNidDetails.details)
       }
   }
     fetchData();
@@ -83,9 +88,46 @@ const handleCancel=()=>{
             <Typography mt={2} sx={{ fontSize: "28px", fontWeight: "bold" }}>
               MUTUWEL SERVICE
             </Typography>
+            <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      "& > *": {
+                        m: 2,
+                      },
+                    }}
+                  >
+                    
+            {
+                  !getNidDetails.error? null:
+                   <Collapse in={open}>
+                   <Alert
+                   severity="error"
+                   sx={{mb: 0.2 }}
+                     action={
+                       <IconButton
+                         aria-label="close"
+                         color="inherit"
+                         size="small"
+                         onClick={handleClose}
+                        //  onClick={() => {
+                        //    setOpen(false);
+                        //  }}
+                       >
+                         <CloseIcon fontSize="inherit" />
+                       </IconButton>
+                     }
+                   >
+                    {getNidDetails.error}
+                   </Alert>
+                 </Collapse>
+                }     
+                </Box>
             <Item>
               <div className="content">
                 <div className="leftContent">
+               
                 <Typography mt={2} sx={{ fontSize: "20px", fontWeight: "bold" }}>
                 Household NID:
                 </Typography>

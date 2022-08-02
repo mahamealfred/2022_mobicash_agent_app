@@ -18,7 +18,7 @@ const Hero = () => {
     <TopBar/>
       <header className="header">
         <div className="header__img">
-          <img src={IMAGES.mobicashdot} alt="logo" />
+          <img src="../../../Assets/images/mobicashdot.png" alt="logo" />
         </div>
         <h1>MobiCash</h1>
         <p className="desktop__text">
