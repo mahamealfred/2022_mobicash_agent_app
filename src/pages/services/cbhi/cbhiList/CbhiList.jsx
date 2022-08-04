@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import "./cbhiList.css";
 import Box from "@mui/material/Box";
 import { Button } from "@mui/material";
@@ -14,6 +14,7 @@ import jsPDF from "jspdf";
 import  "jspdf-autotable";
 import { CSVLink } from "react-csv";
 import IMAGES from "../../../../Assets/Images";
+import { useSelector } from "react-redux";
 import moment from "moment";
 import {
   ButtonGroup,
@@ -76,7 +77,24 @@ const datas=[
 function CbhiList() {
 
   const todaydate=new Date().toISOString().slice(0,10);
- 
+  const transactionsDetails=useSelector((state)=>state.transactions);
+  const [agentTransactionsDetails,setAgentTransactionDetails]=useState("")
+  const [limit, setLimit] = useState(10);
+  const [selectedExamIds, setSelectedExamIds] = useState([]);
+  useEffect(()=>{
+    async function fetchData() {
+     
+      if (!transactionsDetails.loading) {
+        if (transactionsDetails.details) {
+          setAgentTransactionDetails(transactionsDetails.details)
+          
+        }
+      }
+     
+      
+    }
+    fetchData();
+  },[transactionsDetails.details])
     const headers = [
       { label: "Collection Date", key: "collectionDate" },
       { label: "Service", key: "service" },
@@ -169,34 +187,30 @@ function CbhiList() {
               <caption className="textTitle">Approved Data</caption>
               <TableHead>
                 <TableRow>
-                  <TableCell>DATE</TableCell>
-                  <TableCell align="center">SERVICE</TableCell>
+                 
+                  <TableCell align="center">ID</TableCell>
+                  <TableCell>OPERATION DATE</TableCell>
                   <TableCell align="center">AMOUNT</TableCell>
-                  <TableCell align="center">MOBICASH TRANSACTION</TableCell>
-                  <TableCell align="center">STATUS</TableCell>
+                  <TableCell align="center">DESCRIPTION</TableCell>
+                  <TableCell align="center">ACTION</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                    <TableRow>
-                    <TableCell component="th" scope="row">
-                  {/* {moment(d.collectionDate.format("DD/MM/YYYY"))} */}
-                 12-03-2021
+                {/* {agentTransactionsDetails.slice(0, limit).map((details) => ( */}
+                    <TableRow
+                    hover
+                    // key={details.id}
+                    // selected={selectedExamIds.indexOf(details.id) !== -1}
+                    >
+                <TableCell align="center"></TableCell>
+                <TableCell component="th" scope="row">
+                 
                 </TableCell>
-                <TableCell align="center">CBHI</TableCell>
-                <TableCell align="center">12000</TableCell>
-                <TableCell align="center">1282827272</TableCell>
-                <TableCell align="center">Pending</TableCell>
+                <TableCell align="center"></TableCell>
+                <TableCell align="center"></TableCell>
+                <TableCell align="center"><Button>Print</Button></TableCell>
               </TableRow> 
-              <TableRow>
-                    <TableCell component="th" scope="row">
-                  {/* {moment(d.collectionDate.format("DD/MM/YYYY"))} */}
-                 12-03-2021
-                </TableCell>
-                <TableCell align="center">CBHI</TableCell>
-                <TableCell align="center">12000</TableCell>
-                <TableCell align="center">1282827272</TableCell>
-                <TableCell align="center">Approved</TableCell>
-              </TableRow> 
+                {/* ))} */}
                 </TableBody>
             </Table>
           </TableContainer>

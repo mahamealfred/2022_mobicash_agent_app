@@ -58,8 +58,8 @@ import TopBar from "../../components/topNav/TopBar";
       username: Yup.string().required("Required"),
       password: Yup.string().required("Required"),
     });
-    const onSubmit = (values, props) => {
-      dispatch(loginAction(values, history));
+    const onSubmit = async(values, props) => {
+      await dispatch(loginAction(values, history));
       if(userLogin.error){
         setOpen(true);
       }

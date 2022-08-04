@@ -38,7 +38,6 @@ const ChangePin = () => {
     if (reason === "clickaway") {
       return;
     }
-
     setOpen(false);
   };
   const isAuth = localStorage.getItem("mobicashAuth");
@@ -46,7 +45,7 @@ const ChangePin = () => {
 
   const decode= (token) => {
     const JWT_SECRET="tokensecret";
-    const payload =jwt.verify(token, JWT_SECRET);
+    const payload = jwt.verify(token, JWT_SECRET);
      return payload;
   }
   const history= useHistory();
@@ -56,6 +55,7 @@ const ChangePin = () => {
     if (token) {
     const {username}=decode(token);
     setUsername(username)
+    
   }
 
   }, [])
@@ -75,7 +75,6 @@ const ChangePin = () => {
     oldPassword: "",
     newPassword: "",
     newPasswordConfirmation:"",
-   
   };
   const validationSchema = Yup.object().shape({
     oldPassword: Yup.string().required("Required"),
@@ -84,8 +83,8 @@ const ChangePin = () => {
     .oneOf([Yup.ref('newPassword'), null], 'Pin must match')
   });
 
-  const onSubmit = (values, props) => {
-     dispatch(changePinAction(values,username, history));
+  const onSubmit = async(values, props) => {
+    await dispatch(changePinAction(values,username, history));
     if(changePin.users){
       setOpenSnackbar(true)
     }
@@ -128,7 +127,7 @@ const ChangePin = () => {
             Please Change Your PIN.
           </Grid>
           {
-                  !changePin.error? null:
+                changePin.error? 
                    <Collapse in={open}>
                    <Alert
                    severity="error"
@@ -150,6 +149,7 @@ const ChangePin = () => {
                     {changePin.error}
                    </Alert>
                  </Collapse>
+                 :null
                 }    
           <Grid style={textStyle}>
             <Formik
@@ -189,16 +189,7 @@ const ChangePin = () => {
                     required
                     helperText={<ErrorMessage name="newPasswordConfirmation" />}
                   />
-                   {/* {
-                    !changePin.error? null:
-                    <Stack sx={{ width: '100%' }} spacing={2}>
-                <Alert variant="filled" severity="error">
-                    {changePin.error}
-                     </Alert>
-                     </Stack>
-                  } */}
-                   {/* {/* <p>{userLogin.error}</p>
-                    */}
+                   
                   <Button
                     type="submit"
                     color="primary"

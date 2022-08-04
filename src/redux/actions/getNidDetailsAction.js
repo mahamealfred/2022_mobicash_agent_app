@@ -54,10 +54,10 @@ export const getNidDetailsRequest = () => {
   };
 };
 
-export const getNidDetailsSuccess = (details) => {
+export const getNidDetailsSuccess = (cbhidetails) => {
   return {
     type: GET_NID_DETAILS_SUCCESS,
-    payload: details,
+    payload: cbhidetails,
   };
 };
 export const getNidDetailsFailure = (error) => {

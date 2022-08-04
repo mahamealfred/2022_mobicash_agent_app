@@ -11,37 +11,88 @@ import { ButtonGroup, Box,TextField } from "@mui/material";
 import MenuItem from "@mui/material/MenuItem";
 import { useHistory } from 'react-router-dom';
 //import { headIdDetails } from '../Cbhi';
-import {useSelector} from "react-redux";
-
-
-const Img = styled('img')({
-    margin: 'auto',
-    display: 'block',
-    maxWidth: '100%',
-    maxHeight: '100%',
-  });
-  
+import {year} from "../Cbhi";
+import {useSelector,useDispatch} from "react-redux";
+import jwt from "jsonwebtoken";
+import Stack from '@mui/material/Stack';
+import CircularProgress from '@mui/material/CircularProgress';
+import { cbhiPayamentAction } from '../../../../redux/actions/cbhiPaymentAction';
+import {transactionsAction} from '../../../../redux/actions/transactionsAction';
+export let amount=[]
 const CbhiPayment = () => {
   const [headIdDetails,setHeadIdDetails]=useState('');
   const history=useHistory();
+  const dispatch=useDispatch();
   const getNidDetails=useSelector((state)=>state.getNidDetails);
-  const getYear = useSelector((state) => state.getYear);
+  const cbhiPayment = useSelector((state) => state.cbhiPayment);
   const [members,setMembers]=useState('');
+  const [username,setUsername]=useState('')
+  const [agentCategory,setAgentCategory]=useState('');
+
+  const [houseHoldNID,setHouseHoldNID]=useState('')
+  const [paymentYear,setPaymentYear]=useState('')
+  const [amountPaid,setAmountPaid]=useState('');
+  const [payerName,setPayerName]=useState('');
+  const [houseHoldCategory,seHouseHoldCategory]=useState('');
+  const [householdMemberNumber,setHouseholdMemberNumber]=useState('');
+  const [totalPremium,setTotalPremium]=useState('');    
+  const [payerPhoneNumber,setPayerPhoneNumber]=useState('')   
+  const [password,setPassword]=useState('');
+  const [userGroup,setUserGroup]=useState('');
+
+  const decode= (token) => {
+    const JWT_SECRET="tokensecret";
+    const payload = jwt.verify(token, JWT_SECRET);
+     return payload;
+  }
+  useEffect(() => {
   
+    const token =localStorage.getItem('mobicashAuth');
+    if (token) {
+    const {username}=decode(token);
+    const {role}=decode(token);
+    const {group}=decode(token);
+    setUsername(username)
+    setAgentCategory(role)
+    setUserGroup(group);
+  }
+
+  }, []);
+
   useEffect(()=>{
     async function fetchData() {
       if (!getNidDetails.loading) {
-        if (getNidDetails.details) {
-          await setHeadIdDetails(getNidDetails.details);
-         await setMembers(getNidDetails.details.members);
+        if (getNidDetails.cbhidetails) {
+          await setHeadIdDetails(getNidDetails.cbhidetails);
+         await setMembers(getNidDetails.cbhidetails.members);
+         setHouseHoldNID(getNidDetails.cbhidetails.headId)
+         setPaymentYear(year[0])
+         setPayerName(getNidDetails.cbhidetails.headHouseHoldNames)
+         seHouseHoldCategory(getNidDetails.cbhidetails.houseHoldCategory)
+         setHouseholdMemberNumber(getNidDetails.cbhidetails.totalHouseHoldMembers)
+         setTotalPremium(getNidDetails.cbhidetails.totalAmount)
+         
         }
       }
     }
     fetchData();
-  },[getNidDetails.details])
+  },[getNidDetails.cbhidetails])
 
-  const handleSubmit=()=>{
-history.push('/dashboard/cbhi-payment-details',{push:true})
+  const handleSubmit=async()=>{
+    
+await dispatch(cbhiPayamentAction({
+  houseHoldNID,
+  paymentYear,
+  amountPaid,
+  payerName,
+  houseHoldCategory,
+  householdMemberNumber,
+  totalPremium,
+  payerPhoneNumber,
+  agentCategory,
+  userGroup
+},username,password,history))
+await dispatch(transactionsAction(username,password))
   }
   const handleCancel=()=>{
     history.push('/dashboard/cbhi',{push:true}) 
@@ -52,7 +103,7 @@ history.push('/dashboard/cbhi-payment-details',{push:true})
         <Header/>
         <Paper
       sx={{
-        p: 4,
+        p: 2,
         margin: 'auto',
         maxWidth: 500,
         flexGrow: 1,
@@ -60,56 +111,61 @@ history.push('/dashboard/cbhi-payment-details',{push:true})
           theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
       }}
     >
-      <Grid container spacing={2} >
+      <Box sx={{ flexGrow: 4 }}>
+      <Grid 
+      container 
+      spacing={2}
+      sx={{ padding: "5px", textAlign: "center" }}
+       >
+      <Typography mt={2} sx={{ fontSize: "28px", fontWeight: "bold" }}>
+              MUTUWEL SERVICE
+            </Typography>
         <Grid item>
-          {/* <ButtonBase sx={{ width: 158, height: 128 }}>
-            <Img alt="complex" src="../../images/electricity.png" />
-          </ButtonBase> */}
+        
         </Grid>
-        <Grid item xs={12} sm container>
+        <Grid item xs={18} sm container>
           <Grid item xs container direction="column" spacing={2}>
             
             <Grid item xs>
-              <Typography gutterBottom variant="subtitle1" component="div" mt={4} sx={{ fontSize: "28px", fontWeight: "bold" }}>
-              Mutuwel Service
-              </Typography>
+           
               {
-               getNidDetails.loading?("Loading"):getNidDetails.details?(
+               getNidDetails.loading?("Loading"):getNidDetails.cbhidetails?(
                 <>
                  <Typography variant="body2" mt={1} sx={{ fontSize: "14px", fontWeight: "bold" }} gutterBottom>
                Name
               </Typography>
-              <Typography variant="body3" sx={{ fontSize: "20px", fontWeight: "bold" }} color="text.secondary">
+              <Typography variant="body2" sx={{ fontSize: "16px", fontWeight: "bold" }} color="text.secondary">
               {headIdDetails.headHouseHoldNames}
               </Typography>
               <Typography mt={1} sx={{ fontSize: "14px", fontWeight: "bold" }}  variant="body2" gutterBottom>
                 House Hold NID
               </Typography>
-              <Typography variant="body3" sx={{ fontSize: "20px", fontWeight: "bold" }} color="text.secondary">
+              <Typography variant="body2" sx={{ fontSize: "16px", fontWeight: "bold" }} color="text.secondary">
                 {headIdDetails.headId}
               </Typography>
               <Typography mt={1} sx={{ fontSize: "14px", fontWeight: "bold" }}  variant="body2" gutterBottom>
                 Year of payment
               </Typography>
-              <Typography variant="body3" sx={{ fontSize: "20px", fontWeight: "bold" }} color="text.secondary">
-                2022
+              <Typography variant="body2" sx={{ fontSize: "16px", fontWeight: "bold" }} color="text.secondary">
+                {year[0]}
               </Typography>
               <Typography mt={1} sx={{ fontSize: "14px", fontWeight: "bold" }}  variant="body2" gutterBottom>
                 Total Premium 
               </Typography>
-              <Typography  variant="body3" sx={{ fontSize: "20px", fontWeight: "bold" }} color="text.secondary">
+             
+              <Typography  variant="body2"  sx={{ fontSize: "16px", fontWeight: "bold" }}  color="text.secondary">
                 {headIdDetails.totalAmount} Rwf
               </Typography>
               <Typography mt={1} sx={{ fontSize: "14px", fontWeight: "bold" }}  variant="body2" gutterBottom>
                 House Hold Category 
               </Typography>
-              <Typography variant="body3" sx={{ fontSize: "20px", fontWeight: "bold" }} color="text.secondary">
+              <Typography variant="body2" sx={{ fontSize: "16px", fontWeight: "bold" }} color="text.secondary">
                 {headIdDetails.houseHoldCategory}
               </Typography>
               <Typography mt={1} sx={{ fontSize: "14px", fontWeight: "bold" }}  variant="body2" gutterBottom>
                 Number Of Members 
               </Typography>
-              <Typography variant="body3" sx={{ fontSize: "20px", fontWeight: "bold" }} color="text.secondary">
+              <Typography variant="body2" sx={{ fontSize: "16px", fontWeight: "bold" }} color="text.secondary">
                 {headIdDetails.totalHouseHoldMembers}
               </Typography>
               <Typography mt={1} sx={{ fontSize: "14px", fontWeight: "bold" }}  variant="body2" gutterBottom>
@@ -117,7 +173,7 @@ history.push('/dashboard/cbhi-payment-details',{push:true})
               </Typography>
               {
                 !members?null:
-                <Typography variant="body3" sx={{ fontSize: "20px", fontWeight: "bold" }} color="text.secondary">
+                <Typography variant="body2" sx={{ fontSize: "20px", fontWeight: "bold" }} color="text.secondary">
                 <TextField
                       id="standard-select-currency"
                       select
@@ -135,10 +191,11 @@ history.push('/dashboard/cbhi-payment-details',{push:true})
               }
              {
               headIdDetails.totalPaidAmount>0?<>
-               <Typography mt={1} sx={{ fontSize: "14px", fontWeight: "bold" }}  variant="body2" gutterBottom>
+               <Typography mt={1} sx={{ fontSize: "14px", fontWeight: "bold"  }}  variant="body2" gutterBottom>
                 Already Paid
               </Typography>
-              <Typography variant="body3" sx={{ fontSize: "20px", fontWeight: "bold" }} color="text.secondary">
+              
+              <Typography variant="body2" sx={{ fontSize: "16px", fontWeight: "bold",color:"green" }} color="text.secondary">
                 {headIdDetails.totalPaidAmount} Rwf
               </Typography>
               </>:null
@@ -147,6 +204,11 @@ history.push('/dashboard/cbhi-payment-details',{push:true})
                ):"No Details found"
               }
              
+            </Grid>
+           
+          </Grid>
+          <Grid item xs container direction="column" spacing={2}>
+          <Grid item xs>
               <Typography mt={1} sx={{ fontSize: "14px", fontWeight: "bold" }}  variant="body2" gutterBottom>
                 Payer Phone 
               </Typography>
@@ -154,7 +216,7 @@ history.push('/dashboard/cbhi-payment-details',{push:true})
               <TextField
                     label="Phone Number"
                     name="amount"
-                    // onChange={(e)=>setHouseHoldNID(e.target.value)}
+                    onChange={(e)=>setPayerPhoneNumber(e.target.value)}
                     placeholder="Enter Phone"
                     variant="standard"
                     fullWidth
@@ -168,7 +230,7 @@ history.push('/dashboard/cbhi-payment-details',{push:true})
               <TextField
                     label="Amount"
                     name="amount"
-                    // onChange={(e)=>setHouseHoldNID(e.target.value)}
+                     onChange={(e)=>setAmountPaid(e.target.value)}
                     placeholder="Enter Amount to Pay"
                     variant="standard"
                     fullWidth
@@ -183,7 +245,7 @@ history.push('/dashboard/cbhi-payment-details',{push:true})
                     label="Pin"
                     name="amount"
                     type="password"
-                    // onChange={(e)=>setHouseHoldNID(e.target.value)}
+                    onChange={(e)=>setPassword(e.target.value)}
                     placeholder="Enter Pin"
                     variant="standard"
                     fullWidth
@@ -218,22 +280,22 @@ history.push('/dashboard/cbhi-payment-details',{push:true})
                         sx={{ backgroundColor: "#F9842C" }}
                         className="buttonGroup"
                       >
-                        Submit
+                      {cbhiPayment.loading ? <Stack sx={{ color: 'grey.500'}} spacing={1} direction="row">
+      <CircularProgress color="inherit" height="10px" width="10px" />
+     
+    </Stack> : "Send"}   
                       </Button>
                     </ButtonGroup>
                   </Box>
               </Typography>
             </Grid>
           </Grid>
-          <Grid item>
-            <Typography variant="subtitle1" component="div">
-              Mutuwel Service
-            </Typography>
-          </Grid>
+         
         </Grid>
       </Grid>
+    </Box>
     </Paper>
-        </div>
+   </div>
   )
 }
 

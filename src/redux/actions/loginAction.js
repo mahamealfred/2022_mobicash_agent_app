@@ -1,5 +1,4 @@
 import axios from "axios";
-import {encode,decode} from "../../helpers/jwtTokenizer";
 import {
     LOGIN_REQUEST,
     LOGIN_SUCCESS,
@@ -38,8 +37,9 @@ export const loginAction = (user,history) => async (dispatch) => {
       const userId=res.data.id
       const name=res.data.display
       const role=res.data.brokering
+      const group=res.data.group
       console.log(userId,name,role)
-      const claims={userId,name,role,username}
+      const claims={userId,name,role,username,group}
       const token= jwt.sign(claims,jwt_secret, { expiresIn: "7d"});
       dispatch(loginSuccess(data));
       history.push('/dashboard',{push:true})
@@ -64,10 +64,10 @@ export const loginRequest = () => {
   };
 };
 
-export const loginSuccess = (exams) => {
+export const loginSuccess = (users) => {
   return {
     type: LOGIN_SUCCESS,
-    payload: exams,
+    payload: users,
   };
 };
 export const loginFailure = (error) => {

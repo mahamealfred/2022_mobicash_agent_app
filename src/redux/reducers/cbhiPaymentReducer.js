@@ -1,32 +1,32 @@
 import {
-    GET_NID_DETAILS_REQUEST,
-    GET_NID_DETAILS_SUCCESS,
-    GET_NID_DETAILS_FAILURE,
-  } from "../types/getNidDetailsTypes";
+    CBHI_PAYMENT_REQUEST,
+    CBHI_PAYMENT_SUCCESS,
+    CBHI_PAYMENT_FAILURE,
+  } from "../types/cbhiPaymentTypes";
   
   const initialState = {
     loading: false,
-    cbhidetails: [],
+    details: [],
     error: "",
   };
   
   const reducer = (state = initialState, action) => {
     switch (action.type) {
-      case GET_NID_DETAILS_REQUEST:
+      case CBHI_PAYMENT_REQUEST:
         return {
           ...state, //spredding
           loading: true,
         };
-      case GET_NID_DETAILS_SUCCESS:
+      case CBHI_PAYMENT_SUCCESS:
         return {
           loading: false,
-          cbhidetails: action.payload,
+          details: action.payload,
           error: "",
         };
-      case GET_NID_DETAILS_FAILURE:
+      case CBHI_PAYMENT_FAILURE:
         return {
           loading: false,
-          cbhidetails: [],
+          details: [],
           error: action.payload,
         };
       default:

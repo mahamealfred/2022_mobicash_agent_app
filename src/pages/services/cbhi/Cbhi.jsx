@@ -16,10 +16,12 @@ import CbhiList from "./cbhiList/CbhiList";
 import Collapse from '@mui/material/Collapse';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
-
+import LinearProgress from '@mui/material/LinearProgress';
+import Stack from '@mui/material/Stack';
+import CircularProgress from '@mui/material/CircularProgress'
 import Alert from '@mui/material/Alert';
  export let headIdDetails=[]
- export let paymentYear=[]
+ export let year=[]
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
   ...theme.typography.body2,
@@ -43,13 +45,14 @@ const Cbhi = () => {
 const handelSubmit= async()=>{
  
   await dispach(getNidDetailsAction({ houseHoldNID, paymentYear },history));
+  //history.push('/dashboard/cbhi-payment',{push:true})
   if(getNidDetails.error){
     setOpen(true)
   }
-  setHouseHoldNID("")
-  setPaymentYear("")
-  paymentYear.push(paymentYear)
-  console.log("yeara",paymentYear)
+  // setHouseHoldNID("")
+  // setPaymentYear("")
+  year.push(paymentYear)
+ 
   
  // history.push('/dashboard/cbhi-payment',{push:true})
 }
@@ -64,14 +67,15 @@ const handleCancel=()=>{
           setYears(getYear.years.return);
         }
       }
-
-      if(getNidDetails.details){
-        //setHeadIdDetails(getNidDetails.details)
-        headIdDetails.push(getNidDetails.details)
-      }
+       if(!getNidDetails.loading){
+        if(getNidDetails.cbhidetails){
+          //setHeadIdDetails(getNidDetails.details)
+          headIdDetails.push(getNidDetails.cbhidetails)
+        }
+       }
   }
     fetchData();
-  }, [!getYear.years.return]); 
+  }, [!getYear.years.return,!getNidDetails.cbhidetails]); 
   const handleChange = (event) => {
     setPaymentYear(event.target.value);
   };
@@ -184,8 +188,11 @@ const handleCancel=()=>{
                         className="buttonGroup"
                         onClick={handelSubmit}
                       >
-                        {getNidDetails.loading ? "Loading" : "Submit"}
-                      
+                        {getNidDetails.loading ? <Stack sx={{ color: 'grey.500'}} spacing={1} direction="row">
+      <CircularProgress color="inherit" height="10px" width="10px" />
+     
+    </Stack> : "Send"}
+                  
                       </Button>
                     </ButtonGroup>
                   </Box>
@@ -193,7 +200,7 @@ const handleCancel=()=>{
               </div>
             </Item>
           </Grid>
-          <CbhiList/>
+         
         </Grid>
          
       </Box>

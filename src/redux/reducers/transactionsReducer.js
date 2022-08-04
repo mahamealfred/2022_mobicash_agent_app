@@ -1,32 +1,32 @@
 import {
-    GET_NID_DETAILS_REQUEST,
-    GET_NID_DETAILS_SUCCESS,
-    GET_NID_DETAILS_FAILURE,
-  } from "../types/getNidDetailsTypes";
+    TRANSACTIONS_REQUEST,
+    TRANSACTIONS_SUCCESS,
+    TRANSACTIONS_FAILURE,
+  } from "../types/transactionsTypes";
   
   const initialState = {
     loading: false,
-    cbhidetails: [],
+    details: [],
     error: "",
   };
   
   const reducer = (state = initialState, action) => {
     switch (action.type) {
-      case GET_NID_DETAILS_REQUEST:
+      case TRANSACTIONS_REQUEST:
         return {
           ...state, //spredding
           loading: true,
         };
-      case GET_NID_DETAILS_SUCCESS:
+      case TRANSACTIONS_SUCCESS:
         return {
           loading: false,
-          cbhidetails: action.payload,
+          details: action.payload,
           error: "",
         };
-      case GET_NID_DETAILS_FAILURE:
+      case TRANSACTIONS_FAILURE:
         return {
           loading: false,
-          cbhidetails: [],
+          details: [],
           error: action.payload,
         };
       default:

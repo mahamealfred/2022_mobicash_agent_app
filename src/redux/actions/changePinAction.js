@@ -16,23 +16,25 @@ export const changePinAction = (user,username,history) => async (dispatch) => {
     const {oldPassword}=user 
     const {newPassword}=user
     const {newPasswordConfirmation}=user
+    const password=oldPassword
+    console.log("o new c ",oldPassword,newPassword,newPasswordConfirmation,username, password);
     //const encodedBase64Token = Buffer.from(`${username}:${password}`).toString('base64');
-   // let basicAuth='Basic ' + btoa(username + ':' + password);
+    let basicAuth='Basic ' + btoa(username + ':' + password);
     const Url='http://52.36.87.202:107/api/agent/user/rest/v.4.14.01/change-password';
    const res = await axios.post(Url,{
     oldPassword:oldPassword,
     newPassword:newPassword,
     newPasswordConfirmation:newPasswordConfirmation
-   }, {
-    // withCredentials: true,
+   },{
+    withCredentials: true,
     headers:{
     "Accept":"application/json",
     "Content-Type": "application/json",
-  //'Authorization': + basicAuth,
+    'Authorization': + basicAuth,
  },
   auth: {
     username,
-    password:oldPassword
+    password
   }
    });
     const {data} = await res;
@@ -46,8 +48,9 @@ export const changePinAction = (user,username,history) => async (dispatch) => {
   } catch (err) {
     if (err.response) {
       //const errorMessage = await err.response.data.responseMessage;
-      let errorMessage = ''
-        errorMessage="Please provide valid Pin"
+      // let errorMessage = ''
+      //   errorMessage="Please provide valid Pin"
+      const errorMessage = 'Please provide valid Pin'
        // errorMessage=await err.response.data.message
         dispatch(changePinFailure(errorMessage));
       
