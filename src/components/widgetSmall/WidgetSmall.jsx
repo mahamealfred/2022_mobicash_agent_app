@@ -9,4 +9,4 @@ const WidgetSmall = () => {
   )
 }
 
-export default WidgetSmall
+export default WidgetSmall;
