@@ -69,11 +69,11 @@ export const cbhiPayamentAction = (details,username,password,history) => async (
       
   } catch (err) {
     if (err.response) {
-     // const errorMessage = await err.response.data.message;
-       //let errorMessage = ''
+       // const errorMessage = await err.response;
+       let errorMessage = 'Invalid input'
       //   errorMessage="Please provide valid Pin"
-      const errorMessage = 'Error'
-       // errorMessage=await err.response.data.message
+     // const errorMessage = 'Error'
+      // errorMessage=await err.response.data.message
         dispatch(cbhiPaymentFailure(errorMessage)); 
     } else {
       dispatch(cbhiPaymentFailure("Network Error"));

@@ -19,18 +19,16 @@ import jwt from "jsonwebtoken";
 import { useHistory } from 'react-router-dom';
 function App() {
   const { path } = useRouteMatch();
-  const decode= (token) => {
+  const decode=(token) => {
     const JWT_SECRET="tokensecret";
-    const payload =jwt.verify(token, JWT_SECRET);
+    const payload = jwt.verify(token, JWT_SECRET);
      return payload;
   }
   const history= useHistory();
   useEffect(() => {
-  
     const token =localStorage.getItem('mobicashAuth');
     if (token) {
     const {exp}=decode(token);
-    console.log(history)
     if(Date.now()>=exp*1000){
       localStorage.removeItem("mobicashAuth")
      return history.push('/', { push: true })
@@ -40,8 +38,7 @@ function App() {
     }
   }
   return history.push('/', { push: true })
-
-  }, [])
+  }, []);
   return (
     <Switch>
       <AgentDashboard>

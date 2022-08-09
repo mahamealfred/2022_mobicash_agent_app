@@ -37,7 +37,15 @@ const Cbhi = () => {
   const [paymentYear, setPaymentYear] = useState("");
   const [houseHoldNID,setHouseHoldNID]=useState("");
   const [open, setOpen] = React.useState(true);
+  const [error,setError]=useState("");
   const history=useHistory();
+
+  const initialState = {houseHoldNID: '', password: ''};
+ 
+
+  const handleError= ()=>{
+    
+  }
   const handleClose=()=>{
     setOpen(false)
   }
@@ -135,15 +143,26 @@ const handleCancel=()=>{
                 <Typography mt={2} sx={{ fontSize: "20px", fontWeight: "bold" }}>
                 Household NID:
                 </Typography>
-                 
-                  <TextField
-                    label="HouseHold NID"
-                    name={houseHoldNID}
-                    onChange={(e)=>setHouseHoldNID(e.target.value)}
-                    placeholder="Enter Household NID"
-                    variant="standard"
+                <Box
+      component="form"
+      sx={{
+        '& .MuiTextField-root': { m: 1, width: '25ch' },
+      }}
+      noValidate
+      autoComplete="off"
+    >
+                    <TextField
+                     value={houseHoldNID}
+                    //  error={houseHoldNID}
+                     id="standard-error-helper-text"
+                     helperText={houseHoldNID === "" ? "Please enter NID" : " "}
+                     label="HouseHold NID"
+                     name={houseHoldNID}
+                     onChange={(e)=>setHouseHoldNID(e.target.value)}
+                     placeholder="Enter Household NID"
+                     variant="standard"
                     // fullWidth
-                    required
+                     required
                   />
                   <br />
                   <Typography mt={2} sx={{ fontSize: "20px", fontWeight: "bold" }}>
@@ -162,6 +181,8 @@ const handleCancel=()=>{
                       <MenuItem key={option.year} value={option.year}>{option.year}</MenuItem>
                     ))}
                   </TextField>
+      </Box>
+                 
                   <br />
                   <Box
                     sx={{
@@ -189,7 +210,7 @@ const handleCancel=()=>{
                         onClick={handelSubmit}
                       >
                         {getNidDetails.loading ? <Stack sx={{ color: 'grey.500'}} spacing={1} direction="row">
-      <CircularProgress color="inherit" height="10px" width="10px" />
+      <CircularProgress size={20} color="inherit" height="10px" width="10px" />
      
     </Stack> : "Send"}
                   

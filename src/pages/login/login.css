@@ -12,5 +12,10 @@
     height: 32px;
     transition: transform .2s;
     object-fit: contain;
+    color: #cec7c8;
     
 }
+.errors{
+    color: #D8000C;
+    background-color: #FFBABA
+  }

@@ -49,6 +49,7 @@ const Header= () => {
     if(event==="Logout"){
       localStorage.removeItem("mobicashAuth");
       history.push("/", { push: true });
+      window.location.reload(true);
     }
    
     else{

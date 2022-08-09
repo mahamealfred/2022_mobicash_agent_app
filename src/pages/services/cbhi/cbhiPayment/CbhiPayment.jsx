@@ -18,6 +18,10 @@ import Stack from '@mui/material/Stack';
 import CircularProgress from '@mui/material/CircularProgress';
 import { cbhiPayamentAction } from '../../../../redux/actions/cbhiPaymentAction';
 import {transactionsAction} from '../../../../redux/actions/transactionsAction';
+import Collapse from '@mui/material/Collapse';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
+import Alert from '@mui/material/Alert';
 export let amount=[]
 const CbhiPayment = () => {
   const [headIdDetails,setHeadIdDetails]=useState('');
@@ -39,7 +43,11 @@ const CbhiPayment = () => {
   const [payerPhoneNumber,setPayerPhoneNumber]=useState('')   
   const [password,setPassword]=useState('');
   const [userGroup,setUserGroup]=useState('');
-
+  const [open, setOpen] = React.useState(true);
+  
+  const handleClose=()=>{
+    setOpen(false)
+  }
   const decode= (token) => {
     const JWT_SECRET="tokensecret";
     const payload = jwt.verify(token, JWT_SECRET);
@@ -93,7 +101,10 @@ await dispatch(cbhiPayamentAction({
   userGroup
 },username,password,history))
 await dispatch(transactionsAction(username,password))
-  }
+if(cbhiPayment.error){
+  setOpen(true)
+}
+}
   const handleCancel=()=>{
     history.push('/dashboard/cbhi',{push:true}) 
   }
@@ -103,7 +114,7 @@ await dispatch(transactionsAction(username,password))
         <Header/>
         <Paper
       sx={{
-        p: 2,
+        p: 1,
         margin: 'auto',
         maxWidth: 500,
         flexGrow: 1,
@@ -115,17 +126,54 @@ await dispatch(transactionsAction(username,password))
       <Grid 
       container 
       spacing={2}
-      sx={{ padding: "5px", textAlign: "center" }}
+      sx={{ padding: "30px", textAlign: "center" }}
        >
-      <Typography mt={2} sx={{ fontSize: "28px", fontWeight: "bold" }}>
+      <Grid item xs={12}  spacing={2}>
+            <Typography mt={2} sx={{ fontSize: "28px", fontWeight: "bold" }}>
               MUTUWEL SERVICE
             </Typography>
+            <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      "& > *": {
+                        m: 2,
+                      },
+                    }}
+                  >
+                    
+            {
+                  !cbhiPayment.error? null:
+                   <Collapse in={open}>
+                   <Alert
+                   severity="error"
+                   sx={{mb: 0.2 }}
+                     action={
+                       <IconButton
+                         aria-label="close"
+                         color="inherit"
+                         size="small"
+                         onClick={handleClose}
+                        //  onClick={() => {
+                        //    setOpen(false);
+                        //  }}
+                       >
+                         <CloseIcon fontSize="inherit" />
+                       </IconButton>
+                     }
+                   >
+                    {cbhiPayment.error}
+                   </Alert>
+                 </Collapse>
+                }     
+                </Box>
+                </Grid>
         <Grid item>
-        
+      
         </Grid>
         <Grid item xs={18} sm container>
           <Grid item xs container direction="column" spacing={2}>
-            
             <Grid item xs>
            
               {
@@ -281,7 +329,7 @@ await dispatch(transactionsAction(username,password))
                         className="buttonGroup"
                       >
                       {cbhiPayment.loading ? <Stack sx={{ color: 'grey.500'}} spacing={1} direction="row">
-      <CircularProgress color="inherit" height="10px" width="10px" />
+      <CircularProgress size={20} color="inherit" height="10px" width="10px" />
      
     </Stack> : "Send"}   
                       </Button>

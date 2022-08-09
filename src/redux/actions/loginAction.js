@@ -39,7 +39,7 @@ export const loginAction = (user,history) => async (dispatch) => {
       const role=res.data.brokering
       const group=res.data.group
       console.log(userId,name,role)
-      const claims={userId,name,role,username,group}
+      const claims={userId,name,role,username,group,password}
       const token= jwt.sign(claims,jwt_secret, { expiresIn: "7d"});
       dispatch(loginSuccess(data));
       history.push('/dashboard',{push:true})

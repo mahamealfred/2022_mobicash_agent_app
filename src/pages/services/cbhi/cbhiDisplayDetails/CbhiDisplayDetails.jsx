@@ -18,6 +18,7 @@ import CbhiList from '../cbhiList/CbhiList';
 import jwt from "jsonwebtoken";
 import moment from "moment";
 import {amount} from "../cbhiPayment/CbhiPayment";
+import Alert from '@mui/material/Alert';
 const Img = styled('img')({
     margin: 'auto',
     display: 'block',
@@ -63,14 +64,11 @@ const CbhiDisplayDetails = () => {
           
         }
       }
-     
-     
-      
     }
     fetchData();
   },[cbhiPaymentDetails.details])
 
-    const handleNewPayment=()=>{
+const handleNewPayment=()=>{
 history.push('/dashboard/cbhi',{push:true})
     }
   useEffect(()=>{
@@ -150,12 +148,12 @@ history.push('/dashboard/cbhi-payment-details',{push:true})
           <Grid item xs container direction="column" spacing={2}>
           <Grid item xs>
          
-              <Typography mt={1} sx={{ fontSize: "14px", fontWeight: "bold" }}  variant="body2" gutterBottom>
+              {/* <Typography mt={1} sx={{ fontSize: "14px", fontWeight: "bold" }}  variant="body2" gutterBottom>
               Mobicash Reference ID
               </Typography>
               <Typography variant="body2" sx={{ fontSize: "16px", fontWeight: "bold" }} color="text.secondary">
               MOBICASH0000000000023
-              </Typography>
+              </Typography> */}
                <Typography mt={1} sx={{ fontSize: "14px", fontWeight: "bold"  }}  variant="body2" gutterBottom>
                Paid Amount
               </Typography>
@@ -175,7 +173,6 @@ history.push('/dashboard/cbhi-payment-details',{push:true})
               <Typography variant="body2" sx={{ fontSize: "16px", fontWeight: "bold",color:"green" }} color="text.secondary">
               {diplayPaymentDetails.status}
               </Typography>
-              
             </Grid>
             <Grid item>
               <Typography sx={{ cursor: 'pointer' }} variant="body2">

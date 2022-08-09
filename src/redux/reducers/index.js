@@ -8,7 +8,7 @@ import forgotPasswordReducer from "./forgotPasswordReducer";
 import getRnitDetailsReducer from "./getRnitDetailsReducer";
 import cbhiPayamentReducer from "./cbhiPaymentReducer";
 import transactionsReducer from "./transactionsReducer";
-
+import balanceReducer from "./getBalanceReducer";
 const allReducers = combineReducers({
     login:loginReducer,
     getYear:getYearReducer,
@@ -20,6 +20,7 @@ const allReducers = combineReducers({
     getRnitDetails: getRnitDetailsReducer,
     cbhiPayment:cbhiPayamentReducer,
     transactions:transactionsReducer,
+    balance:balanceReducer,
 });
 
 export default allReducers;

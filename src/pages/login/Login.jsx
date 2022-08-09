@@ -18,10 +18,13 @@ import { useDispatch ,useSelector} from "react-redux";
 // import {Link} from "react-router-dom"
 import "./login.css"
 import { loginAction } from "../../redux/actions/loginAction";
+import { getBalanceAction } from "../../redux/actions/getBalanceAction";
 import Collapse from '@mui/material/Collapse';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import TopBar from "../../components/topNav/TopBar";
+import { useForm, Controller } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
   export default function Login() {
     const [open, setOpen] = React.useState(true);
     const dispatch = useDispatch();
@@ -55,14 +58,26 @@ import TopBar from "../../components/topNav/TopBar";
      
     };
     const validationSchema = Yup.object().shape({
-      username: Yup.string().required("Required"),
-      password: Yup.string().required("Required"),
+      username: Yup.string()
+      .required('Username is required'),
+      // .min(3, 'Username must be at least 6 characters')
+      // .max(20, 'Username must not exceed 20 characters'),
+      password: Yup.string().required("Password is required"),
+    });
+    const {
+      register,
+      control,
+      handleSubmit,
+      formState: { errors }
+    } = useForm({
+      resolver: yupResolver(validationSchema)
     });
     const onSubmit = async(values, props) => {
       await dispatch(loginAction(values, history));
       if(userLogin.error){
         setOpen(true);
       }
+      await dispatch(getBalanceAction(values, history));
     };
     useEffect(()=>{
       const isAuth=localStorage.getItem("mobicashAuth")
@@ -130,9 +145,9 @@ import TopBar from "../../components/topNav/TopBar";
                     placeholder="Enter username"
                     variant="standard"
                     fullWidth
-                    required
-                    helperText={<ErrorMessage name="username" />}
+                   helperText={<ErrorMessage name="username" color="red"/>}
                   />
+                 
                   <Field
                     as={TextField}
                     label="Pin"
@@ -141,7 +156,7 @@ import TopBar from "../../components/topNav/TopBar";
                     type="password"
                     variant="standard"
                     fullWidth
-                    required
+                    error={errors.password ? true : false}
                     helperText={<ErrorMessage name="password" />}
                   />   
                    {/* {
