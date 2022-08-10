@@ -1,8 +1,11 @@
 .main-footer {
-    color: white;
-    background-color: #dc3545;
+    color: rgb(32, 32, 32);
+    background-color: #f5f4f4;
     padding-top: 3em;
     position: relative;
     bottom: 0;
     width: 100%;
+  }
+  .link-n{
+    text-decoration: none;
   }

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useRef } from "react";
 import "./cbhiList.css";
 import Box from "@mui/material/Box";
 import { Button } from "@mui/material";
@@ -22,6 +22,9 @@ import { ButtonGroup, Stack } from "@mui/material";
 import { styled, alpha } from '@mui/material/styles';
 import SearchIcon from '@mui/icons-material/Search';
 import InputBase from '@mui/material/InputBase';
+import ReactToPrint from "react-to-print";
+import jwt from "jsonwebtoken";
+import logo from "../../../../Assets/images/logo.png"
 
 const data = [
   {
@@ -50,12 +53,18 @@ const data = [
 function CbhiList() {
   const todaydate = new Date().toISOString().slice(0, 10);
   const transactionsDetails = useSelector((state) => state.transactions);
+  const getNidDetails=useSelector((state)=>state.getNidDetails);
+  const cbhiPaymentDetails=useSelector((state)=>state.cbhiPayment);
+  const [diplayPaymentDetails,setDisplayPaymentDetails]=useState('');
   const [agentTransactionsDetails, setAgentTransactionDetails] = useState([]);
   const [limit, setLimit] = useState(5);
   const [selectedExamIds, setSelectedExamIds] = useState([]);
   const [results, setResults] = useState({});
   const [search, setSearch] = useState(false);
   const [numberOfTransaction,setNumberOfTransaction]=useState(0)
+  const [transactionId,setTransactionId]=useState('');
+  const [agentName,setAgentName]=useState('')
+  const componentRef = useRef();
  
   const trimString = (s) => {
     var l = 0,
@@ -100,7 +109,34 @@ function CbhiList() {
       console.log(error);
     }
   };
-  console.log("search result:",results);
+  const decode= (token) => {
+    const JWT_SECRET="tokensecret";
+    const payload =jwt.verify(token, JWT_SECRET);
+     return payload;
+  }
+  useEffect(() => {
+  
+    const token =localStorage.getItem('mobicashAuth');
+    if (token) {
+    const {name}=decode(token);
+    setAgentName(name)
+  }
+
+  }, []);
+
+  useEffect(()=>{
+    async function fetchData() {
+      if (!cbhiPaymentDetails.loading) {
+        if (cbhiPaymentDetails.details) {
+          setDisplayPaymentDetails(cbhiPaymentDetails.details)
+          
+        }
+      }
+    }
+    fetchData();
+  },[cbhiPaymentDetails.details])
+
+
   useEffect(() => {
     async function fetchData() {
       if (!transactionsDetails.loading) {
@@ -122,7 +158,7 @@ function CbhiList() {
 
   const generatePdf = () => {
     const doc = new jsPDF();
-    doc.addImage(IMAGES.logo, "JPEG", 20, 10, 50, 20);
+    doc.addImage(logo , "PNG", 20, 10, 50, 20);
     doc.setFont("Helvertica", "normal");
     doc.text("Mobicash Ltd", 20, 50);
     doc.text("Company Name: Mobicash", 20, 55);
@@ -131,45 +167,147 @@ function CbhiList() {
     doc.text(`Date ${todaydate}`, 140, 65);
     doc.setFont("Helvertica", "bold");
     doc.text("List of Approved Transfer Report", 70, 75);
-    const tableColumn = [
-      "Collection Date",
-      "Service",
-      "Amount",
-      "Bank Referance",
-      "Mobicash Referance",
-    ];
-    const tableRows = [];
-    data.map((d) => {
-      const Data = [
-        d.collectionDate,
-        d.service,
-        d.amount,
-        d.bank_reference,
-        d.mobicash_reference,
-
-        // format(new Date(student.updated_at), "yyyy-MM-dd")
-      ];
-      tableRows.push(Data);
-    });
-    doc.autoTable(tableColumn, tableRows, {
-      startY: 80,
-      theme: "striped",
-      margin: 10,
-      styles: {
-        font: "courier",
-        fontSize: 12,
-        overflow: "linebreak",
-        cellPadding: 3,
-        halign: "center",
-      },
-      head: [tableColumn],
-      body: [tableRows],
-    });
+  
     const date = Date().split(" ");
     const dateStr = date[0] + date[1] + date[2] + date[3] + date[4];
 
     doc.save(`report_${dateStr}.pdf`);
   };
+  const company_logo = {
+    w: 140,
+    h: 60
+  };
+  const comapnyJSON={
+    CompanyName:'ABCD TECHONOLOGIES',
+    CompanyGSTIN:'37B76C238B7E1Z5',
+    CompanyState:'KERALA (09)',
+    CompanyPAN:'B76C238B7E',
+    CompanyAddressLine1:'ABCDEFGD HOUSE,IX/642-D',
+    CompanyAddressLine2:'ABCDEFGD P.O., NEDUMBASSERY',
+    CompanyAddressLine3:'COCHIN',
+    PIN: '683584',
+    companyEmail:'xyz@gmail.com',
+    companyPhno:'+918189457845',
+  };
+  
+  
+  
+  const invoiceJSON={
+    InvoiceNo:'INV-120152',
+    InvoiceDate:'03-12-2017',
+    RefNo:'REF-78445',
+    TotalAmnt:'Rs.1,24,200',
+    SubTotalAmnt:'Rs.1,04,200',
+    TotalGST:'Rs.2,0000',
+    TotalCGST:'Rs.1,0000',
+    TotalSGST:'Rs.1,0000',
+    TotalIGST:'Rs.0',
+    TotalCESS:'Rs.0',
+  }
+  const fontSizes={
+    HeadTitleFontSize:18,
+    Head2TitleFontSize:16,
+    TitleFontSize:14,
+    SubTitleFontSize:12,
+    NormalFontSize:12,
+    SmallFontSize:8
+  };
+  const lineSpacing={
+    NormalSpacing:12,
+  };
+
+  const generatePdfs=(id)=>{
+    console.log("transs id:",id)
+    var doc = new jsPDF('p', 'pt');
+    var rightStartCol1=400;
+    var rightStartCol2=480;
+    var InitialstartX=40;
+    var startX=40;
+    var InitialstartY=50;
+    var startY=0;
+    var lineHeights=12;
+    var rightcol1=340;
+    var rightcol2=230;
+    doc.rect(
+      18,
+      18,
+      doc.internal.pageSize.width - 42,
+      doc.internal.pageSize.height - 42,
+      "S"
+    );
+    doc.setFontSize(fontSizes.SubTitleFontSize);
+    doc.setFont("Helvertica", "bold");
+    //doc.setFontType('bold');
+    //doc.addImage(logo , "PNG", 20, 10, 50, 20);
+   doc.addImage(logo,'PNG',startX,startY+=50,company_logo.w,company_logo.h);
+   doc.setFontSize(fontSizes.NormalFontSize);
+     doc.text("Mobicash Ltd",startX, startY+=15+company_logo.h,'left');
+    doc.setFontSize(fontSizes.NormalFontSize);
+    doc.text("GSTIN",startX, startY+=lineSpacing.NormalSpacing);
+    doc.setFont("Helvertica", "normal");
+    doc.text(comapnyJSON.CompanyGSTIN, 80, startY);
+    doc.setFontSize(fontSizes.NormalFontSize);
+     doc.text("STATE", startX, startY+=lineSpacing.NormalSpacing);
+     doc.setFont("Helvertica", "normal");
+    doc.text("Kigali", 80, startY);
+    doc.setFontSize(fontSizes.NormalFontSize);
+    doc.text("PAN", startX, startY+=lineSpacing.NormalSpacing);
+    doc.setFont("Helvertica", "normal");
+    doc.text(comapnyJSON.CompanyPAN, 80, startY);
+    doc.setFontSize(fontSizes.NormalFontSize);
+    doc.text("PIN", startX, startY+=lineSpacing.NormalSpacing);
+    doc.setFont("Helvertica", "normal");
+    doc.text(comapnyJSON.PIN, 80, startY);
+    doc.setFontSize(fontSizes.NormalFontSize);
+    doc.text("EMAIL",startX, startY+=lineSpacing.NormalSpacing);
+    doc.setFont("Helvertica", "normal");
+    doc.text("mobicash@online.com", 80, startY);
+    doc.setFontSize(fontSizes.NormalFontSize);
+    doc.text("Phone: ", startX, startY+=lineSpacing.NormalSpacing);
+    doc.setFont("Helvertica", "normal");
+    doc.text(comapnyJSON.companyPhno, 80, startY);
+    var tempY=InitialstartY;
+    doc.setFontSize(fontSizes.NormalFontSize);
+    agentTransactionsDetails.map((details)=>{
+      if(details.id===id){
+        doc.text("Transacttion: ",rightStartCol1,tempY+=lineSpacing.NormalSpacing);
+        doc.setFont("Helvertica", "normal");
+        doc.text(`${id}`, rightStartCol2, tempY);
+        doc.setFontSize(fontSizes.NormalFontSize);
+        doc.text("Payemnt Date: ",  rightStartCol1, tempY+=lineSpacing.NormalSpacing);
+        doc.setFont("Helvertica", "normal");
+        doc.text(`${details.operationDate}`,rightStartCol2, tempY);
+        doc.setFontSize(fontSizes.NormalFontSize);
+        doc.text("Reference No: ",rightStartCol1,tempY+=lineSpacing.NormalSpacing);
+        doc.setFont("Helvertica", "normal");
+        doc.text(invoiceJSON.RefNo, rightStartCol2, tempY);
+        doc.text("Amount Paid : ",rightStartCol1,tempY+=lineSpacing.NormalSpacing);
+        doc.setFont("Helvertica", "normal");
+        doc.text(`${details.amount * -1} rwf`, rightStartCol2, tempY);
+        doc.setFont('normal');
+        doc.setLineWidth(1);
+        doc.line(20, startY+lineSpacing.NormalSpacing, 220, startY+lineSpacing.NormalSpacing);
+        doc.line(380, startY+lineSpacing.NormalSpacing, 580, startY+lineSpacing.NormalSpacing);
+        doc.setFontSize(fontSizes.Head2TitleFontSize);
+        doc.setFontSize(fontSizes.NormalFontSize);
+        //doc.text("MUTUWEL INVOICE",startX,startY+=lineSpacing.NormalSpacing+2,null,null,'center');
+        doc.setFontSize(fontSizes.NormalFontSize);
+        doc.setFont('bold');
+        doc.setFontSize(fontSizes.NormalFontSize);
+        doc.text(`AGENT NAME: ${agentName}`,rightcol2, startY+=lineSpacing.NormalSpacing+25);
+        doc.setFontSize(fontSizes.NormalFontSize);
+        doc.text("PAYER NAME:",rightcol2, startY+=lineSpacing.NormalSpacing+25);
+        doc.setFontSize(fontSizes.NormalFontSize);
+        doc.text(`PRINTED DATE: 2022 ${todaydate}`,rightcol2, startY+=lineSpacing.NormalSpacing+25);
+        doc.setFontSize(fontSizes.NormalFontSize);
+        doc.text(`AMOUNT PAID: ${details.amount*-1} rwf`,rightcol2, startY+=lineSpacing.NormalSpacing+25);
+      }
+    })
+    
+    doc.setFontSize(fontSizes.NormalFontSize);
+    doc.text('Authorised Signatory:',rightcol2, startY+=lineSpacing.NormalSpacing+25);
+    doc.save('InvoiceTemplate.pdf');
+  }
 
   return (
     <>
@@ -228,6 +366,15 @@ function CbhiList() {
           <TableContainer component={Paper}>
             <Table aria-label="caption table">
               <caption className="textTitle">Agent Transactions</caption>
+              {/* <Button
+                  variant="contained"
+                  sx={{ backgroundColor: "#F9842C" }}
+                  className="buttonGroup"
+                  onClick={generatePdfs}
+                  >
+                  Print
+                  </Button> */}
+              
               <TableHead>
                 <TableRow>
                   <TableCell align="center">ID</TableCell>
@@ -254,7 +401,17 @@ function CbhiList() {
                     <TableCell align="center"> {details.amount * -1}</TableCell>
                     <TableCell align="center">{details.description}</TableCell>
                     <TableCell align="center">
-                      <Button>Print</Button>
+                      {/* <Button>Print</Button> */}
+                      <Button
+                  variant="contained"
+                  sx={{ backgroundColor: "#F9842C" }}
+                  className="buttonGroup"
+                 onClick={async()=>{
+                    generatePdfs(details.id)
+                   }}
+                  >
+                  Print
+                  </Button>
                     </TableCell>
                   </TableRow>
                 ))}
@@ -274,7 +431,20 @@ function CbhiList() {
                     <TableCell align="center"> {details.amount * -1}</TableCell>
                     <TableCell align="center">{details.description}</TableCell>
                     <TableCell align="center">
-                      <Button>Print</Button>
+                      {/* <Button>Print</Button> */}
+                    <Button
+                  variant="contained"
+                  sx={{ backgroundColor: "#F9842C" }}
+                  className="buttonGroup"
+                  onClick={async()=>{
+                    generatePdfs(details.id)
+                   }}
+                  >
+                  Print
+                  </Button>
+              
+                
+             
                     </TableCell>
                   </TableRow>
                 ))}
