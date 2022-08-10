@@ -14,6 +14,7 @@ import { forgotPasswordAction } from "../../redux/actions/forgotPasswordAction";
 import { useDispatch,useSelector } from "react-redux/es/exports";
 import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
+import Footer from "../../components/footer/Footer";
   export default function ForgotPassword() {
   
     const history = useHistory();
@@ -124,6 +125,7 @@ await dispatch(forgotPasswordAction(values,history))
             </Formik>
           </Grid>
         </Paper>
+        <Footer/>
       </Grid>
     );
                 }   

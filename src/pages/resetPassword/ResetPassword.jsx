@@ -17,6 +17,7 @@ import {
   import * as Yup from "yup";
 import TopBar from "../../components/topNav/TopBar";
 import { useHistory } from "react-router-dom";
+import Footer from "../../components/footer/Footer";
   
   export default function ResetPassword() {
     const history = useHistory();
@@ -153,6 +154,7 @@ import { useHistory } from "react-router-dom";
             
           </Grid>
         </Paper>
+        <Footer/>
       </Grid>
     );
                 }   

@@ -25,6 +25,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import TopBar from "../../components/topNav/TopBar";
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import Footer from "../../components/footer/Footer";
   export default function Login() {
     const [open, setOpen] = React.useState(true);
     const dispatch = useDispatch();
@@ -188,6 +189,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
             </Typography>
           </Grid>
         </Paper>
+        <Footer/>
       </Grid>
     );
     }   

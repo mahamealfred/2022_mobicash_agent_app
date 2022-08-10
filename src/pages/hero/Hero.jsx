@@ -4,6 +4,7 @@ import IMAGES from '../../Assets/Images';
 import {Link} from "react-router-dom";
 import TopBar from '../../components/topNav/TopBar';
 import { useHistory } from 'react-router-dom';
+import Footer from '../../components/footer/Footer';
 const Hero = () => {
   const  history=useHistory();
   useEffect(()=>{
@@ -29,6 +30,7 @@ const Hero = () => {
       <Link to="/login">Get Started</Link>
     </div>
       </header>
+      <Footer/>
     </>
   )
 }
