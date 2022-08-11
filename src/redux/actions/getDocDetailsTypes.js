@@ -28,7 +28,7 @@ export const getDocDetailsAction = (details,history) => async (dispatch) => {
    });
     const {data} = await res;
     dispatch(getDocDetailsSuccess(data));
-    console.log("data from doc details:",data);
+    //console.log("data from doc details:",data);
    history.push('/dashboard/rra-payment',{push:true})
   } catch (err) {
     if (err.response) {

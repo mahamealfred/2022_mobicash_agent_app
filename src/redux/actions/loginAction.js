@@ -15,8 +15,9 @@ export const loginAction = (user,history) => async (dispatch) => {
     dispatch(loginRequest());
     const {username}=user
     const {password}=user 
+    
     //const encodedBase64Token = Buffer.from(`${username}:${password}`).toString('base64');
-    let basicAuth='Basic ' + btoa(username + ':' + password);
+    //let basicAuth='Basic ' + btoa(username + ':' + password);
     const Url='http://52.36.87.202:107/api/agent/user/rest/v.4.14.01/auth';
    const res = await axios.post(Url,{}, {
      withCredentials: true,
@@ -32,7 +33,7 @@ export const loginAction = (user,history) => async (dispatch) => {
    });
     const {data} = await res;
     const jwt_secret="tokensecret"
-    console.log("response",)
+  //  console.log("response",)
     if(res.data.code==200){
       const userId=res.data.id
       const name=res.data.display
@@ -41,16 +42,22 @@ export const loginAction = (user,history) => async (dispatch) => {
       console.log(userId,name,role)
       const claims={userId,name,role,username,group,password}
       const token= jwt.sign(claims,jwt_secret, { expiresIn: "7d"});
+
       dispatch(loginSuccess(data));
       history.push('/dashboard',{push:true})
       return localStorage.setItem('mobicashAuth',token);
-    }else{
+    }
+  //  else if(res.data.code==401){
+  //     let errorMessage=res.data.responseMessage
+  //     dispatch(loginFailure(errorMessage));
+  //   }
+    else{
      history.push('/',{push:true})
     }
   } catch (err) {
     if (err.response) {
-      //const errorMessage = await err.response.data.responseMessage;
-      const errorMessage = 'Invalid Username or Pin'
+     const errorMessage = await err.response.data.responseMessage;
+      //const errorMessage = 'Invalid Username or Pin'
       dispatch(loginFailure(errorMessage));
     } else {
       dispatch(loginFailure("Network Error"));

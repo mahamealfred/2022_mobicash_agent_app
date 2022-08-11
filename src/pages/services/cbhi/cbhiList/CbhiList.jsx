@@ -15,7 +15,6 @@ import InputAdornment from "@mui/material/InputAdornment";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import { CSVLink } from "react-csv";
-import IMAGES from "../../../../Assets/Images";
 import { useSelector } from "react-redux";
 import moment from "moment";
 import { ButtonGroup, Stack } from "@mui/material";
@@ -25,7 +24,7 @@ import InputBase from '@mui/material/InputBase';
 import ReactToPrint from "react-to-print";
 import jwt from "jsonwebtoken";
 import logo from "../../../../Assets/images/logo.png"
-
+export let amountPaid=[]
 const data = [
   {
     collectionDate: "12/12/2021",
@@ -53,7 +52,7 @@ const data = [
 function CbhiList() {
   const todaydate = new Date().toISOString().slice(0, 10);
   const transactionsDetails = useSelector((state) => state.transactions);
-  const getNidDetails=useSelector((state)=>state.getNidDetails);
+ 
   const cbhiPaymentDetails=useSelector((state)=>state.cbhiPayment);
   const [diplayPaymentDetails,setDisplayPaymentDetails]=useState('');
   const [agentTransactionsDetails, setAgentTransactionDetails] = useState([]);
@@ -190,20 +189,6 @@ function CbhiList() {
     companyPhno:'+918189457845',
   };
   
-  
-  
-  const invoiceJSON={
-    InvoiceNo:'INV-120152',
-    InvoiceDate:'03-12-2017',
-    RefNo:'REF-78445',
-    TotalAmnt:'Rs.1,24,200',
-    SubTotalAmnt:'Rs.1,04,200',
-    TotalGST:'Rs.2,0000',
-    TotalCGST:'Rs.1,0000',
-    TotalSGST:'Rs.1,0000',
-    TotalIGST:'Rs.0',
-    TotalCESS:'Rs.0',
-  }
   const fontSizes={
     HeadTitleFontSize:18,
     Head2TitleFontSize:16,
@@ -231,7 +216,7 @@ function CbhiList() {
     doc.rect(
       18,
       18,
-      doc.internal.pageSize.width - 42,
+      doc.internal.pageSize.width - 40,
       doc.internal.pageSize.height - 42,
       "S"
     );
@@ -239,33 +224,21 @@ function CbhiList() {
     doc.setFont("Helvertica", "bold");
     //doc.setFontType('bold');
     //doc.addImage(logo , "PNG", 20, 10, 50, 20);
-   doc.addImage(logo,'PNG',startX,startY+=50,company_logo.w,company_logo.h);
-   doc.setFontSize(fontSizes.NormalFontSize);
-     doc.text("Mobicash Ltd",startX, startY+=15+company_logo.h,'left');
+    doc.addImage(logo,'PNG',startX,startY+=50,company_logo.w,company_logo.h);
     doc.setFontSize(fontSizes.NormalFontSize);
-    doc.text("GSTIN",startX, startY+=lineSpacing.NormalSpacing);
+    doc.text("MobiCash Ltd I KN 3 Road, Gasabo District",startX, startY+=15+company_logo.h,'left');
+    doc.setFontSize(fontSizes.NormalFontSize);
+    doc.text("ADDRESS",startX, startY+=lineSpacing.NormalSpacing);
     doc.setFont("Helvertica", "normal");
-    doc.text(comapnyJSON.CompanyGSTIN, 80, startY);
-    doc.setFontSize(fontSizes.NormalFontSize);
-     doc.text("STATE", startX, startY+=lineSpacing.NormalSpacing);
-     doc.setFont("Helvertica", "normal");
-    doc.text("Kigali", 80, startY);
-    doc.setFontSize(fontSizes.NormalFontSize);
-    doc.text("PAN", startX, startY+=lineSpacing.NormalSpacing);
-    doc.setFont("Helvertica", "normal");
-    doc.text(comapnyJSON.CompanyPAN, 80, startY);
-    doc.setFontSize(fontSizes.NormalFontSize);
-    doc.text("PIN", startX, startY+=lineSpacing.NormalSpacing);
-    doc.setFont("Helvertica", "normal");
-    doc.text(comapnyJSON.PIN, 80, startY);
+    doc.text("Remra, Rukiri 1, Kigali Rwanda", 80, startY);
     doc.setFontSize(fontSizes.NormalFontSize);
     doc.text("EMAIL",startX, startY+=lineSpacing.NormalSpacing);
     doc.setFont("Helvertica", "normal");
-    doc.text("mobicash@online.com", 80, startY);
+    doc.text("info@mobicashonline.com", 80, startY);
     doc.setFontSize(fontSizes.NormalFontSize);
     doc.text("Phone: ", startX, startY+=lineSpacing.NormalSpacing);
     doc.setFont("Helvertica", "normal");
-    doc.text(comapnyJSON.companyPhno, 80, startY);
+    doc.text("+2507800000", 80, startY);
     var tempY=InitialstartY;
     doc.setFontSize(fontSizes.NormalFontSize);
     agentTransactionsDetails.map((details)=>{
@@ -277,13 +250,6 @@ function CbhiList() {
         doc.text("Payemnt Date: ",  rightStartCol1, tempY+=lineSpacing.NormalSpacing);
         doc.setFont("Helvertica", "normal");
         doc.text(`${details.operationDate}`,rightStartCol2, tempY);
-        doc.setFontSize(fontSizes.NormalFontSize);
-        doc.text("Reference No: ",rightStartCol1,tempY+=lineSpacing.NormalSpacing);
-        doc.setFont("Helvertica", "normal");
-        doc.text(invoiceJSON.RefNo, rightStartCol2, tempY);
-        doc.text("Amount Paid : ",rightStartCol1,tempY+=lineSpacing.NormalSpacing);
-        doc.setFont("Helvertica", "normal");
-        doc.text(`${details.amount * -1} rwf`, rightStartCol2, tempY);
         doc.setFont('normal');
         doc.setLineWidth(1);
         doc.line(20, startY+lineSpacing.NormalSpacing, 220, startY+lineSpacing.NormalSpacing);
@@ -296,17 +262,23 @@ function CbhiList() {
         doc.setFontSize(fontSizes.NormalFontSize);
         doc.text(`AGENT NAME: ${agentName}`,rightcol2, startY+=lineSpacing.NormalSpacing+25);
         doc.setFontSize(fontSizes.NormalFontSize);
-        doc.text("PAYER NAME:",rightcol2, startY+=lineSpacing.NormalSpacing+25);
+        doc.text("DESCRIPTION",rightcol2, startY+=lineSpacing.NormalSpacing+25);
+        const split=details.description.split(",")
+        doc.text(`${split[0].trim()}`,rightcol2, startY+=lineSpacing.NormalSpacing+25);
+        doc.text(`${split[1].trim()}`,rightcol2, startY+=lineSpacing.NormalSpacing+25);
+        doc.text(`${split[2].trim()} Rwf`,rightcol2, startY+=lineSpacing.NormalSpacing+25);
         doc.setFontSize(fontSizes.NormalFontSize);
-        doc.text(`PRINTED DATE: 2022 ${todaydate}`,rightcol2, startY+=lineSpacing.NormalSpacing+25);
-        doc.setFontSize(fontSizes.NormalFontSize);
-        doc.text(`AMOUNT PAID: ${details.amount*-1} rwf`,rightcol2, startY+=lineSpacing.NormalSpacing+25);
+        doc.text(`PRINTED DATE: ${todaydate}`,rightcol2, startY+=lineSpacing.NormalSpacing+25);
+        
       }
     })
     
     doc.setFontSize(fontSizes.NormalFontSize);
-    doc.text('Authorised Signatory:',rightcol2, startY+=lineSpacing.NormalSpacing+25);
-    doc.save('InvoiceTemplate.pdf');
+    doc.text('Authorised Signatory: ......................',rightcol2+10 , startY+=lineSpacing.NormalSpacing+55);
+    const date = Date().split(" ");
+    const dateStr = date[0] + date[1] + date[2] + date[3] + date[4];
+
+    doc.save(`Invoice_${dateStr}.pdf`);
   }
 
   return (

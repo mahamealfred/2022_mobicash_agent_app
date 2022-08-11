@@ -171,9 +171,9 @@ const handleCancel=()=>{
                   <TextField
                     id="standard-select-currency"
                     select
-                    value={paymentYear}
-                    // fullWidth
-                    onChange={handleChange}
+                   value={paymentYear}
+                    fullWidth
+                   onChange={handleChange}
                     helperText="Please select year"
                     variant="standard"
                   >
@@ -181,7 +181,7 @@ const handleCancel=()=>{
                       <MenuItem key={option.year} value={option.year}>{option.year}</MenuItem>
                     ))}
                   </TextField>
-      </Box>
+                  </Box>
                  
                   <br />
                   <Box
@@ -211,8 +211,7 @@ const handleCancel=()=>{
                       >
                         {getNidDetails.loading ? <Stack sx={{ color: 'grey.500'}} spacing={1} direction="row">
       <CircularProgress size={20} color="inherit" height="10px" width="10px" />
-     
-    </Stack> : "Send"}
+       </Stack> : "Send"}
                   
                       </Button>
                     </ButtonGroup>

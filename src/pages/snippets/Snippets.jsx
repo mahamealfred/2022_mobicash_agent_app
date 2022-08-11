@@ -86,11 +86,11 @@ function Snippets() {
           <Grid item xs container direction="column" spacing={4}>
             <Grid item xs>
                 {balance.loading ? (
-                  "loading.."
+                  null
                 ) : balance.details.balance ? (
 
        <>
-      { console.log("kkkk",balance.details.balance[0].details.availableBalance)}
+    
       
         <Typography variant="body2" mt={1} sx={{ fontSize: "16px", fontWeight: "bold"}} color="text.secondary"  gutterBottom>
                Balance: <Typography sx={{color:"green"}} >{balance.details.balance[0].details.balance} Rwf</Typography>

@@ -147,14 +147,14 @@ const TopBar = () => {
        BALANCE
        </Typography> */}
        {balance.loading ? (
-                  "loading.."
+                  null
                 ) : balance.details.balance ? (
         <>
         <Typography variant="body2"  sx={{ fontSize: "16px", fontWeight: "bold" }} color="text.primary" >
             Balance: {balance.details.balance[1].details.balance} Rwf   Available float: {balance.details.balance[1].details.availableBalance} Rwf
           </Typography>
           <Typography variant="body2" sx={{ fontSize: "16px", fontWeight: "bold" }} color="text.primary" gutterBottom>
-            Reserved amaount: {balance.details.balance[1].details.reservedAmount} Rwf
+            Reserved amount: {balance.details.balance[1].details.reservedAmount} Rwf
           </Typography>
         </>
                 ):"No data"

@@ -5,7 +5,6 @@ import {
     GET_BALANCE_FAILURE,
   } from "../types/getBalanceTypes";
   
-  import jwt from "jsonwebtoken";
   import dotenv from "dotenv";
   dotenv.config();
 
@@ -14,9 +13,9 @@ export const getBalanceAction = (user,history) => async (dispatch) => {
     dispatch(getBalanceRequest());
     const {username}=user
     const {password}=user 
-    console.log("oooo",username,password,user)
+   // console.log("oooo",username,password,user)
     //const encodedBase64Token = Buffer.from(`${username}:${password}`).toString('base64');
-    let basicAuth='Basic ' + btoa(username + ':' + password);
+    //let basicAuth='Basic ' + btoa(username + ':' + password);
     const Url='http://52.36.87.202:107/api/agent/utilities/user/rest/v.4.14.01/account-balance';
    const res = await axios.get(Url,{
      withCredentials: true,
@@ -35,7 +34,7 @@ export const getBalanceAction = (user,history) => async (dispatch) => {
       //const token= jwt.sign(claims,jwt_secret, { expiresIn: "7d"});
       if(res.data.code==200){
         dispatch(getBalanceSuccess(data));
-        console.log("results .. balance:",data)
+       // console.log("results .. balance:",data)
         // history.push('/dashboard',{push:true})
       }
   } catch (err) {

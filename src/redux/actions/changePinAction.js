@@ -5,7 +5,6 @@ import {
     CHANGE_PIN_FAILURE,
   } from "../types/changePinTypes";
   
-  import jwt from "jsonwebtoken";
   import dotenv from "dotenv";
   dotenv.config();
 
@@ -17,7 +16,7 @@ export const changePinAction = (user,username,history) => async (dispatch) => {
     const {newPassword}=user
     const {newPasswordConfirmation}=user
     const password=oldPassword
-    console.log("o new c ",oldPassword,newPassword,newPasswordConfirmation,username, password);
+  //  console.log("o new c ",oldPassword,newPassword,newPasswordConfirmation,username, password);
     //const encodedBase64Token = Buffer.from(`${username}:${password}`).toString('base64');
     let basicAuth='Basic ' + btoa(username + ':' + password);
     const Url='http://52.36.87.202:107/api/agent/user/rest/v.4.14.01/change-password';

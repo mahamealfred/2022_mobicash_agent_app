@@ -4,7 +4,7 @@ import {
     FORGOT_PASSWORD_SUCCESS,
     FORGOT_PASSWORD_FAILURE,
   } from "../types/forgotPasswordTypes";
-  import jwt from "jsonwebtoken";
+
   import dotenv from "dotenv";
   dotenv.config();
 
@@ -13,7 +13,7 @@ export const forgotPasswordAction = (user,history) => async (dispatch) => {
   try {
     dispatch(forgotPasswordRequest());
     const {username}=user 
-    console.log("username ;;;",username)
+   // console.log("username ;;;",username)
     const Url='http://52.36.87.202:107/api/agent/user/rest/v.4.14.01/forgetten-password-request';
    const res = await axios.post(Url,{
     user:username

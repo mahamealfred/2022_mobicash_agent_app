@@ -21,8 +21,8 @@ export const cbhiPayamentAction = (details,username,password,history) => async (
     const {agentCategory}=details
     const {userGroup}=details
     
+   // let errorMessage =''
   
-    console.log("detailes, username , password,::",details,username,password)
     //const encodedBase64Token = Buffer.from(`${username}:${password}`).toString('base64');
     let basicAuth='Basic ' + btoa(username + ':' + password);
     const Url='http://52.36.87.202:107/api/agent/goverment-services/cbhi/rest/v.4.14.01/payment';
@@ -63,14 +63,21 @@ export const cbhiPayamentAction = (details,username,password,history) => async (
     const {data} = await res;
       if(res.data.responseCode==200){
        await dispatch(cbhiPaymentSuccess(data));
-        console.log("Success ...")
+    
         history.push('/dashboard/cbhi-payment-details',{push:true})
       }
+      if(res.data.responseCode==400){
+        let errorMessage = 'Invalid Credential, Please provide valid Pin'
+          dispatch(cbhiPaymentFailure(errorMessage)); 
+      }
+      // else{
+      //   history.push('/dashboard/cbhi',{push:true})
+      // }
       
   } catch (err) {
     if (err.response) {
        // const errorMessage = await err.response;
-       let errorMessage = 'Invalid input'
+       let errorMessage = 'Invalid Crendentials'
       //   errorMessage="Please provide valid Pin"
      // const errorMessage = 'Error'
       // errorMessage=await err.response.data.message
