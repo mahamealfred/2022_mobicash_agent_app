@@ -36,12 +36,15 @@ const CbhiPayment = () => {
   const [houseHoldNID,setHouseHoldNID]=useState('')
   const [paymentYear,setPaymentYear]=useState('')
   const [amountPaid,setAmountPaid]=useState('');
+  const [password,setPassword]=useState('');
+  const [payerPhoneNumber,setPayerPhoneNumber]=useState('')   
   const [payerName,setPayerName]=useState('');
+
   const [houseHoldCategory,seHouseHoldCategory]=useState('');
   const [householdMemberNumber,setHouseholdMemberNumber]=useState('');
   const [totalPremium,setTotalPremium]=useState('');    
-  const [payerPhoneNumber,setPayerPhoneNumber]=useState('')   
-  const [password,setPassword]=useState('');
+ 
+  
   const [userGroup,setUserGroup]=useState('');
   const [open, setOpen] = React.useState(true);
   
