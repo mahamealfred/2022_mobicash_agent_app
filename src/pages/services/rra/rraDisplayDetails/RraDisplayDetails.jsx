@@ -1,4 +1,4 @@
-import React from 'react'
+import React,{useEffect,useState} from 'react'
 import Header from '../../../../components/header/Header';
 import './rraDisplayDetails.css';
 import { styled } from '@mui/material/styles';
@@ -10,7 +10,10 @@ import Button from "@mui/material/Button";
 import { ButtonGroup, Box,TextField } from "@mui/material";
 import MenuItem from "@mui/material/MenuItem";
 import { useHistory } from 'react-router-dom';
-
+import {useSelector,useDispatch} from 'react-redux';
+import jwt from "jsonwebtoken";
+import CbhiList from '../../cbhi/cbhiList/CbhiList';
+import moment from "moment";
 const Img = styled('img')({
     margin: 'auto',
     display: 'block',
@@ -18,8 +21,53 @@ const Img = styled('img')({
     maxHeight: '100%',
   });
 const RraDisplayDetails = () => {
+  const dispatch=useDispatch();
+  const getDocDetails = useSelector((state) => state.getDocDetails);
+  const rraPaymentDetails = useSelector((state) => state.rraPayment);
+  const [displayRraPaymentDetails,setDisplayRraPaymentDetails]=useState('')
+  const [agentName,setAgentName]=useState('');
+  const [payerName,setPayerName]=useState('');
+  const [amountPaid,setAmountPaid]=useState('');
     const history=useHistory();
 
+    const decode = (token) => {
+      const JWT_SECRET = "tokensecret";
+      const payload = jwt.verify(token, JWT_SECRET);
+      return payload;
+    };
+    //console.log("amount paid",amount[0])
+    useEffect(() => {
+      const token = localStorage.getItem("mobicashAuth");
+      if (token) {
+        const { name } = decode(token);
+        setAgentName(name);
+      }
+    }, []);
+    useEffect(() => {
+      async function fetchData() {
+        if (!rraPaymentDetails.loading) {
+          if (rraPaymentDetails.details) {
+            setDisplayRraPaymentDetails(rraPaymentDetails.details);
+        
+          }
+        }
+      }
+      fetchData();
+    }, [rraPaymentDetails.details]);
+
+    useEffect(() => {
+      async function fetchData() {
+        if (!getDocDetails.loading) {
+          if (getDocDetails.details) {
+            await setPayerName(getDocDetails.details.TAX_PAYER_NAME);
+           setAmountPaid(getDocDetails.details.AMOUNT_TO_PAY)
+            // setAmountPaid(amount[0])
+          }
+        }
+      }
+      fetchData();
+    }, [getDocDetails.cbhidetails]);
+  
     const handleNewPayment=()=>{
 history.push('/dashboard/rra',{push:true})
     }
@@ -62,7 +110,7 @@ history.push('/dashboard/rra',{push:true})
                     sx={{ fontSize: "16px", fontWeight: "bold" }}
                     color="text.secondary"
                   >
-                 M2876
+                 {displayRraPaymentDetails.mobicashTransctionNo}
                   </Typography>
                   <Typography
                     mt={1}
@@ -77,7 +125,7 @@ history.push('/dashboard/rra',{push:true})
                     sx={{ fontSize: "16px", fontWeight: "bold" }}
                     color="text.secondary"
                   >
-             Bizimana Jean Claude
+             {agentName}
                   </Typography>
                   <Typography
                     mt={1}
@@ -92,23 +140,9 @@ history.push('/dashboard/rra',{push:true})
                     sx={{ fontSize: "16px", fontWeight: "bold" }}
                     color="text.secondary"
                   >
-                 Mahame Alfred
+                 {payerName}
                   </Typography>
-                  <Typography
-                    mt={1}
-                    sx={{ fontSize: "14px", fontWeight: "bold" }}
-                    variant="body2"
-                    gutterBottom
-                  >
-                    Token
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    sx={{ fontSize: "16px", fontWeight: "bold" }}
-                    color="text.secondary"
-                  >
-                 30709790049814143303
-                  </Typography>
+                 
                 </Grid>
               </Grid>
               <Grid item xs container direction="column" spacing={2}>
@@ -127,7 +161,7 @@ history.push('/dashboard/rra',{push:true})
                     sx={{ fontSize: "16px", fontWeight: "bold" }}
                     color="text.secondary"
                   >
-                    10000 Rwf
+                    {amountPaid} Rwf
                   </Typography>
                   <Typography
                     mt={1}
@@ -142,8 +176,8 @@ history.push('/dashboard/rra',{push:true})
                     sx={{ fontSize: "16px", fontWeight: "bold" }}
                     color="text.secondary"
                   >
-                    12/12/2022 12:08 AM
-                    {/* {moment(diplayPaymentDetails.date).format("llll")} */}
+                     {moment(displayRraPaymentDetails.date).format("llll")}
+                  
                   </Typography>
                   <Typography
                     mt={1}
@@ -215,7 +249,7 @@ history.push('/dashboard/rra',{push:true})
           spacing={2}
           sx={{ padding: "40px", textAlign: "center" }}
         >
-          {/* <CbhiList /> */}
+          <CbhiList />
         </Grid>
       </Box>
     </div>

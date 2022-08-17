@@ -11,7 +11,8 @@ export const getDocDetailsAction = (details,history) => async (dispatch) => {
   try {
     dispatch(getDocDetailsRequest());
     const docId=details.docId
-    const Url ='http://52.36.87.202:105/api/agent/goverment-services/rra/rest/v.4.14.01/doc-id-validation'
+   
+    const Url ='http://52.36.87.202:107/api/agent/goverment-services/rra/rest/v.4.14.01/doc-id-validation'
 //    const res = await axios.post(Url,{
 //     details
 //    });
@@ -22,17 +23,17 @@ export const getDocDetailsAction = (details,history) => async (dispatch) => {
     headers:{
       "Accept":"application/json",
     "Content-Type": "application/json",
-    
   },
- 
    });
-    const {data} = await res;
-    dispatch(getDocDetailsSuccess(data));
-    console.log("data from doc details:",data);
-   history.push('/dashboard/rra-payment',{push:true})
+    const data = await res.data;
+    if(data.responseCode==200){
+      dispatch(getDocDetailsSuccess(data));
+      history.push('/dashboard/rra-payment',{push:true})
+    }
+  
   } catch (err) {
     if (err.response) {
-      const errorMessage = await err.response.data.message;
+      const errorMessage = await err.response.data.responseDescription;
       dispatch(getDocDetailsFailure(errorMessage));
     } else {
       dispatch(getDocDetailsFailure("Network  Error"));

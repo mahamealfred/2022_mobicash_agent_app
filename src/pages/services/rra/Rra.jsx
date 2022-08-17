@@ -9,6 +9,10 @@ import Button from "@mui/material/Button";
 import { Typography, ButtonGroup, TextField } from "@mui/material";
 import { getDocDetailsAction } from '../../../redux/actions/getDocDetailsTypes';
 import { useDispatch, useSelector } from "react-redux";
+import Alert from '@mui/material/Alert';
+import Collapse from '@mui/material/Collapse';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
 import MenuItem from "@mui/material/MenuItem";
 import { useHistory } from 'react-router-dom';
 const Item = styled(Paper)(({ theme }) => ({
@@ -23,11 +27,17 @@ const Rra = () => {
   
   const getDocDetails = useSelector((state) => state.getDocDetails);
   const [docId,setDocId]=useState('');
+  const [open, setOpen] = React.useState(true);
     const history=useHistory()
     const handelSubmit= async()=>{
-      await dispach(getDocDetailsAction({docId}));
+      await dispach(getDocDetailsAction({docId},history));
       setDocId('')
-
+      if(getDocDetails.error){
+        setOpen(true)
+      }
+    }
+    const handleClose=()=>{
+      setOpen(false)
     }
     const handleCancel=()=>{
       history.push('/dashboard',{push:true}) 
@@ -45,12 +55,49 @@ const Rra = () => {
             <Typography mt={2} sx={{ fontSize: "28px", fontWeight: "bold" }}>
               RRA SERVICE
             </Typography>
+            <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      "& > *": {
+                        m: 2,
+                      },
+                    }}
+                  >
+                    
+            {
+                  !getDocDetails.error? null:
+                   <Collapse in={open}>
+                   <Alert
+                   severity="error"
+                   sx={{mb: 0.2 }}
+                     action={
+                       <IconButton
+                         aria-label="close"
+                         color="inherit"
+                         size="small"
+                         onClick={handleClose}
+                        //  onClick={() => {
+                        //    setOpen(false);
+                        //  }}
+                       >
+                         <CloseIcon fontSize="inherit" />
+                       </IconButton>
+                     }
+                   >
+                    {getDocDetails.error}
+                   </Alert>
+                 </Collapse>
+                }     
+                </Box>
             <Item>
               <div className="content">
                 <div className="leftContent">
                 <Typography mt={2} sx={{ fontSize: "20px", fontWeight: "bold" }}>
                      DOC ID:
                 </Typography>
+
                   <TextField
                     label="Doc ID"
                     name={docId}

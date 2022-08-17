@@ -9,18 +9,27 @@ import getRnitDetailsReducer from "./getRnitDetailsReducer";
 import cbhiPayamentReducer from "./cbhiPaymentReducer";
 import transactionsReducer from "./transactionsReducer";
 import balanceReducer from "./getBalanceReducer";
+import rraPaymentReducer from "./rraPayementReducer";
 const allReducers = combineReducers({
     login:loginReducer,
-    getYear:getYearReducer,
-    getNidDetails: getNidDetailsReducer,
-    //ra
-    getDocDetails: getDocDetailsReducer,
     changePin: changePinReducer,
     forgotPassword:forgotPasswordReducer,
-    getRnitDetails: getRnitDetailsReducer,
-    cbhiPayment:cbhiPayamentReducer,
-    transactions:transactionsReducer,
+
+    //all 
     balance:balanceReducer,
+    transactions:transactionsReducer,
+    getYear:getYearReducer,
+
+    //cbhi
+    getNidDetails: getNidDetailsReducer,
+    cbhiPayment:cbhiPayamentReducer,
+
+    //rra
+    getDocDetails: getDocDetailsReducer,
+    rraPayment: rraPaymentReducer,
+
+    //rnit
+    getRnitDetails: getRnitDetailsReducer,
 });
 
 export default allReducers;

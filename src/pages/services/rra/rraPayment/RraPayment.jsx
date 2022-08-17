@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState,useEffect} from 'react'
 import Header from '../../../../components/header/Header';
 import './rraPayment.css';
 import { styled } from '@mui/material/styles';
@@ -12,25 +12,105 @@ import MenuItem from "@mui/material/MenuItem";
 import { useHistory } from 'react-router-dom';
 import Stack from '@mui/material/Stack';
 import CircularProgress from '@mui/material/CircularProgress';
-
-const Img = styled('img')({
-    margin: 'auto',
-    display: 'block',
-    maxWidth: '100%',
-    maxHeight: '100%',
-  });
- 
+import {useSelector,useDispatch} from "react-redux";
+import jwt from "jsonwebtoken";
+import { rraPayamentAction } from '../../../../redux/actions/rraPaymentAction';
+import Alert from '@mui/material/Alert';
+import Collapse from '@mui/material/Collapse';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
 const RraPayment= () => {
-
+  const dispatch=useDispatch();
+  const getDocDetails = useSelector((state) => state.getDocDetails);
+  const rraPayment = useSelector((state) => state.rraPayment);
+  const [open, setOpen] = React.useState(true);
   const [amountPaid,setAmountPaid]=useState('');
   const [password,setPassword]=useState('');
-  const [payerPhoneNumber,setPayerPhoneNumber]=useState('')   
+  const [username,setUsername]=useState('')
+  const [payerPhoneNumber,setPayerPhoneNumber]=useState('')  
+  
+  const [bankName,setBankName]=useState('');
+  const [rraRef,setRraRef]=useState('');
+  const [tin,setTin]=useState('');
+  const [taxPayerName,setTaxPayerName]=useState('');
+  const [taxTypeDesc,setTaxTypeDesc]=useState('');
+  const [taxCenterNo,setTaxCenterNo]=useState('');
+  const [taxTypeNo,setTaxTypeNo]=useState('');
+  const [assessNo,setAssessNo]=useState('');
+  const [rraOrginNo,setRraOrginNo]=useState('');
+  const [amountToPay,setAmountToPay]=useState('');
+  const [descId,setDescId]=useState('');
+  const [payerPhone,setPayerPhone]=useState('');
+  const [brokering,setBrokering]=useState('');
+
+  const handleClose=()=>{
+    setOpen(false)
+  }
+  const decode= (token) => {
+    const JWT_SECRET="tokensecret";
+    const payload = jwt.verify(token, JWT_SECRET);
+     return payload;
+  }
+  useEffect(() => {
+  
+    const token =localStorage.getItem('mobicashAuth');
+    if (token) {
+    const {username}=decode(token);
+    const {role}=decode(token);
+    setUsername(username)
+    setBrokering(role)
+    
+  }
+
+  }, []);
+  
+  useEffect(()=>{
+    async function fetchData() {
+      if (!getDocDetails.loading) {
+        if (getDocDetails.details) {
+          setBankName(getDocDetails.details.bank_name)
+          setRraRef(getDocDetails.details.RRA_REF)
+          setTin(getDocDetails.details.TIN)
+          setTaxPayerName(getDocDetails.details.TAX_PAYER_NAME)
+          setTaxTypeDesc(getDocDetails.details.TAX_TYPE_DESC)
+          setTaxCenterNo(getDocDetails.details.TAX_CENTRE_NO)
+          setTaxTypeNo(getDocDetails.details.TAX_TYPE_NO)
+          setAssessNo(getDocDetails.details.ASSESS_NO)
+          setRraOrginNo(getDocDetails.details.RRA_ORIGIN_NO)
+          setAmountToPay(getDocDetails.details.AMOUNT_TO_PAY)
+          setDescId(getDocDetails.details.DEC_ID)
+          
+        }
+      }
+    }
+    fetchData();
+  },[getDocDetails.details])
+
   const history=useHistory();
   const handleCancel=()=>{
     history.push('/dashboard/rra',{push:true}) 
   }
-  const handleSubmit=()=>{
-    history.push('/dashboard/rra-payment-details',{push:true}) 
+  const handleSubmit=async()=>{
+    await dispatch(rraPayamentAction({
+      bankName,
+      rraRef,
+      tin,
+      taxPayerName,
+      taxTypeDesc,
+      taxCenterNo,
+      taxTypeNo,
+      assessNo,
+      rraOrginNo,
+      amountToPay,
+      descId,
+      payerPhoneNumber,
+      brokering
+
+    },username,password,history))
+   // await dispatch(transactionsAction(username,password))
+    if(rraPayment.error){
+      setOpen(true)
+    } 
   }
  
   return (
@@ -67,8 +147,8 @@ const RraPayment= () => {
                     }}
                   >
                     
-            {/* {
-                  !cbhiPayment.error? null:
+            {
+                  !rraPayment.error? null:
                    <Collapse in={open}>
                    <Alert
                    severity="error"
@@ -87,10 +167,10 @@ const RraPayment= () => {
                        </IconButton>
                      }
                    >
-                    {cbhiPayment.error}
+                    {rraPayment.error}
                    </Alert>
                  </Collapse>
-                }      */}
+                }     
                 </Box>
                 </Grid>
         <Grid item>
@@ -103,13 +183,19 @@ const RraPayment= () => {
              Payer  Name
               </Typography>
               <Typography variant="body2" sx={{ fontSize: "16px", fontWeight: "bold" }} color="text.secondary">
-              Uwase Nicole
+              {taxPayerName}
               </Typography>
               <Typography mt={1} sx={{ fontSize: "14px", fontWeight: "bold" }}  variant="body2" gutterBottom>
                 RRA Reference
               </Typography>
               <Typography variant="body2" sx={{ fontSize: "16px", fontWeight: "bold" }} color="text.secondary">
-                004536227272
+                {rraRef}
+              </Typography>
+              <Typography mt={1} sx={{ fontSize: "14px", fontWeight: "bold" }}  variant="body2" gutterBottom>
+                Amount To Pay
+              </Typography>
+              <Typography variant="body2" sx={{ fontSize: "16px", fontWeight: "bold" }} color="text.secondary">
+                {amountToPay} Rwf
               </Typography>
             </Grid>
            
@@ -130,7 +216,7 @@ const RraPayment= () => {
                     required
                   />
               </Typography>
-              <Typography mt={1} sx={{ fontSize: "14px", fontWeight: "bold" }}  variant="body2" gutterBottom>
+              {/* <Typography mt={1} sx={{ fontSize: "14px", fontWeight: "bold" }}  variant="body2" gutterBottom>
                 Amount 
               </Typography>
               <Typography variant="body3" sx={{ fontSize: "20px", fontWeight: "bold" }} color="text.secondary">
@@ -143,7 +229,7 @@ const RraPayment= () => {
                     fullWidth
                     required
                   />
-              </Typography>
+              </Typography> */}
               <Typography mt={1} sx={{ fontSize: "14px", fontWeight: "bold" }}  variant="body2" gutterBottom>
                 Agent PIN
               </Typography>
@@ -187,10 +273,10 @@ const RraPayment= () => {
                         sx={{ backgroundColor: "#F9842C" }}
                         className="buttonGroup"
                       >
-                      {/* {cbhiPayment.loading ? <Stack sx={{ color: 'grey.500'}} spacing={1} direction="row">
+                      {rraPayment.loading ? <Stack sx={{ color: 'grey.500'}} spacing={1} direction="row">
       <CircularProgress size={20} color="inherit" height="10px" width="10px" />
      
-    </Stack> : "Send"}    */} Send
+    </Stack> : "Send"}    
                       </Button>
                     </ButtonGroup>
                   </Box>
