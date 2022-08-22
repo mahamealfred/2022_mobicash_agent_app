@@ -31,7 +31,7 @@ const TopBar = () => {
   const dispatch=useDispatch();
   const balance=useSelector(state=>state.balance);
   const [balanceDetails,setBalanceDetails]=useState([])
- console.log("B LL:",balanceDetails)
+  
   const isAuth = localStorage.getItem("mobicashAuth");
   const [agentName, setAgentName] = useState("");
   const token = localStorage.getItem("mobicashAuth");

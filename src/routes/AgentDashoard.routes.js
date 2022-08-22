@@ -14,6 +14,9 @@ import Rra from "../pages/services/rra/Rra";
 import RraPayment from "../pages/services/rra/rraPayment/RraPayment";
 import RraDisplayDetails from "../pages/services/rra/rraDisplayDetails/RraDisplayDetails";
 import ChangePin from "../pages/changepin/ChangePin";
+
+import Ltss from "../pages/services/ltss/Ltss";
+import LtssPayment from "../pages/services/ltss/ltssPayment/LtssPayment"
 import {useEffect} from "react";
 import jwt from "jsonwebtoken";
 import { useHistory } from 'react-router-dom';
@@ -159,6 +162,28 @@ function App() {
               exact
               path={`${path}/change-pin`}
               component={ChangePin}
+            />
+          </>
+        )}
+      />
+       <Route
+        component={({ match }) => (
+          <>
+            <PrivateRoute
+              exact
+              path={`${path}/ltss`}
+              component={Ltss}
+            />
+          </>
+        )}
+      />
+      <Route
+        component={({ match }) => (
+          <>
+            <PrivateRoute
+              exact
+              path={`${path}/ltss-payment`}
+              component={LtssPayment}
             />
           </>
         )}

@@ -44,6 +44,9 @@ const handleElectricity=()=>{
 const handleRra=()=>{
   history.push("/dashboard/rra",{ push: true })
 }
+const handleLtss=()=>{
+  history.push("/dashboard/ltss",{ push: true })
+}
   return (
     <div className='widgetLarge'>
      <Grid sx={{ flexGrow: 1 }} container spacing={2}>
@@ -68,7 +71,7 @@ const handleRra=()=>{
               </Button>
             </Grid>
             <Grid  item>
-          <Button   className="btnImage"  >
+          <Button onClick={handleLtss}  className="btnImage"  >
             <img src="../../../Assets/images/ejoHeza.png" alt='' className="images" />
               </Button>
             </Grid>

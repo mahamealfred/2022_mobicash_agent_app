@@ -10,6 +10,7 @@ import cbhiPayamentReducer from "./cbhiPaymentReducer";
 import transactionsReducer from "./transactionsReducer";
 import balanceReducer from "./getBalanceReducer";
 import rraPaymentReducer from "./rraPayementReducer";
+import getLtssIdentificationDetailsReducer from "./getLtssIdentificationDetailsReducer";
 const allReducers = combineReducers({
     login:loginReducer,
     changePin: changePinReducer,
@@ -30,6 +31,9 @@ const allReducers = combineReducers({
 
     //rnit
     getRnitDetails: getRnitDetailsReducer,
+
+    //ltss
+    getLtssIndDetails: getLtssIdentificationDetailsReducer,
 });
 
 export default allReducers;
