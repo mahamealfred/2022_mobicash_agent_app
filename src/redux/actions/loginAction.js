@@ -18,7 +18,7 @@ export const loginAction = (user,history) => async (dispatch) => {
     
     //const encodedBase64Token = Buffer.from(`${username}:${password}`).toString('base64');
     //let basicAuth='Basic ' + btoa(username + ':' + password);
-    const Url='http://52.36.87.202:107/api/agent/user/rest/v.4.14.01/auth';
+    const Url='https://agentweb.mobicash.rw/api/agent/user/rest/v.4.14.01/auth';
    const res = await axios.post(Url,{}, {
      withCredentials: true,
     headers:{
@@ -34,7 +34,7 @@ export const loginAction = (user,history) => async (dispatch) => {
     const {data} = await res;
     const jwt_secret="tokensecret"
   //  console.log("response",)
-    if(res.data.code==200){
+    if(res.data.code===200){
       const userId=res.data.id
       const name=res.data.display
       const role=res.data.brokering

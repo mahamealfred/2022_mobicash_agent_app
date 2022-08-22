@@ -8,9 +8,9 @@ import Footer from '../../components/footer/Footer';
 const Hero = () => {
   const  history=useHistory();
   useEffect(()=>{
-    const isAuth=localStorage.getItem("mobicashAuth")
+    const isAuth=localStorage.removeItem("mobicashAuth")
   if(isAuth){
-    history.push('/dashboard',{push:true})
+    history.push('/',{push:true})
   }
   },[])
   return (

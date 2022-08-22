@@ -249,7 +249,7 @@ history.push('/dashboard/rra',{push:true})
           spacing={2}
           sx={{ padding: "40px", textAlign: "center" }}
         >
-          <CbhiList />
+          <CbhiList/>
         </Grid>
       </Box>
     </div>

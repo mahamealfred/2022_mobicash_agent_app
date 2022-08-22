@@ -3,7 +3,7 @@ import { useRouteMatch, Switch, Route } from "react-router-dom";
 import Home from "../pages/home/Home";
 import AgentDashboard from "../views/AgentDashboard";
 import PrivateRoute from "./PrivateRoutes";
-import Snippets from "../pages/snippets/Snippets";
+
 import Electricity from "../pages/services/electricity/Electricity";
 import ElectricityPayment from "../pages/services/electricity/electricityPayment/ElectricityPayament";
 import Cbhi from "../pages/services/cbhi/Cbhi";
@@ -24,8 +24,12 @@ function App() {
     const payload = jwt.verify(token, JWT_SECRET);
      return payload;
   }
+  const handleCloseWindows=()=>{
+  localStorage.removeItem('mobicashAuth');
+  }
   const history= useHistory();
   useEffect(() => {
+   // window.addEventListener('beforeunload', handleCloseWindows);
     const token =localStorage.getItem('mobicashAuth');
     if (token) {
     const {exp}=decode(token);
@@ -38,7 +42,7 @@ function App() {
     }
   }
   return history.push('/', { push: true })
-  }, []);
+  }, [history]);
   return (
     <Switch>
       <AgentDashboard>

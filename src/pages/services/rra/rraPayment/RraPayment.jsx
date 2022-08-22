@@ -15,6 +15,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import {useSelector,useDispatch} from "react-redux";
 import jwt from "jsonwebtoken";
 import { rraPayamentAction } from '../../../../redux/actions/rraPaymentAction';
+import { transactionsAction } from '../../../../redux/actions/transactionsAction';
 import Alert from '@mui/material/Alert';
 import Collapse from '@mui/material/Collapse';
 import IconButton from '@mui/material/IconButton';
@@ -43,6 +44,11 @@ const RraPayment= () => {
   const [payerPhone,setPayerPhone]=useState('');
   const [brokering,setBrokering]=useState('');
 
+
+  //vvalidation
+  const [phoneErrorMessage,setPhoneErrorMessage]=useState('')
+  const [pinErrorMessage,setPinErrorMessage]=useState('')
+
   const handleClose=()=>{
     setOpen(false)
   }
@@ -52,7 +58,6 @@ const RraPayment= () => {
      return payload;
   }
   useEffect(() => {
-  
     const token =localStorage.getItem('mobicashAuth');
     if (token) {
     const {username}=decode(token);
@@ -91,22 +96,42 @@ const RraPayment= () => {
     history.push('/dashboard/rra',{push:true}) 
   }
   const handleSubmit=async()=>{
-    await dispatch(rraPayamentAction({
-      bankName,
-      rraRef,
-      tin,
-      taxPayerName,
-      taxTypeDesc,
-      taxCenterNo,
-      taxTypeNo,
-      assessNo,
-      rraOrginNo,
-      amountToPay,
-      descId,
-      payerPhoneNumber,
-      brokering
-
-    },username,password,history))
+    let errorMessage=""
+    if(payerPhoneNumber==""){
+      errorMessage="Phone number is required"
+      setPhoneErrorMessage(errorMessage)
+    }
+    else if(payerPhoneNumber.length < 10){
+      errorMessage="Phone number must be 10 number"
+      setPhoneErrorMessage(errorMessage)
+    }
+    else if(!password){
+      errorMessage="Pin is required"
+      setPinErrorMessage(errorMessage) ;
+    }
+    else{
+      errorMessage=""
+      setPhoneErrorMessage("")
+      setPinErrorMessage("") ;
+      await dispatch(rraPayamentAction({
+        bankName,
+        rraRef,
+        tin,
+        taxPayerName,
+        taxTypeDesc,
+        taxCenterNo,
+        taxTypeNo,
+        assessNo,
+        rraOrginNo,
+        amountToPay,
+        descId,
+        payerPhoneNumber,
+        brokering
+  
+      },username,password,history));
+      await dispatch(transactionsAction(username,password))
+    }
+   
    // await dispatch(transactionsAction(username,password))
     if(rraPayment.error){
       setOpen(true)
@@ -209,6 +234,9 @@ const RraPayment= () => {
               <TextField
                     label="Phone Number"
                     name="amount"
+                    value={payerPhoneNumber}
+                    helperText={phoneErrorMessage ? phoneErrorMessage : " "}
+                    error={phoneErrorMessage==""?null:phoneErrorMessage}
                     onChange={(e)=>setPayerPhoneNumber(e.target.value)}
                     placeholder="Enter Phone"
                     variant="standard"
@@ -216,20 +244,7 @@ const RraPayment= () => {
                     required
                   />
               </Typography>
-              {/* <Typography mt={1} sx={{ fontSize: "14px", fontWeight: "bold" }}  variant="body2" gutterBottom>
-                Amount 
-              </Typography>
-              <Typography variant="body3" sx={{ fontSize: "20px", fontWeight: "bold" }} color="text.secondary">
-              <TextField
-                    label="Amount"
-                    name="amount"
-                     onChange={(e)=>setAmountPaid(e.target.value)}
-                    placeholder="Enter Amount to Pay"
-                    variant="standard"
-                    fullWidth
-                    required
-                  />
-              </Typography> */}
+             
               <Typography mt={1} sx={{ fontSize: "14px", fontWeight: "bold" }}  variant="body2" gutterBottom>
                 Agent PIN
               </Typography>
@@ -238,6 +253,9 @@ const RraPayment= () => {
                     label="Pin"
                     name="amount"
                     type="password"
+                    value={password}
+                    helperText={pinErrorMessage ? pinErrorMessage : " "}
+                    error={pinErrorMessage==""?null:pinErrorMessage}
                     onChange={(e)=>setPassword(e.target.value)}
                     placeholder="Enter Pin"
                     variant="standard"

@@ -28,10 +28,20 @@ const Rra = () => {
   const getDocDetails = useSelector((state) => state.getDocDetails);
   const [docId,setDocId]=useState('');
   const [open, setOpen] = React.useState(true);
+  const [docErrorMessage,setDocErrorMessage]=useState("")
     const history=useHistory()
     const handelSubmit= async()=>{
-      await dispach(getDocDetailsAction({docId},history));
-      setDocId('')
+      let errorMessage=""
+      if(docId==""){
+        errorMessage="Doc Id is required"
+        setDocErrorMessage(errorMessage)
+      }
+      else{
+        setDocErrorMessage("")
+        errorMessage=""
+        await dispach(getDocDetailsAction({docId},history));
+      }
+     
       if(getDocDetails.error){
         setOpen(true)
       }
@@ -101,6 +111,9 @@ const Rra = () => {
                   <TextField
                     label="Doc ID"
                     name={docId}
+                    value={docId}
+                    helperText={docErrorMessage ? docErrorMessage : " "}
+                    error={docErrorMessage==""?null:docErrorMessage}
                     onChange={(e)=>setDocId(e.target.value)}
                     placeholder="Enter Doc ID"
                     variant="standard"

@@ -20,6 +20,7 @@ import Alert from '@mui/material/Alert';
 import Collapse from '@mui/material/Collapse';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
+import { yupResolver } from '@hookform/resolvers/yup';
  export let headIdDetails=[]
  export let year=[]
 const Item = styled(Paper)(({ theme }) => ({
@@ -37,7 +38,8 @@ const Cbhi = () => {
   const [paymentYear, setPaymentYear] = useState("");
   const [houseHoldNID,setHouseHoldNID]=useState("");
   const [open, setOpen] = React.useState(true);
-  const [error,setError]=useState("");
+  const [nIdErrorMessage,setNIdErrorMessage]=useState("");
+  const [paymentYearErrorMessage,setPaymentYearErrorMessage]=useState("")
   const history=useHistory();
 
   const initialState = {houseHoldNID: '', password: ''};
@@ -51,12 +53,31 @@ const Cbhi = () => {
   }
  
 const handelSubmit= async()=>{
- 
-  await dispach(getNidDetailsAction({ houseHoldNID, paymentYear },history));
-  //history.push('/dashboard/cbhi-payment',{push:true})
+  let errorMessage=""
+  if(houseHoldNID=="" ){
+    errorMessage="HouseHold NID is required"
+    setNIdErrorMessage(errorMessage)
+  }
+  else if(houseHoldNID.length<8 || houseHoldNID.length>16 ){
+    errorMessage="NID lenght muster between 8 to 16 numbers"
+    setNIdErrorMessage(errorMessage)
+  }
+  else if(paymentYear==""){
+    errorMessage="Please select year of payment"
+    setPaymentYearErrorMessage(errorMessage)
+  }
+  else{
+    setNIdErrorMessage("")
+    setPaymentYearErrorMessage("")
+    errorMessage=""
+    await dispach(getNidDetailsAction({ houseHoldNID, paymentYear },history));
+    
+  }
   if(getNidDetails.error){
     setOpen(true)
   }
+  //history.push('/dashboard/cbhi-payment',{push:true})
+  
   // setHouseHoldNID("")
   // setPaymentYear("")
   year.push(paymentYear)
@@ -155,13 +176,14 @@ const handleCancel=()=>{
                      value={houseHoldNID}
                     //  error={houseHoldNID}
                      id="standard-error-helper-text"
-                     helperText={houseHoldNID === "" ? "Please enter NID" : " "}
+                     helperText={nIdErrorMessage ? nIdErrorMessage : " "}
                      label="HouseHold NID"
                      name={houseHoldNID}
                      onChange={(e)=>setHouseHoldNID(e.target.value)}
                      placeholder="Enter Household NID"
                      variant="standard"
                     // fullWidth
+                    error={nIdErrorMessage==""?null:nIdErrorMessage}
                      required
                   />
                   <br />
@@ -171,10 +193,11 @@ const handleCancel=()=>{
                   <TextField
                     id="standard-select-currency"
                     select
-                   value={paymentYear}
+                    value={paymentYear}
                     fullWidth
                    onChange={handleChange}
-                    helperText="Please select year"
+                   helperText={paymentYearErrorMessage? paymentYearErrorMessage : " "}
+                   error={paymentYearErrorMessage==""?null:paymentYearErrorMessage}
                     variant="standard"
                   >
                     {years.map((option) => (
@@ -182,7 +205,6 @@ const handleCancel=()=>{
                     ))}
                   </TextField>
                   </Box>
-                 
                   <br />
                   <Box
                     sx={{
@@ -210,7 +232,7 @@ const handleCancel=()=>{
                         onClick={handelSubmit}
                       >
                         {getNidDetails.loading ? <Stack sx={{ color: 'grey.500'}} spacing={1} direction="row">
-      <CircularProgress size={20} color="inherit" height="10px" width="10px" />
+       <CircularProgress size={20} color="inherit" height="10px" width="10px" />
        </Stack> : "Send"}
                   
                       </Button>

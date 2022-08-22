@@ -1,6 +1,8 @@
 .paperStyle{
     width: 240px;
     height: 45vh;
+    /* height: calc(100vh - 50vh); */
+   
     background-color:#ffff;
     border-radius: 8px;
     -webkit-box-shadow: 5px 5px 15px 5px #000000; 

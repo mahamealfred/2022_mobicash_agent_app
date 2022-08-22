@@ -14,7 +14,7 @@ export const forgotPasswordAction = (user,history) => async (dispatch) => {
     dispatch(forgotPasswordRequest());
     const {username}=user 
    // console.log("username ;;;",username)
-    const Url='http://52.36.87.202:107/api/agent/user/rest/v.4.14.01/forgetten-password-request';
+    const Url='https://agentweb.mobicash.rw/api/agent/user/rest/v.4.14.01/forgetten-password-request';
    const res = await axios.post(Url,{
     user:username
    }, {
@@ -25,7 +25,7 @@ export const forgotPasswordAction = (user,history) => async (dispatch) => {
  }
    });
     const {data} = await res;
-      if(res.data.code==200){
+      if(res.data.code===200){
         dispatch(forgotPasswordSuccess(data));
         history.push('/reset-pin',{push:true})
       }
@@ -35,7 +35,7 @@ export const forgotPasswordAction = (user,history) => async (dispatch) => {
     if (err.response) {
       //const errorMessage = await err.response.data.responseMessage;
       let errorMessage = ''
-      if(err.response.data.code==400){
+      if(err.response.data.code===400){
         // errorMessage="Invalid Pin, Please enter a valid Pin"
         errorMessage=await err.response.data.message
         dispatch(forgotPasswordFailure(errorMessage));

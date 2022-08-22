@@ -414,9 +414,6 @@ function CbhiList() {
                   >
                   Print
                   </Button>
-              
-                
-             
                     </TableCell>
                   </TableRow>
                 ))}

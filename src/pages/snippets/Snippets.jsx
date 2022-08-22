@@ -1,20 +1,19 @@
 import React,{useEffect,useState} from "react";
-import IMAGES from "../../Assets/Images"
 import WidgetLarge from "../../components/widgetLarge/WidgetLarge";
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
-import { ButtonGroup, Box,TextField } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
+import {  Box } from "@mui/material";
+import { useSelector } from "react-redux";
 function Snippets() {
 
-  const dispatch=useDispatch();
+  //const dispatch=useDispatch();
   const balance=useSelector(state=>state.balance);
   const [balanceDetails,setBalanceDetails]=useState([])
- console.log("B LL Alfred:",balanceDetails)
-  const isAuth = localStorage.getItem("mobicashAuth");
-  const [agentName, setAgentName] = useState("");
-  const token = localStorage.getItem("mobicashAuth");
+console.log("B LL Alfred:",balanceDetails)
+ // const isAuth = localStorage.getItem("mobicashAuth");
+
+  //const token = localStorage.getItem("mobicashAuth");
   
  
   useEffect(()=>{

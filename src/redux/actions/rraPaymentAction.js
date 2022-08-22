@@ -28,7 +28,7 @@ export const rraPayamentAction = (details,username,password,history) => async (d
   console.log(" rra details:",details,username,password)
     //const encodedBase64Token = Buffer.from(`${username}:${password}`).toString('base64');
     let basicAuth='Basic ' + btoa(username + ':' + password);
-    const Url='http://52.36.87.202:107/api/agent/goverment-services/rra/rest/v.4.14.01/payment';
+    const Url='https://agentweb.mobicash.rw/api/agent/goverment-services/rra/rest/v.4.14.01/payment';
     const res = await axios.post(Url,{
         bankName:bankName,
         rraRef:rraRef,
@@ -57,7 +57,7 @@ export const rraPayamentAction = (details,username,password,history) => async (d
   }
    });
     const {data} = await res;
-      if(res.data.responseCode==200){
+      if(res.data.responseCode===200){
        await dispatch(rraPaymentSuccess(data));
     
         history.push('/dashboard/rra-payment-details',{push:true})

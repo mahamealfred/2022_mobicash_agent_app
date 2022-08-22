@@ -42,7 +42,12 @@ const CbhiPayment = () => {
 
   const [houseHoldCategory,seHouseHoldCategory]=useState('');
   const [householdMemberNumber,setHouseholdMemberNumber]=useState('');
-  const [totalPremium,setTotalPremium]=useState('');    
+  const [totalPremium,setTotalPremium]=useState('');   
+  
+  //vlaidation
+  const [phoneErrorMessage,setPhoneErrorMessage]=useState('')
+  const [amountErrorMessage,setAmountErroMessage]=useState('')
+  const [pinErrorMessage,setPinErrorMessage]=useState('');
  
   
   const [userGroup,setUserGroup]=useState('');
@@ -90,20 +95,47 @@ const CbhiPayment = () => {
   },[getNidDetails.cbhidetails])
 
   const handleSubmit=async()=>{
-    
-await dispatch(cbhiPayamentAction({
-  houseHoldNID,
-  paymentYear,
-  amountPaid,
-  payerName,
-  houseHoldCategory,
-  householdMemberNumber,
-  totalPremium,
-  payerPhoneNumber,
-  agentCategory,
-  userGroup
-},username,password,history))
-await dispatch(transactionsAction(username,password))
+    let errorMessage=""
+    if(payerPhoneNumber==""){
+      errorMessage="Phone number is required"
+      setPhoneErrorMessage(errorMessage)
+    }
+    else if(payerPhoneNumber.length < 10){
+      errorMessage="Phone number must be 10 number"
+      setPhoneErrorMessage(errorMessage)
+    }
+   else if(amountPaid==""){
+      errorMessage="Amount is required"
+      setAmountErroMessage(errorMessage)
+    }
+    else if(amountPaid%1000!==0){
+      errorMessage="Amount must be divisible by 1000"
+      setAmountErroMessage(errorMessage)
+    }  
+   else if(!password){
+      errorMessage="Pin is required"
+      setPinErrorMessage(errorMessage) 
+    }
+else{
+  setPinErrorMessage("") 
+  setAmountErroMessage("")
+  setPhoneErrorMessage("")
+  errorMessage=""
+  await dispatch(cbhiPayamentAction({
+    houseHoldNID,
+    paymentYear,
+    amountPaid,
+    payerName,
+    houseHoldCategory,
+    householdMemberNumber,
+    totalPremium,
+    payerPhoneNumber,
+    agentCategory,
+    userGroup
+  },username,password,history))
+  await dispatch(transactionsAction(username,password))
+}
+
 if(cbhiPayment.error){
   setOpen(true)
 }
@@ -267,6 +299,9 @@ if(cbhiPayment.error){
               <TextField
                     label="Phone Number"
                     name="amount"
+                    value={payerPhoneNumber}
+                    helperText={phoneErrorMessage ? phoneErrorMessage : " "}
+                    error={phoneErrorMessage==""?null:phoneErrorMessage}
                     onChange={(e)=>setPayerPhoneNumber(e.target.value)}
                     placeholder="Enter Phone"
                     variant="standard"
@@ -281,6 +316,9 @@ if(cbhiPayment.error){
               <TextField
                     label="Amount"
                     name="amount"
+                    value={amountPaid}
+                    helperText={amountErrorMessage? amountErrorMessage : " "}
+                    error={amountErrorMessage==""?null:amountErrorMessage}
                      onChange={(e)=>setAmountPaid(e.target.value)}
                     placeholder="Enter Amount to Pay"
                     variant="standard"
@@ -296,12 +334,16 @@ if(cbhiPayment.error){
                     label="Pin"
                     name="amount"
                     type="password"
+                    value={password}
+                    helperText={pinErrorMessage ? pinErrorMessage : " "}
+                    error={pinErrorMessage==""?null:pinErrorMessage}
                     onChange={(e)=>setPassword(e.target.value)}
                     placeholder="Enter Pin"
                     variant="standard"
                     fullWidth
                     required
                   />
+                  
               </Typography>
             </Grid>
             <Grid item>

@@ -16,7 +16,7 @@ export const getBalanceAction = (user,history) => async (dispatch) => {
    // console.log("oooo",username,password,user)
     //const encodedBase64Token = Buffer.from(`${username}:${password}`).toString('base64');
     //let basicAuth='Basic ' + btoa(username + ':' + password);
-    const Url='http://52.36.87.202:107/api/agent/utilities/user/rest/v.4.14.01/account-balance';
+    const Url='https://agentweb.mobicash.rw/api/agent/utilities/user/rest/v.4.14.01/account-balance';
    const res = await axios.get(Url,{
      withCredentials: true,
     headers:{
@@ -32,7 +32,7 @@ export const getBalanceAction = (user,history) => async (dispatch) => {
     const {data} = await res;
     
       //const token= jwt.sign(claims,jwt_secret, { expiresIn: "7d"});
-      if(res.data.code==200){
+      if(res.data.code===200){
         dispatch(getBalanceSuccess(data));
        // console.log("results .. balance:",data)
         // history.push('/dashboard',{push:true})

@@ -26,13 +26,15 @@ import TopBar from "../../components/topNav/TopBar";
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import Footer from "../../components/footer/Footer";
+import {  InputAdornment } from '@mui/material';
+import Iconify from "../../components/Iconify";
   export default function Login() {
     const [open, setOpen] = React.useState(true);
     const dispatch = useDispatch();
     const userLogin=useSelector((state)=>state.login)
     const [agentDetails,setAgentDetails]=useState('');
     const history = useHistory();
- 
+    const [showPassword, setShowPassword] = useState(false);
     const handleClose=()=>{
       setOpen(false)
     }
@@ -75,6 +77,7 @@ import Footer from "../../components/footer/Footer";
     });
     const onSubmit = async(values, props) => {
       await dispatch(loginAction(values, history));
+      
       if(userLogin.error){
         setOpen(true);
       }
@@ -85,18 +88,16 @@ import Footer from "../../components/footer/Footer";
     if(isAuth){
       history.push('/dashboard',{push:true})
     }
-  
     },[])
     return (
       <Grid>
-     
      <TopBar/>
-      <Paper elevation={4}
+      <Paper elevation={2}
          sx={{
-          p: 2,
+          p: 4,
           margin: '60px auto',
-          maxWidth: 280,
-          flexGrow: 2,
+          maxWidth: 320,
+          flexGrow: 4,
           backgroundColor: (theme) =>
             theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
         }}
@@ -154,11 +155,21 @@ import Footer from "../../components/footer/Footer";
                     label="Pin"
                     name="password"
                     placeholder="Enter Pin"
-                    type="password"
+                    //type="password"
                     variant="standard"
                     fullWidth
                     error={errors.password ? true : false}
                     helperText={<ErrorMessage name="password" />}
+                    type={showPassword ? 'text' : 'password'}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
+                            <Iconify icon={showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'} />
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
                   />   
                    {/* {
                   !userLogin.error? null:
@@ -168,7 +179,7 @@ import Footer from "../../components/footer/Footer";
                    </Alert>
                    </Stack>
                 }    */}
-               
+              
                   <Button
                     type="submit"
                     color="primary"

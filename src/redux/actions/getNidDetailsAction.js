@@ -13,7 +13,7 @@ export const getNidDetailsAction = (details,history) => async (dispatch) => {
     const  {paymentYear}=details
     //const encodedBase64Token = Buffer.from(`${username}:${password}`).toString('base64');
    // let basicAuth='Basic ' + btoa(username + ':' + password);
-   const Url='http://52.36.87.202:107/api/agent/goverment-services/cbhi/rest/v.4.14.01/nid-validation';
+   const Url='https://agentweb.mobicash.rw/api/agent/goverment-services/cbhi/rest/v.4.14.01/nid-validation';
    const res = await axios.post(Url,{
     houseHoldNID:houseHoldNID,
     paymentYear:paymentYear
@@ -26,10 +26,10 @@ export const getNidDetailsAction = (details,history) => async (dispatch) => {
  },
    });
     const {data} = await res;
-      if(res.data.responsecode==200){
+      if(res.data.responsecode===200){
         dispatch(getNidDetailsSuccess(data.response));
         history.push('/dashboard/cbhi-payment',{push:true})
-      }else if(res.data.responsecode==400){
+      }else if(res.data.responsecode===400){
         let errMsg=res.data.response.message
         dispatch(getNidDetailsFailure(errMsg));
       }
