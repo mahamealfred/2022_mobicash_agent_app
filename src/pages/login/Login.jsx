@@ -29,16 +29,31 @@ import Footer from "../../components/footer/Footer";
 import {  InputAdornment } from '@mui/material';
 import { transactionsAction } from "../../redux/actions/transactionsAction";
 import Iconify from "../../components/Iconify";
+import { styled } from '@mui/material/styles';
+import { Card} from '@mui/material';
+import { ButtonGroup, useMediaQuery, useTheme } from "@mui/material";
+
   export default function Login() {
+    const theme = useTheme();
+    const isMatch = useMediaQuery(theme.breakpoints.up("md"));
     const [open, setOpen] = React.useState(true);
     const dispatch = useDispatch();
     const userLogin=useSelector((state)=>state.login)
     const [agentDetails,setAgentDetails]=useState('');
     const history = useHistory();
     const [showPassword, setShowPassword] = useState(false);
+
     const handleClose=()=>{
       setOpen(false)
     }
+    const SectionStyle = styled(Card)(({ theme }) => ({
+      width: '100%',
+      maxWidth: 464,
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      margin: theme.spacing(2, 0, 2, 2),
+    }));
     const avatarStyle = {
         backgroundColor: "#FFFF",
         margin: "6px 0px",
@@ -94,6 +109,15 @@ import Iconify from "../../components/Iconify";
     return (
       <Grid>
      <TopBar/>
+    
+     {/* {isMatch&& (
+          <SectionStyle> */}
+            <Typography variant="h3" sx={{ px: 5, mt: 2, mb: 5 }}>
+            MobiCash Agent Application
+            </Typography>
+            {/* <img src="/Asstes/images/logo.png" alt="login" />
+          </SectionStyle>
+        )} */}
       <Paper elevation={2}
          sx={{
           p: 4,
@@ -104,6 +128,7 @@ import Iconify from "../../components/Iconify";
             theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
         }}
         >
+          
           <Grid item xs={12} align="center">
             <Avatar style={avatarStyle}>
               {/* <LoginIcon /> */}

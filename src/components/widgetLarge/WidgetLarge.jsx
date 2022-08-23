@@ -47,6 +47,9 @@ const handleRra=()=>{
 const handleLtss=()=>{
   history.push("/dashboard/ltss",{ push: true })
 }
+const handleClient=()=>{
+  history.push("/dashboard/client",{ push: true }) 
+}
   return (
     <div className='widgetLarge'>
      <Grid sx={{ flexGrow: 1 }} container spacing={2}>
@@ -95,6 +98,11 @@ const handleLtss=()=>{
             <Grid  item>
           <Button className="btnImage" >
             <img src="../../../Assets/images/logs.png" alt=''  className="images" />
+              </Button>
+            </Grid>
+            <Grid  item>
+          <Button className="btnImage" onClick={handleClient}>
+          <img src="../../../Assets/images/client.png" alt=''  className="imagesClient" />
               </Button>
             </Grid>
         </Grid>

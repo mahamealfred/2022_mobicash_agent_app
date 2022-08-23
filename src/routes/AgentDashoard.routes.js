@@ -3,7 +3,6 @@ import { useRouteMatch, Switch, Route } from "react-router-dom";
 import Home from "../pages/home/Home";
 import AgentDashboard from "../views/AgentDashboard";
 import PrivateRoute from "./PrivateRoutes";
-
 import Electricity from "../pages/services/electricity/Electricity";
 import ElectricityPayment from "../pages/services/electricity/electricityPayment/ElectricityPayament";
 import Cbhi from "../pages/services/cbhi/Cbhi";
@@ -14,12 +13,12 @@ import Rra from "../pages/services/rra/Rra";
 import RraPayment from "../pages/services/rra/rraPayment/RraPayment";
 import RraDisplayDetails from "../pages/services/rra/rraDisplayDetails/RraDisplayDetails";
 import ChangePin from "../pages/changepin/ChangePin";
-
 import Ltss from "../pages/services/ltss/Ltss";
 import LtssPayment from "../pages/services/ltss/ltssPayment/LtssPayment"
 import {useEffect} from "react";
 import jwt from "jsonwebtoken";
 import { useHistory } from 'react-router-dom';
+import Client from "../pages/services/client/Client";
 function App() {
   const { path } = useRouteMatch();
   const decode=(token) => {
@@ -33,10 +32,11 @@ function App() {
   const history= useHistory();
   useEffect(() => {
    // window.addEventListener('beforeunload', handleCloseWindows);
-    const token =localStorage.getItem('mobicashAuth');
+    const token =sessionStorage.getItem('mobicash-auth');
     if (token) {
     const {exp}=decode(token);
     if(Date.now()>=exp*1000){
+      sessionStorage.removeItem("mobicash-auth")
       localStorage.removeItem("mobicashAuth")
      return history.push('/', { push: true })
     }
@@ -184,6 +184,18 @@ function App() {
               exact
               path={`${path}/ltss-payment`}
               component={LtssPayment}
+            />
+          </>
+        )}
+      />
+
+<Route
+        component={({ match }) => (
+          <>
+            <PrivateRoute
+              exact
+              path={`${path}/client`}
+              component={Client}
             />
           </>
         )}

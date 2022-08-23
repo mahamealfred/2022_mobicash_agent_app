@@ -15,6 +15,10 @@ import { useDispatch,useSelector } from "react-redux/es/exports";
 import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
 import Footer from "../../components/footer/Footer";
+import {
+  Avatar,
+ 
+} from "@mui/material";
   export default function ForgotPassword() {
   
     const history = useHistory();
@@ -29,7 +33,7 @@ import Footer from "../../components/footer/Footer";
     },[])
   
     const avatarStyle = {
-      backgroundColor: "#3D426B",
+      backgroundColor: "#FFFF",
       margin: "6px 0px",
     };
     const btnStyle = {
@@ -67,14 +71,20 @@ await dispatch(forgotPasswordAction(values,history))
       <TopBar/>
         <Paper elevation={4}
          sx={{
-          p: 2,
+          p: 4,
           margin: '60px auto',
-          maxWidth: 280,
-          flexGrow: 2,
+          maxWidth: 320,
+          flexGrow: 4,
           backgroundColor: (theme) =>
             theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
         }}
         >
+           <Grid item xs={12} align="center">
+            <Avatar style={avatarStyle}>
+              {/* <LoginIcon /> */}
+              <img src="../../../Assets/images/mobicashdot.png" alt="" className="topAvatarLogin" />
+            </Avatar>
+          </Grid>
             <Grid align="center" sx={{fontSize:'20px', fontWeight:'bold'}}>
             Forgot Password
           </Grid>

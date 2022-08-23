@@ -1,5 +1,5 @@
 .widgetLarge{
-    flex: 3;
+    flex: 4;
     background-color:#ffff;
     /* height: calc(83vh - 50px); */
     height: auto;
@@ -13,14 +13,14 @@
     font-weight: 600;
     color: #0474BA;
 }
-.btnImage{
+/* .btnImage{
     width: 180px;
     height: 160px;
     cursor: pointer;
-}
+} */
 .images{
 object-fit: contain;
-width: 170;
+width: 150;
 height: 150;
 }
 /* @media screen and (min-width: 1200px) {
@@ -34,7 +34,7 @@ height: 150;
         height: 90;
         }
 } */
-@media screen and  (max-width: 400px) {
+/* @media screen and  (max-width: 400px) {
     .btnImage{
         width: 120px;
         height: 100px;
@@ -86,16 +86,78 @@ height: 150;
         }
         
   }
-  /* @media screen and  (min-width: 900px) {
+  */
+  @media (min-width:320px) {
     .btnImage{
-        width: 145px;
+        width: 120px;
+        height: 120px;   
+    }
+    .btnImageClient{
+        width: 120px;
+        height: 120px;
+        
+    }
+  } 
+@media (min-width:481px)  {
+    .btnImage{
+        width: 140px;
+        height: 140px;
+        
+    }
+}
+@media (min-width:641px) {
+    .btnImage{
+        width: 120px;
+        height: 120px;
+        
+    }
+}
+@media (min-width:912px) {
+    .btnImage{
+        width: 140px;
+        height: 145px;
+        
+    }
+} 
+@media (min-width:1024px){
+    .btnImage{
+        width: 175px;
+        height: 145px;
+        
+    }
+} 
+@media (min-width:1250px){
+    .btnImage{
+        width: 170px;
         height: 100px;
         
     }
-    .images{
-        width: 180;
-        height: 170;
-        }
+    .btnImageClient{
+        width: 100px;
+        height: 100px;      
+    }
+}
+@media (min-width:1280px) {
+    .btnImage{
+        width: 175px;
+        height: 100px;
         
-  } */
- 
+    }
+  
+}
+.imagesClient{
+    width: 140px;
+    height: 120px; 
+    -webkit-box-shadow: 10px 15px 15px 5px #3a2121; 
+    box-shadow: 0px 0px 15px -10px rgba(87, 66, 66, 0.75);
+}
+
+
+/* @media (min-width:1366px){
+    .btnImage{
+        width: 175px;
+        height: 1000px;
+        
+    }
+}
+ */

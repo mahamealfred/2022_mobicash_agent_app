@@ -45,6 +45,7 @@ export const loginAction = (user,history) => async (dispatch) => {
 
       dispatch(loginSuccess(data));
       history.push('/dashboard',{push:true})
+      sessionStorage.setItem('mobicash-auth',token)
       return localStorage.setItem('mobicashAuth',token);
     }
   //  else if(res.data.code==401){
