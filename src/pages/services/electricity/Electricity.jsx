@@ -9,6 +9,7 @@ import Button from "@mui/material/Button";
 import { Typography, ButtonGroup, TextField } from "@mui/material";
 import MenuItem from "@mui/material/MenuItem";
 import { useHistory } from 'react-router-dom';
+import CbhiList from '../cbhi/cbhiList/CbhiList';
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
   ...theme.typography.body2,
@@ -88,6 +89,15 @@ history.push('/dashboard/electricity-payment',{push: true});
               </div>
             </Item>
           </Grid>
+        </Grid>
+      </Box>
+      <Box sx={{ flexGrow: 1 }}>
+        <Grid
+          container
+          spacing={2}
+          sx={{ padding: "40px", textAlign: "center" }}
+        >
+          <CbhiList />
         </Grid>
       </Box>
         </div>

@@ -27,6 +27,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import Footer from "../../components/footer/Footer";
 import {  InputAdornment } from '@mui/material';
+import { transactionsAction } from "../../redux/actions/transactionsAction";
 import Iconify from "../../components/Iconify";
   export default function Login() {
     const [open, setOpen] = React.useState(true);
@@ -82,6 +83,7 @@ import Iconify from "../../components/Iconify";
         setOpen(true);
       }
       await dispatch(getBalanceAction(values, history));
+      await dispatch(transactionsAction(values.username,values.password))
     };
     useEffect(()=>{
       const isAuth=localStorage.getItem("mobicashAuth")

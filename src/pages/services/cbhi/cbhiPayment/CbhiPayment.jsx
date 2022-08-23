@@ -62,7 +62,6 @@ const CbhiPayment = () => {
      return payload;
   }
   useEffect(() => {
-  
     const token =localStorage.getItem('mobicashAuth');
     if (token) {
     const {username}=decode(token);

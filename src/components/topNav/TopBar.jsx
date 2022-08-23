@@ -11,7 +11,7 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import PersonIcon from "@mui/icons-material/Person";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import EmailIcon from "@mui/icons-material/Email";
-import IMAGES from "../../Assets/Images";
+
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";

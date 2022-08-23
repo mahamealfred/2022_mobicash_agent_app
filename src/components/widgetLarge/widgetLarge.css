@@ -86,4 +86,16 @@ height: 150;
         }
         
   }
+  /* @media screen and  (min-width: 900px) {
+    .btnImage{
+        width: 145px;
+        height: 100px;
+        
+    }
+    .images{
+        width: 180;
+        height: 170;
+        }
+        
+  } */
  

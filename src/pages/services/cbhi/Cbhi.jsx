@@ -241,12 +241,21 @@ const handleCancel=()=>{
                 </div>
               </div>
             </Item>
+           
           </Grid>
-         
+        
         </Grid>
          
       </Box>
-    
+      <Box sx={{ flexGrow: 1 }}>
+        <Grid
+          container
+          spacing={2}
+          sx={{ padding: "40px", textAlign: "center" }}
+        >
+          <CbhiList />
+        </Grid>
+      </Box>
     </div>
   );
 };
