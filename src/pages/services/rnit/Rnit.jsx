@@ -1,5 +1,5 @@
 import Header from '../../../components/header/Header';
-import './client.css';
+import './rnit.css';
 import React, { useState, useEffect } from "react";
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
@@ -8,7 +8,7 @@ import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import { Typography, ButtonGroup, TextField } from "@mui/material";
 import { getDocDetailsAction } from '../../../redux/actions/getDocDetailsTypes';
-import { getClientDetailsAction } from '../../../redux/actions/getClientDetailsAction';
+import { getRnitDetailsAction } from '../../../redux/actions/getRnitDetailsAction';
 import { useDispatch, useSelector } from "react-redux";
 import Alert from '@mui/material/Alert';
 import Collapse from '@mui/material/Collapse';
@@ -17,7 +17,6 @@ import CloseIcon from '@mui/icons-material/Close';
 import MenuItem from "@mui/material/MenuItem";
 import { useHistory } from 'react-router-dom';
 import CbhiList from '../cbhi/cbhiList/CbhiList';
-import jwt from "jsonwebtoken";
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
   ...theme.typography.body2,
@@ -25,53 +24,30 @@ const Item = styled(Paper)(({ theme }) => ({
   textAlign: "center",
   color: theme.palette.text.secondary,
 }));
-const Client = () => {
+const Rnit = () => {
   const dispach = useDispatch();
   
   const getDocDetails = useSelector((state) => state.getDocDetails);
-  const getClientDetails=useSelector((state)=>state.getClientDetails);
-  const [identityNumber,setIdentityNumber]=useState('');
-  const [password,setPassword]=useState('')
+  const getRnitDetails=useSelector((state)=>state.getRnitDetails);
+  const [docId,setDocId]=useState('');
   const [open, setOpen] = React.useState(true);
-  const [pinErrorMessage,setPinErrorMessage]=useState("")
- const [username,setUsername]=useState('');
-  const [identityNumberErrorMessage,setIdentityNumberErrorMessage]=useState('')
+  const [docErrorMessage,setDocErrorMessage]=useState("")
+  const [identityNumberErrorMessage,setIdentityNumberErrorMessage]=useState('');
+  const [identityNumber,setIdentityNumber]=useState('')
     const history=useHistory()
-
-    const decode= (token) => {
-        const JWT_SECRET="tokensecret";
-        const payload = jwt.verify(token, JWT_SECRET);
-         return payload;
-      }
-      useEffect(() => {
-        const token =localStorage.getItem('mobicashAuth');
-        if (token) {
-        const {username}=decode(token);
-        const {role}=decode(token);
-        setUsername(username)
-         
-      }
-    
-      }, []);
     const handelSubmit= async()=>{
       let errorMessage=""
       if(identityNumber==""){
-        errorMessage="Identity Number is required"
+        errorMessage="Identification number is required"
         setIdentityNumberErrorMessage(errorMessage)
-      }
-      else if(password==""){
-        errorMessage="PiN is required"
-        setPinErrorMessage(errorMessage)
       }
       else{
         setIdentityNumberErrorMessage("")
         errorMessage=""
-       
-        await dispach(getClientDetailsAction(identityNumber,username,password))
-        //await dispach(getDocDetailsAction({identityNumber},password,username,history));
+        await dispach(getRnitDetailsAction(identityNumber,history));
       }
      
-      if(getClientDetails.error){
+      if(getRnitDetails.error){
         setOpen(true)
       }
     }
@@ -82,7 +58,7 @@ const Client = () => {
       history.push('/dashboard',{push:true}) 
     }
   return (
-    <div className='rraContainer'>
+    <div className='rnitContainer'>
         <Header/>
         <Box sx={{ flexGrow: 1 }}>
         <Grid
@@ -92,7 +68,7 @@ const Client = () => {
         >
           <Grid item xs={12} spacing={2}>
             <Typography mt={2} sx={{ fontSize: "28px", fontWeight: "bold" }}>
-              CLIENT SERVICE
+              RNIT SERVICE
             </Typography>
             <Box
                     sx={{
@@ -106,7 +82,7 @@ const Client = () => {
                   >
                     
             {
-                  !getClientDetails.error? null:
+                  !getRnitDetails.error? null:
                    <Collapse in={open}>
                    <Alert
                    severity="error"
@@ -125,7 +101,7 @@ const Client = () => {
                        </IconButton>
                      }
                    >
-                    {getClientDetails.error}
+                    {getRnitDetails.error}
                    </Alert>
                  </Collapse>
                 }     
@@ -134,33 +110,17 @@ const Client = () => {
               <div className="content">
                 <div className="leftContent">
                 <Typography mt={2} sx={{ fontSize: "20px", fontWeight: "bold" }}>
-                     IDENTITY NUMBER:
+                     IDENTIFICATION NUMBER:
                 </Typography>
 
                   <TextField
-                    label="Identity Number "
+                    label="Identification Number"
                     name={identityNumber}
                     value={identityNumber}
                     helperText={identityNumberErrorMessage ? identityNumberErrorMessage : " "}
                     error={identityNumberErrorMessage==""?null:identityNumberErrorMessage}
                     onChange={(e)=>setIdentityNumber(e.target.value)}
-                    placeholder="Enter Identity number"
-                    variant="standard"
-                    // fullWidth
-                    required
-                  />
-                  <Typography mt={2} sx={{ fontSize: "20px", fontWeight: "bold" }}>
-                     PIN:
-                </Typography>
-                   <TextField
-                    label="PIN "
-                    type='password'
-                    name={password}
-                    value={password}
-                    helperText={pinErrorMessage ? pinErrorMessage : " "}
-                    error={pinErrorMessage==""?null:pinErrorMessage}
-                    onChange={(e)=>setPassword(e.target.value)}
-                    placeholder="Enter Pin"
+                    placeholder="Enter Identification Number"
                     variant="standard"
                     // fullWidth
                     required
@@ -191,8 +151,8 @@ const Client = () => {
                         className="buttonGroup"
                         onClick={handelSubmit}
                       >
-                        {getClientDetails.loading ? "Loading" : "Submit"}
-                    
+                        {getRnitDetails.loading ? "Loading" : "Submit"}
+                      
                       </Button>
                     </ButtonGroup>
                   </Box>
@@ -216,4 +176,4 @@ const Client = () => {
   )
 }
 
-export default Client;
+export default Rnit;

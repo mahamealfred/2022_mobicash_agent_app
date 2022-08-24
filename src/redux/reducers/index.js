@@ -11,6 +11,9 @@ import transactionsReducer from "./transactionsReducer";
 import balanceReducer from "./getBalanceReducer";
 import rraPaymentReducer from "./rraPayementReducer";
 import getLtssIdentificationDetailsReducer from "./getLtssIdentificationDetailsReducer";
+import getClientDetailsReducer from "./getClientDetailsReducer";
+import rnitPaymentReducer from "./rnitPaymentReducer";
+import chashinReducer from "./cashInReducer";
 const allReducers = combineReducers({
     login:loginReducer,
     changePin: changePinReducer,
@@ -31,9 +34,14 @@ const allReducers = combineReducers({
 
     //rnit
     getRnitDetails: getRnitDetailsReducer,
+    rnitPayment:rnitPaymentReducer,
 
     //ltss
     getLtssIndDetails: getLtssIdentificationDetailsReducer,
+
+    //client
+    getClientDetails:getClientDetailsReducer,
+    cashIn:chashinReducer,
 });
 
 export default allReducers;

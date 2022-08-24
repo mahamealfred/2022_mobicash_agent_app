@@ -1,6 +1,6 @@
-import React, { useEffect,useState } from 'react'
+import React, {useState,useEffect} from 'react'
 import Header from '../../../../components/header/Header';
-import './cbhiPayment.css';
+import './rnitPayment.css';
 import { styled } from '@mui/material/styles';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
@@ -10,49 +10,70 @@ import Button from "@mui/material/Button";
 import { ButtonGroup, Box,TextField } from "@mui/material";
 import MenuItem from "@mui/material/MenuItem";
 import { useHistory } from 'react-router-dom';
-//import { headIdDetails } from '../Cbhi';
-import {year} from "../Cbhi";
-import {useSelector,useDispatch} from "react-redux";
-import jwt from "jsonwebtoken";
 import Stack from '@mui/material/Stack';
 import CircularProgress from '@mui/material/CircularProgress';
-import { cbhiPayamentAction } from '../../../../redux/actions/cbhiPaymentAction';
-import {transactionsAction} from '../../../../redux/actions/transactionsAction';
+import {useSelector,useDispatch} from "react-redux";
+import jwt from "jsonwebtoken";
+import { rraPayamentAction } from '../../../../redux/actions/rraPaymentAction';
+import { transactionsAction } from '../../../../redux/actions/transactionsAction';
+import { rnitPaymentAction } from '../../../../redux/actions/rnitPaymentAction';
+import Alert from '@mui/material/Alert';
 import Collapse from '@mui/material/Collapse';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
-import Alert from '@mui/material/Alert';
-export let cbhiPaidAmount=[]
-const CbhiPayment = () => {
-  const [headIdDetails,setHeadIdDetails]=useState('');
-  const history=useHistory();
+export let rrnitPaidAmount=[]
+const banks=[
+    {
+        value:"BK",
+        label:"Bank of Kigali"
+    },
+    {
+        value:"GTBank",
+        label:"GT Bank"
+    },
+    {
+        value:"Equity",
+        label:"Equity"
+    }
+    , {
+        value:"AccessBank",
+        label:"Access Bank"
+    }
+]
+const RnitPayment= () => {
   const dispatch=useDispatch();
-  const getNidDetails=useSelector((state)=>state.getNidDetails);
-  const cbhiPayment = useSelector((state) => state.cbhiPayment);
-  const [members,setMembers]=useState('');
-  const [username,setUsername]=useState('')
-  const [agentCategory,setAgentCategory]=useState('');
+  const getDocDetails = useSelector((state) => state.getDocDetails);
+  const getRnitDetails= useSelector((state) => state.getRnitDetails);
+  const rraPayment = useSelector((state) => state.rraPayment);
+  const rnitPayment = useSelector((state) => state.rnitPayment);
 
-  const [houseHoldNID,setHouseHoldNID]=useState('')
-  const [paymentYear,setPaymentYear]=useState('')
+  const [open, setOpen] = React.useState(true);
   const [amountPaid,setAmountPaid]=useState('');
   const [password,setPassword]=useState('');
-  const [payerPhoneNumber,setPayerPhoneNumber]=useState('')   
-  const [payerName,setPayerName]=useState('');
-
-  const [houseHoldCategory,seHouseHoldCategory]=useState('');
-  const [householdMemberNumber,setHouseholdMemberNumber]=useState('');
-  const [totalPremium,setTotalPremium]=useState('');   
+  const [username,setUsername]=useState('')
+  const [payerPhoneNumber,setPayerPhoneNumber]=useState('')  
   
-  //vlaidation
-  const [phoneErrorMessage,setPhoneErrorMessage]=useState('')
-  const [amountErrorMessage,setAmountErroMessage]=useState('')
-  const [pinErrorMessage,setPinErrorMessage]=useState('');
+  const [bankName,setBankName]=useState('');
  
-  
-  const [userGroup,setUserGroup]=useState('');
-  const [open, setOpen] = React.useState(true);
-  
+  const [payerNid,setPayerNid]=useState('')
+  const [payerName,setPayerName]=useState('')
+  const [bankAccount,setBankAccount]=useState('')
+
+  const [amountToPay,setAmountToPay]=useState('');
+
+
+  const [amountToPayErrorMessage,setAmountToPayErrorMessage]=useState('');
+  const [payerEmail,setPayerEmail]=useState('')
+  const [payerEmailErrorMessage,setPayerEmailErrorMessage]=useState('');
+  const [bankNameErrorMessage,setBankNameErrorMessage]=useState('');
+  const [bankAccountErrorMessage,setBankAccountErrorMessage]=useState('');
+  const [brokering,setBrokering]=useState('');
+
+
+  //vvalidation
+  const [phoneErrorMessage,setPhoneErrorMessage]=useState('')
+  const [pinErrorMessage,setPinErrorMessage]=useState('')
+
   const handleClose=()=>{
     setOpen(false)
   }
@@ -66,36 +87,49 @@ const CbhiPayment = () => {
     if (token) {
     const {username}=decode(token);
     const {role}=decode(token);
-    const {group}=decode(token);
     setUsername(username)
-    setAgentCategory(role)
-    setUserGroup(group);
+    setBrokering(role)
+    
   }
 
   }, []);
-
+  
   useEffect(()=>{
     async function fetchData() {
-      if (!getNidDetails.loading) {
-        if (getNidDetails.cbhidetails) {
-          await setHeadIdDetails(getNidDetails.cbhidetails);
-         await setMembers(getNidDetails.cbhidetails.members);
-         setHouseHoldNID(getNidDetails.cbhidetails.headId)
-         setPaymentYear(year[0])
-         setPayerName(getNidDetails.cbhidetails.headHouseHoldNames)
-         seHouseHoldCategory(getNidDetails.cbhidetails.houseHoldCategory)
-         setHouseholdMemberNumber(getNidDetails.cbhidetails.totalHouseHoldMembers)
-         setTotalPremium(getNidDetails.cbhidetails.totalAmount)
-         
+      if (!getRnitDetails.loading) {
+        if (getRnitDetails.details) {
+         setPayerName(getRnitDetails.details.fullName)
+         setPayerNid(getRnitDetails.details.nid)
         }
       }
     }
     fetchData();
-  },[getNidDetails.cbhidetails])
+  },[getRnitDetails.details])
 
+  const history=useHistory();
+  const handleCancel=()=>{
+    history.push('/dashboard/rnit',{push:true}) 
+  }
   const handleSubmit=async()=>{
     let errorMessage=""
-    if(payerPhoneNumber==""){
+    if(bankName==""){
+        errorMessage="Please Select Bank"
+        setBankNameErrorMessage(errorMessage)   
+    }
+    else if(bankAccount==""){
+        errorMessage="Bank Account is requires"
+        setBankAccountErrorMessage(errorMessage)   
+    }
+  else if(amountToPay==""){
+    errorMessage="Amount is required"
+    setAmountToPayErrorMessage(errorMessage)
+   }
+   else if(payerEmail==""){
+        errorMessage="Email is required"
+        setPayerEmailErrorMessage(errorMessage)
+      }
+     
+    else if(payerPhoneNumber==""){
       errorMessage="Phone number is required"
       setPhoneErrorMessage(errorMessage)
     }
@@ -103,55 +137,45 @@ const CbhiPayment = () => {
       errorMessage="Phone number must be 10 number"
       setPhoneErrorMessage(errorMessage)
     }
-   else if(amountPaid==""){
-      errorMessage="Amount is required"
-      setAmountErroMessage(errorMessage)
-    }
-    else if(amountPaid%1000!==0){
-      errorMessage="Amount must be divisible by 1000"
-      setAmountErroMessage(errorMessage)
-    }  
-   else if(!password){
+    else if(!password){
       errorMessage="Pin is required"
-      setPinErrorMessage(errorMessage) 
+      setPinErrorMessage(errorMessage) ;
     }
-else{
-  setPinErrorMessage("") 
-  setAmountErroMessage("")
-  setPhoneErrorMessage("")
- cbhiPaidAmount.push(amountPaid)
-  errorMessage=""
-  await dispatch(cbhiPayamentAction({
-    houseHoldNID,
-    paymentYear,
-    amountPaid,
-    payerName,
-    houseHoldCategory,
-    householdMemberNumber,
-    totalPremium,
-    payerPhoneNumber,
-    agentCategory,
-    userGroup
-  },username,password,history))
-  await dispatch(transactionsAction(username,password))
-}
-
-if(cbhiPayment.error){
-  setOpen(true)
-}
-}
-  const handleCancel=()=>{
-    history.push('/dashboard/cbhi',{push:true}) 
-  }
-  return (
-    <div className='cbhiPayment'>
+    else{
+      errorMessage=""
+      setPhoneErrorMessage("")
+      setPinErrorMessage("") 
+      setPayerEmailErrorMessage("")
+      setAmountToPayErrorMessage('')
+      rrnitPaidAmount.push(amountToPay)
+      await dispatch(rnitPaymentAction({
+        bankName,
+        bankAccount,
+        payerNid,
+        amountToPay,
+        payerName,
+        payerPhoneNumber,
+        payerEmail,
+        brokering
   
+      },username,password,history));
+      await dispatch(transactionsAction(username,password))
+    }
+   
+   // await dispatch(transactionsAction(username,password))
+    if(rraPayment.error){
+      setOpen(true)
+    } 
+  }
+ 
+  return (
+    <div className='rnitPayamentContainer'>
         <Header/>
         <Paper
       sx={{
-        p: 1,
+        p: 4,
         margin: 'auto',
-        maxWidth: 500,
+        maxWidth: 800,
         flexGrow: 1,
         backgroundColor: (theme) =>
           theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -161,11 +185,11 @@ if(cbhiPayment.error){
       <Grid 
       container 
       spacing={2}
-      sx={{ padding: "30px", textAlign: "center" }}
+      sx={{ padding: "20px", textAlign: "center" }}
        >
       <Grid item xs={12}  spacing={2}>
             <Typography mt={2} sx={{ fontSize: "28px", fontWeight: "bold" }}>
-              MUTUWEL SERVICE
+              RNIT SERVICE
             </Typography>
             <Box
                     sx={{
@@ -179,7 +203,7 @@ if(cbhiPayment.error){
                   >
                     
             {
-                  !cbhiPayment.error? null:
+                  !rnitPayment.error? null:
                    <Collapse in={open}>
                    <Alert
                    severity="error"
@@ -198,7 +222,7 @@ if(cbhiPayment.error){
                        </IconButton>
                      }
                    >
-                    {cbhiPayment.error}
+                    {rnitPayment.error}
                    </Alert>
                  </Collapse>
                 }     
@@ -208,97 +232,88 @@ if(cbhiPayment.error){
       
         </Grid>
         <Grid item xs={18} sm container>
-          <Grid item xs container direction="column" spacing={2}>
+          <Grid item xs container direction="column" spacing={12}>
             <Grid item xs>
-           
-              {
-               getNidDetails.loading?("Loading"):getNidDetails.cbhidetails?(
-                <>
                  <Typography variant="body2" mt={1} sx={{ fontSize: "14px", fontWeight: "bold" }} gutterBottom>
-               Name
+             Payer  Name
               </Typography>
               <Typography variant="body2" sx={{ fontSize: "16px", fontWeight: "bold" }} color="text.secondary">
-              {headIdDetails.headHouseHoldNames}
+                 {payerName}
               </Typography>
               <Typography mt={1} sx={{ fontSize: "14px", fontWeight: "bold" }}  variant="body2" gutterBottom>
-                House Hold NID
+                Identification Number
               </Typography>
               <Typography variant="body2" sx={{ fontSize: "16px", fontWeight: "bold" }} color="text.secondary">
-                {headIdDetails.headId}
+               {payerNid}
               </Typography>
               <Typography mt={1} sx={{ fontSize: "14px", fontWeight: "bold" }}  variant="body2" gutterBottom>
-                Year of payment
+                Bank Name
               </Typography>
-              <Typography variant="body2" sx={{ fontSize: "16px", fontWeight: "bold" }} color="text.secondary">
-                {year[0]}
-              </Typography>
-              <Typography mt={1} sx={{ fontSize: "14px", fontWeight: "bold" }}  variant="body2" gutterBottom>
-                Total Premium 
-              </Typography>
-             
-              <Typography  variant="body2"  sx={{ fontSize: "16px", fontWeight: "bold" }}  color="text.secondary">
-                {headIdDetails.totalAmount} Rwf
-              </Typography>
-              <Typography mt={1} sx={{ fontSize: "14px", fontWeight: "bold" }}  variant="body2" gutterBottom>
-                House Hold Category 
-              </Typography>
-              <Typography variant="body2" sx={{ fontSize: "16px", fontWeight: "bold" }} color="text.secondary">
-                {headIdDetails.houseHoldCategory}
-              </Typography>
-              <Typography mt={1} sx={{ fontSize: "14px", fontWeight: "bold" }}  variant="body2" gutterBottom>
-                Number Of Members 
-              </Typography>
-              <Typography variant="body2" sx={{ fontSize: "16px", fontWeight: "bold" }} color="text.secondary">
-                {headIdDetails.totalHouseHoldMembers}
-              </Typography>
-              <Typography mt={1} sx={{ fontSize: "14px", fontWeight: "bold" }}  variant="body2" gutterBottom>
-                Name Of Members 
-              </Typography>
-              {
-                !members?null:
-                <Typography variant="body2" sx={{ fontSize: "20px", fontWeight: "bold" }} color="text.secondary">
-                <TextField
-                      id="standard-select-currency"
-                      select
-                      // value={paymentYear}
-                      fullWidth
-                      // onChange={handleChange}
-                      helperText="Please Check Name Of Members"
-                      variant="standard"
-                    >
-                      {members.map((option) => (
-                        <MenuItem disabled key={option.fullNames} value={option.fullNames}>{option.fullNames}</MenuItem>
-                      ))}
+              <Typography variant="body3" sx={{ fontSize: "20px", fontWeight: "bold" }} color="text.secondary">
+              <TextField
+                    label="Bank Name "
+                    name="amountToPay"
+                    select
+                    value={bankName}
+                    helperText={bankNameErrorMessage ? bankNameErrorMessage : " "}
+                    error={bankNameErrorMessage==""?null:bankNameErrorMessage}
+                    onChange={(e)=>setBankName(e.target.value)}
+                    placeholder="Enter amount"
+                    variant="standard"
+                    fullWidth
+                    required
+                  >
+                    {banks.map((option) => (
+                      <MenuItem key={option.value} value={option.value}>{option.label}</MenuItem>
+                    ))} 
                     </TextField>
-                </Typography>
-              }
-             {
-              headIdDetails.totalPaidAmount>0?<>
-               <Typography mt={1} sx={{ fontSize: "14px", fontWeight: "bold"  }}  variant="body2" gutterBottom>
-                Already Paid
               </Typography>
-              
-              <Typography variant="body2" sx={{ fontSize: "16px", fontWeight: "bold",color:"green" }} color="text.secondary">
-                {headIdDetails.totalPaidAmount} Rwf
+              <Typography mt={1} sx={{ fontSize: "14px", fontWeight: "bold" }}  variant="body2" gutterBottom>
+                Bank Account
               </Typography>
-              </>:null
-             }
-                </>
-               ):"No Details found"
-              }
-             
+              <Typography variant="body3" sx={{ fontSize: "20px", fontWeight: "bold" }} color="text.secondary">
+              <TextField
+                    label="Bank Account"
+                    name="bankAccount"
+                    value={bankAccount}
+                    helperText={bankAccountErrorMessage? bankAccountErrorMessage : " "}
+                    error={bankAccountErrorMessage==""?null:bankAccountErrorMessage}
+                    onChange={(e)=>setBankAccount(e.target.value)}
+                    placeholder="Enter Phone"
+                    variant="standard"
+                    fullWidth
+                    required
+                  />
+              </Typography>
             </Grid>
            
           </Grid>
           <Grid item xs container direction="column" spacing={2}>
           <Grid item xs>
+          <Typography mt={1} sx={{ fontSize: "14px", fontWeight: "bold" }}  variant="body2" gutterBottom>
+                Amount To Pay
+              </Typography>
+              <Typography variant="body3" sx={{ fontSize: "20px", fontWeight: "bold" }} color="text.secondary">
+              <TextField
+                    label="Amount "
+                    name="amountToPay"
+                    value={amountToPay}
+                    helperText={amountToPayErrorMessage ? amountToPayErrorMessage : " "}
+                    error={amountToPayErrorMessage==""?null:amountToPayErrorMessage}
+                    onChange={(e)=>setAmountToPay(e.target.value)}
+                    placeholder="Enter amount"
+                    variant="standard"
+                    fullWidth
+                    required
+                  />
+              </Typography>
               <Typography mt={1} sx={{ fontSize: "14px", fontWeight: "bold" }}  variant="body2" gutterBottom>
                 Payer Phone 
               </Typography>
               <Typography variant="body3" sx={{ fontSize: "20px", fontWeight: "bold" }} color="text.secondary">
               <TextField
                     label="Phone Number"
-                    name="amount"
+                    name="payerPhoneNumbert"
                     value={payerPhoneNumber}
                     helperText={phoneErrorMessage ? phoneErrorMessage : " "}
                     error={phoneErrorMessage==""?null:phoneErrorMessage}
@@ -310,17 +325,18 @@ if(cbhiPayment.error){
                   />
               </Typography>
               <Typography mt={1} sx={{ fontSize: "14px", fontWeight: "bold" }}  variant="body2" gutterBottom>
-                Amount 
+                Payer Email
               </Typography>
               <Typography variant="body3" sx={{ fontSize: "20px", fontWeight: "bold" }} color="text.secondary">
               <TextField
-                    label="Amount"
-                    name="amount"
-                    value={amountPaid}
-                    helperText={amountErrorMessage? amountErrorMessage : " "}
-                    error={amountErrorMessage==""?null:amountErrorMessage}
-                     onChange={(e)=>setAmountPaid(e.target.value)}
-                    placeholder="Enter Amount to Pay"
+                    label="Email"
+                    type="email"
+                    name="payerEmail"
+                    value={payerEmail}
+                    helperText={payerEmailErrorMessage ? payerEmailErrorMessage : " "}
+                    error={payerEmailErrorMessage==""?null:payerEmailErrorMessage}
+                    onChange={(e)=>setPayerEmail(e.target.value)}
+                    placeholder="Enter Email"
                     variant="standard"
                     fullWidth
                     required
@@ -343,7 +359,6 @@ if(cbhiPayment.error){
                     fullWidth
                     required
                   />
-                  
               </Typography>
             </Grid>
             <Grid item>
@@ -373,10 +388,11 @@ if(cbhiPayment.error){
                         sx={{ backgroundColor: "#F9842C" }}
                         className="buttonGroup"
                       >
-                      {cbhiPayment.loading ? <Stack sx={{ color: 'grey.500'}} spacing={1} direction="row">
+                      {rnitPayment.loading ? <Stack sx={{ color: 'grey.500'}} spacing={1} direction="row">
       <CircularProgress size={20} color="inherit" height="10px" width="10px" />
      
-    </Stack> : "Send"}   
+    </Stack> : "Send"}    
+    
                       </Button>
                     </ButtonGroup>
                   </Box>
@@ -388,8 +404,8 @@ if(cbhiPayment.error){
       </Grid>
     </Box>
     </Paper>
-   </div>
+        </div>
   )
 }
 
-export default CbhiPayment
+export default RnitPayment

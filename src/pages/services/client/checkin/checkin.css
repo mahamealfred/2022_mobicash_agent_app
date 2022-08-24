@@ -1,0 +1,8 @@
+.checkin{
+    flex:4;
+    padding: 4px;
+    margin-top: 1.2em;
+    background-color:rgb(255, 255, 255);
+    border-radius: 12px;
+    width: 100%;
+}

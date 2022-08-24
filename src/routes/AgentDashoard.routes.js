@@ -19,6 +19,10 @@ import {useEffect} from "react";
 import jwt from "jsonwebtoken";
 import { useHistory } from 'react-router-dom';
 import Client from "../pages/services/client/Client";
+import Rnit from "../pages/services/rnit/Rnit";
+import RnitPayment from "../pages/services/rnit/rnitPayment/RnitPayment";
+import RnitDisplayDetails from "../pages/services/rnit/rnitDisplayDetails/RnitDisplayDetails";
+import Checkin from "../pages/services/client/checkin/Checkin";
 function App() {
   const { path } = useRouteMatch();
   const decode=(token) => {
@@ -196,6 +200,51 @@ function App() {
               exact
               path={`${path}/client`}
               component={Client}
+            />
+          </>
+        )}
+      />
+      
+<Route
+        component={({ match }) => (
+          <>
+            <PrivateRoute
+              exact
+              path={`${path}/client-checkin`}
+              component={Checkin}
+            />
+          </>
+        )}
+      />
+      <Route
+        component={({ match }) => (
+          <>
+            <PrivateRoute
+              exact
+              path={`${path}/rnit`}
+              component={Rnit}
+            />
+          </>
+        )}
+      />
+      <Route
+        component={({ match }) => (
+          <>
+            <PrivateRoute
+              exact
+              path={`${path}/rnit-payment`}
+              component={RnitPayment}
+            />
+          </>
+        )}
+      />
+       <Route
+        component={({ match }) => (
+          <>
+            <PrivateRoute
+              exact
+              path={`${path}/rnit-payment-details`}
+              component={RnitDisplayDetails}
             />
           </>
         )}

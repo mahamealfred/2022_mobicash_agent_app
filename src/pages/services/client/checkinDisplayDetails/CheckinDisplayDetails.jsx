@@ -13,12 +13,16 @@ import CbhiList from "../cbhiList/CbhiList";
 import jwt from "jsonwebtoken";
 import moment from "moment";
 import { cbhiPaidAmount } from "../cbhiPayment/CbhiPayment";
+import { getClientDetailsAction } from "../../../../redux/actions/getClientDetailsAction";
 
-const CbhiDisplayDetails = () => {
+
+const ChekinDisplayDetails= () => {
   const [headIdDetails, setHeadIdDetails] = useState("");
   const history = useHistory();
   const getNidDetails = useSelector((state) => state.getNidDetails);
   const cbhiPaymentDetails = useSelector((state) => state.cbhiPayment);
+  const getClientDetails = useSelector((state) => state.cbhiPayment);
+  
   const [members, setMembers] = useState("");
   const [agentName, setAgentName] = useState("");
   const [diplayPaymentDetails, setDisplayPaymentDetails] = useState("");
@@ -66,7 +70,7 @@ const CbhiDisplayDetails = () => {
   }, [getNidDetails.cbhidetails]);
 
   return (
-    <div className="cbhiPayment">
+    <div className="checkinDisplayContainer">
       <Header />
       <Paper
         sx={{
@@ -268,4 +272,4 @@ const CbhiDisplayDetails = () => {
   );
 };
 
-export default CbhiDisplayDetails;
+export default ChekinDisplayDetails;

@@ -1,6 +1,6 @@
 import React, { useEffect,useState } from 'react'
 import Header from '../../../../components/header/Header';
-import './cbhiPayment.css';
+import './checkin.css';
 import { styled } from '@mui/material/styles';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
@@ -11,7 +11,7 @@ import { ButtonGroup, Box,TextField } from "@mui/material";
 import MenuItem from "@mui/material/MenuItem";
 import { useHistory } from 'react-router-dom';
 //import { headIdDetails } from '../Cbhi';
-import {year} from "../Cbhi";
+
 import {useSelector,useDispatch} from "react-redux";
 import jwt from "jsonwebtoken";
 import Stack from '@mui/material/Stack';
@@ -22,13 +22,19 @@ import Collapse from '@mui/material/Collapse';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import Alert from '@mui/material/Alert';
+import { getClientDetailsAction } from "../../../../redux/actions/getClientDetailsAction";
+import { cashInAction } from '../../../../redux/actions/cashInAction';
 export let cbhiPaidAmount=[]
-const CbhiPayment = () => {
+const Checkin = () => {
   const [headIdDetails,setHeadIdDetails]=useState('');
   const history=useHistory();
   const dispatch=useDispatch();
   const getNidDetails=useSelector((state)=>state.getNidDetails);
   const cbhiPayment = useSelector((state) => state.cbhiPayment);
+
+  const getClientDetails=useSelector((state)=>state.getClientDetails);
+  const cashIn =useSelector((state)=>state.cashIn);
+
   const [members,setMembers]=useState('');
   const [username,setUsername]=useState('')
   const [agentCategory,setAgentCategory]=useState('');
@@ -48,7 +54,11 @@ const CbhiPayment = () => {
   const [phoneErrorMessage,setPhoneErrorMessage]=useState('')
   const [amountErrorMessage,setAmountErroMessage]=useState('')
   const [pinErrorMessage,setPinErrorMessage]=useState('');
- 
+  const  [accountNumber,setAccountNumber]=useState('');
+  const [accountNumberErrorMessage,setAccountNumberErrorMessage]=useState('')
+
+  const [diposerName,setDiposerName]=useState('')
+  
   
   const [userGroup,setUserGroup]=useState('');
   const [open, setOpen] = React.useState(true);
@@ -76,41 +86,23 @@ const CbhiPayment = () => {
 
   useEffect(()=>{
     async function fetchData() {
-      if (!getNidDetails.loading) {
-        if (getNidDetails.cbhidetails) {
-          await setHeadIdDetails(getNidDetails.cbhidetails);
-         await setMembers(getNidDetails.cbhidetails.members);
-         setHouseHoldNID(getNidDetails.cbhidetails.headId)
-         setPaymentYear(year[0])
-         setPayerName(getNidDetails.cbhidetails.headHouseHoldNames)
-         seHouseHoldCategory(getNidDetails.cbhidetails.houseHoldCategory)
-         setHouseholdMemberNumber(getNidDetails.cbhidetails.totalHouseHoldMembers)
-         setTotalPremium(getNidDetails.cbhidetails.totalAmount)
-         
+      if (!getClientDetails.loading) {
+        if (getClientDetails.details) {
+         setDiposerName(getClientDetails.details.names)
+         setAccountNumber(getClientDetails.details.id)
         }
       }
     }
     fetchData();
-  },[getNidDetails.cbhidetails])
+  },[getClientDetails.details])
 
   const handleSubmit=async()=>{
     let errorMessage=""
-    if(payerPhoneNumber==""){
-      errorMessage="Phone number is required"
-      setPhoneErrorMessage(errorMessage)
-    }
-    else if(payerPhoneNumber.length < 10){
-      errorMessage="Phone number must be 10 number"
-      setPhoneErrorMessage(errorMessage)
-    }
-   else if(amountPaid==""){
+     
+    if(amountPaid==""){
       errorMessage="Amount is required"
       setAmountErroMessage(errorMessage)
-    }
-    else if(amountPaid%1000!==0){
-      errorMessage="Amount must be divisible by 1000"
-      setAmountErroMessage(errorMessage)
-    }  
+    } 
    else if(!password){
       errorMessage="Pin is required"
       setPinErrorMessage(errorMessage) 
@@ -120,23 +112,17 @@ else{
   setAmountErroMessage("")
   setPhoneErrorMessage("")
  cbhiPaidAmount.push(amountPaid)
-  errorMessage=""
+ errorMessage=""
   await dispatch(cbhiPayamentAction({
-    houseHoldNID,
-    paymentYear,
+   
     amountPaid,
-    payerName,
-    houseHoldCategory,
-    householdMemberNumber,
-    totalPremium,
-    payerPhoneNumber,
-    agentCategory,
-    userGroup
+    
+  
   },username,password,history))
   await dispatch(transactionsAction(username,password))
 }
 
-if(cbhiPayment.error){
+if(cashIn.error){
   setOpen(true)
 }
 }
@@ -144,14 +130,14 @@ if(cbhiPayment.error){
     history.push('/dashboard/cbhi',{push:true}) 
   }
   return (
-    <div className='cbhiPayment'>
+    <div className="checkin">
   
         <Header/>
         <Paper
       sx={{
         p: 1,
         margin: 'auto',
-        maxWidth: 500,
+        maxWidth: 600,
         flexGrow: 1,
         backgroundColor: (theme) =>
           theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -165,7 +151,7 @@ if(cbhiPayment.error){
        >
       <Grid item xs={12}  spacing={2}>
             <Typography mt={2} sx={{ fontSize: "28px", fontWeight: "bold" }}>
-              MUTUWEL SERVICE
+              CLIENT SERVICE
             </Typography>
             <Box
                     sx={{
@@ -179,7 +165,7 @@ if(cbhiPayment.error){
                   >
                     
             {
-                  !cbhiPayment.error? null:
+                  !cashIn.error? null:
                    <Collapse in={open}>
                    <Alert
                    severity="error"
@@ -198,7 +184,7 @@ if(cbhiPayment.error){
                        </IconButton>
                      }
                    >
-                    {cbhiPayment.error}
+                    {cashIn.error}
                    </Alert>
                  </Collapse>
                 }     
@@ -211,104 +197,25 @@ if(cbhiPayment.error){
           <Grid item xs container direction="column" spacing={2}>
             <Grid item xs>
            
-              {
-               getNidDetails.loading?("Loading"):getNidDetails.cbhidetails?(
-                <>
                  <Typography variant="body2" mt={1} sx={{ fontSize: "14px", fontWeight: "bold" }} gutterBottom>
                Name
               </Typography>
               <Typography variant="body2" sx={{ fontSize: "16px", fontWeight: "bold" }} color="text.secondary">
-              {headIdDetails.headHouseHoldNames}
+            {diposerName}
               </Typography>
               <Typography mt={1} sx={{ fontSize: "14px", fontWeight: "bold" }}  variant="body2" gutterBottom>
-                House Hold NID
+                Account No
               </Typography>
               <Typography variant="body2" sx={{ fontSize: "16px", fontWeight: "bold" }} color="text.secondary">
-                {headIdDetails.headId}
+                {accountNumber}
               </Typography>
-              <Typography mt={1} sx={{ fontSize: "14px", fontWeight: "bold" }}  variant="body2" gutterBottom>
-                Year of payment
-              </Typography>
-              <Typography variant="body2" sx={{ fontSize: "16px", fontWeight: "bold" }} color="text.secondary">
-                {year[0]}
-              </Typography>
-              <Typography mt={1} sx={{ fontSize: "14px", fontWeight: "bold" }}  variant="body2" gutterBottom>
-                Total Premium 
-              </Typography>
-             
-              <Typography  variant="body2"  sx={{ fontSize: "16px", fontWeight: "bold" }}  color="text.secondary">
-                {headIdDetails.totalAmount} Rwf
-              </Typography>
-              <Typography mt={1} sx={{ fontSize: "14px", fontWeight: "bold" }}  variant="body2" gutterBottom>
-                House Hold Category 
-              </Typography>
-              <Typography variant="body2" sx={{ fontSize: "16px", fontWeight: "bold" }} color="text.secondary">
-                {headIdDetails.houseHoldCategory}
-              </Typography>
-              <Typography mt={1} sx={{ fontSize: "14px", fontWeight: "bold" }}  variant="body2" gutterBottom>
-                Number Of Members 
-              </Typography>
-              <Typography variant="body2" sx={{ fontSize: "16px", fontWeight: "bold" }} color="text.secondary">
-                {headIdDetails.totalHouseHoldMembers}
-              </Typography>
-              <Typography mt={1} sx={{ fontSize: "14px", fontWeight: "bold" }}  variant="body2" gutterBottom>
-                Name Of Members 
-              </Typography>
-              {
-                !members?null:
-                <Typography variant="body2" sx={{ fontSize: "20px", fontWeight: "bold" }} color="text.secondary">
-                <TextField
-                      id="standard-select-currency"
-                      select
-                      // value={paymentYear}
-                      fullWidth
-                      // onChange={handleChange}
-                      helperText="Please Check Name Of Members"
-                      variant="standard"
-                    >
-                      {members.map((option) => (
-                        <MenuItem disabled key={option.fullNames} value={option.fullNames}>{option.fullNames}</MenuItem>
-                      ))}
-                    </TextField>
-                </Typography>
-              }
-             {
-              headIdDetails.totalPaidAmount>0?<>
-               <Typography mt={1} sx={{ fontSize: "14px", fontWeight: "bold"  }}  variant="body2" gutterBottom>
-                Already Paid
-              </Typography>
-              
-              <Typography variant="body2" sx={{ fontSize: "16px", fontWeight: "bold",color:"green" }} color="text.secondary">
-                {headIdDetails.totalPaidAmount} Rwf
-              </Typography>
-              </>:null
-             }
-                </>
-               ):"No Details found"
-              }
-             
+   
             </Grid>
            
           </Grid>
           <Grid item xs container direction="column" spacing={2}>
           <Grid item xs>
-              <Typography mt={1} sx={{ fontSize: "14px", fontWeight: "bold" }}  variant="body2" gutterBottom>
-                Payer Phone 
-              </Typography>
-              <Typography variant="body3" sx={{ fontSize: "20px", fontWeight: "bold" }} color="text.secondary">
-              <TextField
-                    label="Phone Number"
-                    name="amount"
-                    value={payerPhoneNumber}
-                    helperText={phoneErrorMessage ? phoneErrorMessage : " "}
-                    error={phoneErrorMessage==""?null:phoneErrorMessage}
-                    onChange={(e)=>setPayerPhoneNumber(e.target.value)}
-                    placeholder="Enter Phone"
-                    variant="standard"
-                    fullWidth
-                    required
-                  />
-              </Typography>
+            
               <Typography mt={1} sx={{ fontSize: "14px", fontWeight: "bold" }}  variant="body2" gutterBottom>
                 Amount 
               </Typography>
@@ -373,7 +280,7 @@ if(cbhiPayment.error){
                         sx={{ backgroundColor: "#F9842C" }}
                         className="buttonGroup"
                       >
-                      {cbhiPayment.loading ? <Stack sx={{ color: 'grey.500'}} spacing={1} direction="row">
+                      {cashIn.loading ? <Stack sx={{ color: 'grey.500'}} spacing={1} direction="row">
       <CircularProgress size={20} color="inherit" height="10px" width="10px" />
      
     </Stack> : "Send"}   
@@ -392,4 +299,4 @@ if(cbhiPayment.error){
   )
 }
 
-export default CbhiPayment
+export default Checkin

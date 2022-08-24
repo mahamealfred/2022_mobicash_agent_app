@@ -112,9 +112,9 @@ import { ButtonGroup, useMediaQuery, useTheme } from "@mui/material";
     
      {/* {isMatch&& (
           <SectionStyle> */}
-            <Typography variant="h3" sx={{ px: 5, mt: 2, mb: 5 }}>
+            {/* <Typography variant="h3" sx={{ px: 5, mt: 2, mb: 5 }}>
             MobiCash Agent Application
-            </Typography>
+            </Typography> */}
             {/* <img src="/Asstes/images/logo.png" alt="login" />
           </SectionStyle>
         )} */}

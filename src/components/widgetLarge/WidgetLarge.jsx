@@ -50,6 +50,9 @@ const handleLtss=()=>{
 const handleClient=()=>{
   history.push("/dashboard/client",{ push: true }) 
 }
+const handleRnit=()=>{
+  history.push("/dashboard/rnit",{ push: true }) 
+}
   return (
     <div className='widgetLarge'>
      <Grid sx={{ flexGrow: 1 }} container spacing={2}>
@@ -68,7 +71,7 @@ const handleClient=()=>{
               </Button>
             </Grid>
             <Grid  item>
-          <Button  className="btnImage" >
+          <Button  className="btnImage" onClick={handleRnit}>
             <img src="../../../Assets/images/rnit_img.png" alt='' className="images"/>
               
               </Button>

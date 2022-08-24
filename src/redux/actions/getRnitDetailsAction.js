@@ -7,66 +7,63 @@ import {
  
 
 
-export const changePinAction = (user,username,history) => async (dispatch) => {
+export const getRnitDetailsAction = (identityNumber,history) => async (dispatch) => {
   try {
-    dispatch(changePinRequest());
-    const {oldPassword}=user 
-    const {newPassword}=user
-    const {newPasswordConfirmation}=user
+    dispatch(getRnitDetailsRequest());
+  
     //const encodedBase64Token = Buffer.from(`${username}:${password}`).toString('base64');
    // let basicAuth='Basic ' + btoa(username + ':' + password);
-    const Url='https://agentweb.mobicash.rw/api/agent/user/rest/v.4.14.01/change-password';
+    const Url='https://agentweb.mobicash.rw/api/agent/goverment-services/rnit/rest/v.4.14.01/identification-validation';
    const res = await axios.post(Url,{
-    oldPassword:oldPassword,
-    newPassword:newPassword,
-    newPasswordConfirmation:newPasswordConfirmation
+    identification:identityNumber
    }, {
     // withCredentials: true,
     headers:{
     "Accept":"application/json",
     "Content-Type": "application/json",
   //'Authorization': + basicAuth,
- },
-  auth: {
-    username,
-    password:oldPassword
-  }
+ }
    });
     const {data} = await res;
-      if(res.data.code==200){
-        dispatch(changePinSuccess(data));
-      }
-      
-     // history.push('/dashboard',{push:true})
-      
+      if(res.data.responseCode==200){
+        dispatch(getRnitDetailsSuccess(data.Response));
+         history.push('/dashboard/rnit-payment',{push:true})
+      }  
+      if(res.data.responseCode==400){
+        let errorMessage = ''
+        errorMessage="Invalid Identification number"
+       // errorMessage=await err.response.data.message
+        dispatch(getRnitDetailsFailure(errorMessage));
+         
+      }  
    
   } catch (err) {
     if (err.response) {
       //const errorMessage = await err.response.data.responseMessage;
       let errorMessage = ''
-        errorMessage="Please provide valid Pin"
+        errorMessage="Invalid Identification number"
        // errorMessage=await err.response.data.message
-        dispatch(changePinFailure(errorMessage));
+        dispatch(getRnitDetailsFailure(errorMessage));
       
     } else {
-      dispatch(changePinFailure("Network Error"));
+      dispatch(getRnitDetailsFailure("Network Error"));
     }
   }
 };
 
-export const changePinRequest = () => {
+export const getRnitDetailsRequest = () => {
   return {
     type: GET_RNIT_DETAILS_REQUEST,
   };
 };
 
-export const changePinSuccess = (users) => {
+export const getRnitDetailsSuccess = (details) => {
   return {
     type: GET_RNIT_DETAILS_SUCCESS,
-    payload: users,
+    payload: details,
   };
 };
-export const changePinFailure = (error) => {
+export const getRnitDetailsFailure = (error) => {
   return {
     type: GET_RNIT_DETAILS_FAILURE,
     payload: error,
