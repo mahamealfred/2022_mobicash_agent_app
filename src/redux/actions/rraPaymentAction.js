@@ -23,6 +23,7 @@ export const rraPayamentAction = (details,username,password,history) => async (d
     const {descId}=details
     const {payerPhoneNumber}=details
     const {brokering}=details
+    const {userGroup}=details
     
    // let errorMessage =''
   console.log(" rra details:",details,username,password)
@@ -42,6 +43,7 @@ export const rraPayamentAction = (details,username,password,history) => async (d
         amountToPay:amountToPay,
         descId:descId,
         payerPhone:payerPhoneNumber,
+        userGroup:userGroup,
         brokering:brokering
      
    },{

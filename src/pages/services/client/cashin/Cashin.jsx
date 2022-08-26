@@ -1,6 +1,6 @@
 import React, { useEffect,useState } from 'react'
 import Header from '../../../../components/header/Header';
-import './checkin.css';
+import './cashin.css';
 import { styled } from '@mui/material/styles';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
@@ -24,8 +24,8 @@ import CloseIcon from '@mui/icons-material/Close';
 import Alert from '@mui/material/Alert';
 import { getClientDetailsAction } from "../../../../redux/actions/getClientDetailsAction";
 import { cashInAction } from '../../../../redux/actions/cashInAction';
-export let cbhiPaidAmount=[]
-const Checkin = () => {
+export let amountDiposited=[]
+const Cashin = () => {
   const [headIdDetails,setHeadIdDetails]=useState('');
   const history=useHistory();
   const dispatch=useDispatch();
@@ -111,11 +111,12 @@ else{
   setPinErrorMessage("") 
   setAmountErroMessage("")
   setPhoneErrorMessage("")
- cbhiPaidAmount.push(amountPaid)
+ amountDiposited.push(amountPaid)
  errorMessage=""
-  await dispatch(cbhiPayamentAction({
+  await dispatch(cashInAction({
    
     amountPaid,
+    accountNumber
     
   
   },username,password,history))
@@ -127,10 +128,10 @@ if(cashIn.error){
 }
 }
   const handleCancel=()=>{
-    history.push('/dashboard/cbhi',{push:true}) 
+    history.push('/dashboard/client',{push:true}) 
   }
   return (
-    <div className="checkin">
+    <div className="cashin">
   
         <Header/>
         <Paper
@@ -299,4 +300,4 @@ if(cashIn.error){
   )
 }
 
-export default Checkin
+export default Cashin

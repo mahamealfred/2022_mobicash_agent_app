@@ -43,7 +43,7 @@ const RraPayment= () => {
   const [descId,setDescId]=useState('');
   const [payerPhone,setPayerPhone]=useState('');
   const [brokering,setBrokering]=useState('');
-
+const [userGroup,setUserGroup]=useState('');
 
   //vvalidation
   const [phoneErrorMessage,setPhoneErrorMessage]=useState('')
@@ -62,8 +62,10 @@ const RraPayment= () => {
     if (token) {
     const {username}=decode(token);
     const {role}=decode(token);
+    const {group}=decode(token);
     setUsername(username)
     setBrokering(role)
+    setUserGroup(group)
     
   }
 
@@ -126,6 +128,7 @@ const RraPayment= () => {
         amountToPay,
         descId,
         payerPhoneNumber,
+        userGroup,
         brokering
   
       },username,password,history));

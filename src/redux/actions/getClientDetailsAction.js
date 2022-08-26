@@ -30,9 +30,9 @@ console.log("iiii:",identityNumber,username,password)
    });
     const {data} = await res;
     console.log("datat",data)
-      if(res.data.responseCode===200){
+      if(res.data.responseCode==200){
         dispatch(getClientDetailsSuccess(data));
-        history.push('/dashboard/client-checkin',{push:true})
+        history.push('/dashboard/client-cashin',{push:true})
       }   
     //   if(res.data.responseCode==400){
     //     const errorMessage = await res.data.status;

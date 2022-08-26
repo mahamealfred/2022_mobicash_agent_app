@@ -1,29 +1,30 @@
 import React, { useEffect, useState, useRef } from "react";
 import Header from "../../../../components/header/Header";
-import "./cbhiDisplayDetails.css";
+import "./cashinDisplayDetails.css";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { ButtonGroup, Box } from "@mui/material";
 import { useHistory } from "react-router-dom";
-import { year } from "../Cbhi";
+
 import { useSelector } from "react-redux";
-import CbhiList from "../cbhiList/CbhiList";
+import CbhiList from "../../cbhi/cbhiList/CbhiList"
 import jwt from "jsonwebtoken";
 import moment from "moment";
-import { cbhiPaidAmount } from "../cbhiPayment/CbhiPayment";
+
 import { getClientDetailsAction } from "../../../../redux/actions/getClientDetailsAction";
+import { amountDiposited } from "../checkin/Cashin";
 
-
-const ChekinDisplayDetails= () => {
+const CashinDisplayDetails= () => {
   const [headIdDetails, setHeadIdDetails] = useState("");
   const history = useHistory();
   const getNidDetails = useSelector((state) => state.getNidDetails);
   const cbhiPaymentDetails = useSelector((state) => state.cbhiPayment);
   const getClientDetails = useSelector((state) => state.cbhiPayment);
-  
+  const cashIn =useSelector((state)=>state.cashIn);
   const [members, setMembers] = useState("");
+  const [customerDetails, setCustomerDetails] = useState("");
   const [agentName, setAgentName] = useState("");
   const [diplayPaymentDetails, setDisplayPaymentDetails] = useState("");
   const [amountPaid, setAmountPaid] = useState("");
@@ -54,23 +55,21 @@ const ChekinDisplayDetails= () => {
   }, [cbhiPaymentDetails.details]);
 
   const handleNewPayment = () => {
-    history.push("/dashboard/cbhi", { push: true });
+    history.push("/dashboard/client", { push: true });
   };
   useEffect(() => {
     async function fetchData() {
-      if (!getNidDetails.loading) {
-        if (getNidDetails.cbhidetails) {
-          await setHeadIdDetails(getNidDetails.cbhidetails);
-          await setMembers(getNidDetails.cbhidetails.members);
-          // setAmountPaid(amount[0])
+      if (!cashIn.loading) {
+        if (cashIn.details) {
+          setCustomerDetails(cashIn.details)
         }
       }
     }
     fetchData();
-  }, [getNidDetails.cbhidetails]);
+  }, [cashIn.details]);
 
   return (
-    <div className="checkinDisplayContainer">
+    <div className="cashinDisplayContainer">
       <Header />
       <Paper
         sx={{
@@ -89,7 +88,7 @@ const ChekinDisplayDetails= () => {
             sx={{ padding: "5px", textAlign: "center" }}
           >
             <Typography mt={2} sx={{ fontSize: "28px", fontWeight: "bold" }}>
-              Mutuwel Service Transaction Details
+              Client Service Transaction Details
             </Typography>
             <Grid item></Grid>
             <Grid item xs={18} sm container>
@@ -108,7 +107,7 @@ const ChekinDisplayDetails= () => {
                     sx={{ fontSize: "16px", fontWeight: "bold" }}
                     color="text.secondary"
                   >
-                    {diplayPaymentDetails.transfersId}
+                    {customerDetails.transactionNumber}
                   </Typography>
                   <Typography
                     mt={1}
@@ -131,14 +130,14 @@ const ChekinDisplayDetails= () => {
                     variant="body2"
                     gutterBottom
                   >
-                    Year of payment
+                    Customer Names
                   </Typography>
                   <Typography
                     variant="body2"
                     sx={{ fontSize: "16px", fontWeight: "bold" }}
                     color="text.secondary"
                   >
-                    {year[0]}
+                   {customerDetails.toUser}
                   </Typography>
                   <Typography
                     mt={1}
@@ -146,14 +145,14 @@ const ChekinDisplayDetails= () => {
                     variant="body2"
                     gutterBottom
                   >
-                    House Hold NID
+                    Description
                   </Typography>
                   <Typography
                     variant="body2"
                     sx={{ fontSize: "16px", fontWeight: "bold" }}
                     color="text.secondary"
                   >
-                    {headIdDetails.headId}
+                    {customerDetails.description}
                   </Typography>
                 </Grid>
               </Grid>
@@ -171,14 +170,15 @@ const ChekinDisplayDetails= () => {
                     variant="body2"
                     gutterBottom
                   >
-                    Paid Amount
+                    Diposited Amount
                   </Typography>
                   <Typography
                     variant="body2"
                     sx={{ fontSize: "16px", fontWeight: "bold" }}
                     color="text.secondary"
                   >
-                    {cbhiPaidAmount[0]} Rwf
+                  
+                   {customerDetails.amount} Rwf
                   </Typography>
                   <Typography
                     mt={1}
@@ -193,7 +193,7 @@ const ChekinDisplayDetails= () => {
                     sx={{ fontSize: "16px", fontWeight: "bold" }}
                     color="text.secondary"
                   >
-                    {moment(diplayPaymentDetails.date).format("llll")}
+                    {moment(customerDetails.date).format("llll")}
                   </Typography>
                   <Typography
                     mt={1}
@@ -212,7 +212,7 @@ const ChekinDisplayDetails= () => {
                     }}
                     color="text.secondary"
                   >
-                    {diplayPaymentDetails.status}
+                   status
                   </Typography>
                 </Grid>
                 <Grid item>
@@ -235,7 +235,7 @@ const ChekinDisplayDetails= () => {
                             variant="contained"
                             onClick={handleNewPayment}
                           >
-                            New Payment
+                            New Diposit
                           </Button>
                           {/* <ReactToPrint
                   trigger={() => <Button
@@ -272,4 +272,4 @@ const ChekinDisplayDetails= () => {
   );
 };
 
-export default ChekinDisplayDetails;
+export default CashinDisplayDetails;

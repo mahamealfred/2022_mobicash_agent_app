@@ -22,7 +22,8 @@ import Client from "../pages/services/client/Client";
 import Rnit from "../pages/services/rnit/Rnit";
 import RnitPayment from "../pages/services/rnit/rnitPayment/RnitPayment";
 import RnitDisplayDetails from "../pages/services/rnit/rnitDisplayDetails/RnitDisplayDetails";
-import Checkin from "../pages/services/client/checkin/Checkin";
+import Cashin from "../pages/services/client/cashin/Cashin"
+import ClientEnrollment from "../pages/clientenrollment/ClientEnrollment";
 function App() {
   const { path } = useRouteMatch();
   const decode=(token) => {
@@ -210,8 +211,19 @@ function App() {
           <>
             <PrivateRoute
               exact
-              path={`${path}/client-checkin`}
-              component={Checkin}
+              path={`${path}/client-cashin`}
+              component={Cashin}
+            />
+          </>
+        )}
+      />
+      <Route
+        component={({ match }) => (
+          <>
+            <PrivateRoute
+              exact
+              path={`${path}/client/enrollment`}
+              component={ClientEnrollment}
             />
           </>
         )}

@@ -14,7 +14,7 @@ import MenuItem from '@mui/material/MenuItem';
 import HomeIcon from '@mui/icons-material/Home';
 import { useHistory,Link} from 'react-router-dom';
 import './header.css'
-const pages = ['Account', 'Agent Enrollment', 'Change PIN'];
+const pages = ['Account', 'Client Enrollment', 'Change PIN'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 const Header= () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -33,9 +33,9 @@ const Header= () => {
     if(event==="Account"){
       history.push("/dashboard/account",{ push: true })
     }
-    else if(event==="Agent Enrollment"){
+    else if(event==="Client Enrollment"){
     
-        history.push("/dashboard/agentenrollement",{ push: true })
+        history.push("/dashboard/client/enrollment",{ push: true })
       }
     else if(event==="Change PIN"){
     

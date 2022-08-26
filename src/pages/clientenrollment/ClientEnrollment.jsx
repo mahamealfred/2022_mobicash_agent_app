@@ -1,6 +1,6 @@
 import React ,{useState,useEffect} from 'react'
 import Header from '../../components/header/Header'
-import './changePin.css';
+import './clientEnrollment.css';
 import { useHistory } from 'react-router-dom';
 import jwt  from 'jsonwebtoken';
 import {
@@ -22,6 +22,7 @@ import * as Yup from "yup";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 import { changePinAction } from '../../redux/actions/changePinAction';
+import { getClientNidDetailsAction } from '../../redux/actions/getClientNidDetailsTypes';
 import { useSelector,useDispatch } from 'react-redux';
 import Collapse from '@mui/material/Collapse';
 import IconButton from '@mui/material/IconButton';
@@ -29,9 +30,10 @@ import CloseIcon from '@mui/icons-material/Close';
 const Alerts = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
-const ChangePin = () => {
+const ClientEnrollment = () => {
   const dispatch=useDispatch()
   const changePin=useSelector(state=>state.changePin);
+  const getClientNidDetails=useSelector(state=>state.getClientNidDetails);
   const [open, setOpen] = React.useState(false);
   const [openSnackbar,setOpenSnackbar]=React.useState(false);
   const handleClose = (event, reason) => {
@@ -72,32 +74,37 @@ const ChangePin = () => {
   };
  
   const initialValues = {
-    oldPassword: "",
-    newPassword: "",
-    newPasswordConfirmation:"",
+    clientNid: "",
+    nidIssuePlace: "",
+    nidBirthDate:"",
+    activeEmail:"",
+    activePhone:""
+
   };
   const validationSchema = Yup.object().shape({
-    oldPassword: Yup.string().required("Required"),
-    newPassword: Yup.string().required("Required"),
-    newPasswordConfirmation:Yup.string()
-    .oneOf([Yup.ref('newPassword'), null], 'Pin must match')
+    clientNid: Yup.string().required("Required"),
+    nidIssuePlace: Yup.string().required("Required"),
+    nidBirthDate:Yup.string().required("Required"),
+    activeEmail:Yup.string().email('Invalid email').required('Required'),
+    activePhone:Yup.string().required("Required")
   });
 
   const onSubmit = async(values, props) => {
-    await dispatch(changePinAction(values,username, history));
-    if(changePin.users){
-      setOpenSnackbar(true)
-    }
-    if(changePin.error){
+   
+   await dispatch(getClientNidDetailsAction(values,username, history));
+    if(getClientNidDetails.error){   
       setOpen(true)
     }
+    // if(changePin.details){
+    //   setOpenSnackbar(true)
+    // }
     
   };
   return (
     <div className='changePin'>
       <Header/>
-      {
-        changePin.error? null:
+      {/* {
+        getClientNidDetails.error? null:
         <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={handleClose}>
             <Alerts
               onClose={handleClose}
@@ -107,11 +114,11 @@ const ChangePin = () => {
              
               sx={{ width: "80%",margin:"0px 80px", padding:"0 5px" }}
             >
-             Pin Changed successfull
+             {getClientNidDetails.error}
             </Alerts>
           </Snackbar>
       }
-      
+       */}
       <Grid>
         <Paper elevation={4}
          sx={{
@@ -124,10 +131,10 @@ const ChangePin = () => {
         }}
         >
           <Grid align="center" sx={{fontSize:'20px', fontWeight:'bold'}}>
-            Please Change Your PIN.
+          Client Enrollment
           </Grid>
           {
-                changePin.error? 
+                getClientNidDetails.error? 
                    <Collapse in={open}>
                    <Alert
                    severity="error"
@@ -146,7 +153,7 @@ const ChangePin = () => {
                      }
                      sx={{ mb: 0.2 }}
                    >
-                    {changePin.error}
+                    {getClientNidDetails.error}
                    </Alert>
                  </Collapse>
                  :null
@@ -161,33 +168,53 @@ const ChangePin = () => {
                 <Form>
                   <Field
                     as={TextField}
-                    label="Enter Old PIN"
-                    name="oldPassword"
-                    placeholder="Enter Old PIN"
+                    label="Enter NID"
+                    name="clientNid"
+                    placeholder="Enter NID"
                     variant="standard"
                     fullWidth
                     required
-                    helperText={<ErrorMessage name="oldPassword" />}
-                  />
-                  <Field
-                    as={TextField}
-                    label="Enter New PIN"
-                    name="newPassword"
-                    placeholder="Enter New PIN"
-                    variant="standard"
-                    fullWidth
-                    required
-                    helperText={<ErrorMessage name="newPassword" />}
+                    helperText={<ErrorMessage name="clientNid" />}
                   />
                    <Field
                     as={TextField}
-                    label="Confirm New PIN"
-                    name="newPasswordConfirmation"
-                    placeholder="Confirm New PIN"
+                    label="Enter NID place of issue(Sector)"
+                    name="nidIssuePlace"
+                    placeholder="Enter NID place of issue(Sector)"
                     variant="standard"
                     fullWidth
                     required
-                    helperText={<ErrorMessage name="newPasswordConfirmation" />}
+                    helperText={<ErrorMessage name="nidIssuePlace" />}
+                  />
+                  <Field
+                    as={TextField}
+                    label="Enter NID Date of Birth"
+                    name="nidBirthDate"
+                    placeholder="Enter NID Date of Birth"
+                    variant="standard"
+                    fullWidth
+                    required
+                    helperText={<ErrorMessage name="nidBirthDate" />}
+                  />
+                   <Field
+                    as={TextField}
+                    label="Enter your Active or privte Email"
+                    name="activeEmail"
+                    placeholder="Enter active email"
+                    variant="standard"
+                    fullWidth
+                    required
+                    helperText={<ErrorMessage name="activeEmail" />}
+                  />
+                   <Field
+                    as={TextField}
+                    label="Enter your active phone number"
+                    name="activePhone"
+                    placeholder="Enter active phone number"
+                    variant="standard"
+                    fullWidth
+                    required
+                    helperText={<ErrorMessage name="activePhone" />}
                   />
                    
                   <Button
@@ -199,7 +226,7 @@ const ChangePin = () => {
                     // disabled={props.isSubmitting}
                   >
   
-                    {changePin.loading ? "Loading" : "Sign in"}
+                    {getClientNidDetails.loading ? "Loading" : "Sign up"}
                   </Button>
                 </Form>
     )}
@@ -212,4 +239,4 @@ const ChangePin = () => {
   )
 }
 
-export default ChangePin
+export default ClientEnrollment

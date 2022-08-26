@@ -14,6 +14,7 @@ import getLtssIdentificationDetailsReducer from "./getLtssIdentificationDetailsR
 import getClientDetailsReducer from "./getClientDetailsReducer";
 import rnitPaymentReducer from "./rnitPaymentReducer";
 import chashinReducer from "./cashInReducer";
+import getClientNidDetailsReducer from "./getClientNidDetailsReducer";
 const allReducers = combineReducers({
     login:loginReducer,
     changePin: changePinReducer,
@@ -42,6 +43,7 @@ const allReducers = combineReducers({
     //client
     getClientDetails:getClientDetailsReducer,
     cashIn:chashinReducer,
+    getClientNidDetails:getClientNidDetailsReducer,
 });
 
 export default allReducers;

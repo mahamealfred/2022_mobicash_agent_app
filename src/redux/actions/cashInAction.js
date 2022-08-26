@@ -10,7 +10,7 @@ import {
 export const cashInAction = (details,username,password,history) => async (dispatch) => {
   try {
     dispatch(cashInRequest());
-    const {bankName}=details
+    const {amountPaid}=details
     const {accountNumber}=details
     
    // let errorMessage =''
@@ -19,8 +19,8 @@ export const cashInAction = (details,username,password,history) => async (dispat
     let basicAuth='Basic ' + btoa(username + ':' + password);
     const Url='https://agentweb.mobicash.rw/api/banking/finance/rest/v.4.14.01/cash-in';
     const res = await axios.post(Url,{
-      amount:10000,
-    account:8241755934761559462
+      amount:amountPaid,
+    account:accountNumber
      
    },{
     withCredentials: true,
@@ -35,10 +35,10 @@ export const cashInAction = (details,username,password,history) => async (dispat
   }
    });
     const {data} = await res;
-      if(res.data.responseCode===200){
+      if(res.data.code===200){
        await dispatch(cashInSuccess(data));
     
-        history.push('/dashboard/rra-payment-details',{push:true})
+        history.push('/dashboard/client-cashin-details',{push:true})
       }
     //   if(res.data.responseCode==400){
     //     let errorMessage = 'Invalid Credential, Please provide valid Pin'

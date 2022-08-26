@@ -67,7 +67,7 @@ const Client = () => {
         setIdentityNumberErrorMessage("")
         errorMessage=""
        
-        await dispach(getClientDetailsAction(identityNumber,username,password))
+        await dispach(getClientDetailsAction(identityNumber,username,password,history))
         //await dispach(getDocDetailsAction({identityNumber},password,username,history));
       }
      
