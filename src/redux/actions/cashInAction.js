@@ -35,6 +35,7 @@ export const cashInAction = (details,username,password,history) => async (dispat
   }
    });
     const {data} = await res;
+    console.log("cash in response",data)
       if(res.data.code===200){
        await dispatch(cashInSuccess(data));
     

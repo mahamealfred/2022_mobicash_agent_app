@@ -10,12 +10,15 @@ import { Typography, ButtonGroup, TextField } from "@mui/material";
 import { getDocDetailsAction } from '../../../redux/actions/getDocDetailsTypes';
 import { useDispatch, useSelector } from "react-redux";
 import Alert from '@mui/material/Alert';
-import Collapse from '@mui/material/Collapse';
+
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import MenuItem from "@mui/material/MenuItem";
 import { useHistory } from 'react-router-dom';
 import CbhiList from '../cbhi/cbhiList/CbhiList';
+import MuiAlert from "@mui/material/Alert";
+import Collapse from '@mui/material/Collapse';
+
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
   ...theme.typography.body2,
@@ -23,6 +26,8 @@ const Item = styled(Paper)(({ theme }) => ({
   textAlign: "center",
   color: theme.palette.text.secondary,
 }));
+
+
 const Rra = () => {
   const dispach = useDispatch();
   
@@ -34,7 +39,11 @@ const Rra = () => {
     const handelSubmit= async()=>{
       let errorMessage=""
       if(docId==""){
-        errorMessage="Doc Id is required"
+        errorMessage="Document Id is required"
+        setDocErrorMessage(errorMessage)
+      }
+     else if(!Number(docId)){
+        errorMessage="Document Id must be a number"
         setDocErrorMessage(errorMessage)
       }
       else{
@@ -106,11 +115,11 @@ const Rra = () => {
               <div className="content">
                 <div className="leftContent">
                 <Typography mt={2} sx={{ fontSize: "20px", fontWeight: "bold" }}>
-                     DOC ID:
+                     RRA REFERENCE:
                 </Typography>
 
                   <TextField
-                    label="Doc ID"
+                    label="RRA reference"
                     name={docId}
                     value={docId}
                     helperText={docErrorMessage ? docErrorMessage : " "}

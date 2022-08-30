@@ -71,6 +71,7 @@ const TopBar = () => {
   },[!balance.details])
   const handleLogout = () => {
     localStorage.removeItem("mobicashAuth");
+    sessionStorage.removeItem("mobicash-auth")
     history.push("/", { push: true });
     window.location.reload(true);
   };
@@ -153,9 +154,9 @@ const TopBar = () => {
         <Typography variant="body2"  sx={{ fontSize: "16px", fontWeight: "bold" }} color="text.primary" >
             Balance: {balance.details.balance[1].details.balance} Rwf   Available float: {balance.details.balance[1].details.availableBalance} Rwf
           </Typography>
-          <Typography variant="body2" sx={{ fontSize: "16px", fontWeight: "bold" }} color="text.primary" gutterBottom>
+          {/* <Typography variant="body2" sx={{ fontSize: "16px", fontWeight: "bold" }} color="text.primary" gutterBottom>
             Reserved amount: {balance.details.balance[1].details.reservedAmount} Rwf
-          </Typography>
+          </Typography> */}
         </>
                 ):"No data"
        }

@@ -37,16 +37,7 @@ export const cbhiPayamentAction = (details,username,password,history) => async (
     payerPhoneNumber:payerPhoneNumber,   
     brokering:agentCategory,
     userGroup:userGroup
-      // houseHoldNID:"1197070037691016",
-      // paymentYear:"2022",
-      // amountPaid:"1000",
-      // payerName:"BEATRICE UZAMUKUNDA",
-      // houseHoldCategory:3,
-      // householdMemberNumber:5,
-      // totalPremium:15000,     
-      // payerPhoneNumber:"0788529611",   
-      // brokering:"Broker",
-      // userGroup:"retail_agents"
+      
   
    },{
     withCredentials: true,

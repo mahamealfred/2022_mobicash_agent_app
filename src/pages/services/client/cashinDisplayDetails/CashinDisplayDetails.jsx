@@ -14,7 +14,17 @@ import jwt from "jsonwebtoken";
 import moment from "moment";
 
 import { getClientDetailsAction } from "../../../../redux/actions/getClientDetailsAction";
-import { amountDiposited } from "../checkin/Cashin";
+import { amountDiposited } from "../cashin/Cashin";
+
+import MuiAlert from "@mui/material/Alert";
+import Snackbar,  { SnackbarOrigin } from "@mui/material/Snackbar";
+
+
+
+const Alerts = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
+
 
 const CashinDisplayDetails= () => {
   const [headIdDetails, setHeadIdDetails] = useState("");
@@ -29,6 +39,15 @@ const CashinDisplayDetails= () => {
   const [diplayPaymentDetails, setDisplayPaymentDetails] = useState("");
   const [amountPaid, setAmountPaid] = useState("");
 
+  const [open, setOpen] = React.useState(false);
+  const [openSnackbar,setOpenSnackbar]=React.useState(false);
+  const handleClose = (event, reason) => {
+    setOpenSnackbar(false)
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpen(false);
+  };
   const decode = (token) => {
     const JWT_SECRET = "tokensecret";
     const payload = jwt.verify(token, JWT_SECRET);
@@ -50,6 +69,7 @@ const CashinDisplayDetails= () => {
           setDisplayPaymentDetails(cbhiPaymentDetails.details);
         }
       }
+     
     }
     fetchData();
   }, [cbhiPaymentDetails.details]);
@@ -64,13 +84,36 @@ const CashinDisplayDetails= () => {
           setCustomerDetails(cashIn.details)
         }
       }
+      if( customerDetails.code==200){
+        setOpenSnackbar(true)
+      }
     }
     fetchData();
-  }, [cashIn.details]);
+  }, [cashIn.details,customerDetails.code]);
 
   return (
     <div className="cashinDisplayContainer">
       <Header />
+      <Snackbar
+       open={openSnackbar}
+        autoHideDuration={6000}
+         onClose={handleClose}
+         anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'right'
+        }}
+         >
+            <Alerts
+              onClose={handleClose}
+              severity="success"
+              variant="outlined" 
+              color="success"
+             
+              sx={{ width: "80%",margin:"0px 80px", padding:"0 5px" }}
+            >
+             Thank you!, You have successful diposited
+            </Alerts>
+          </Snackbar>
       <Paper
         sx={{
           p: 2,
@@ -212,7 +255,7 @@ const CashinDisplayDetails= () => {
                     }}
                     color="text.secondary"
                   >
-                   status
+                   success
                   </Typography>
                 </Grid>
                 <Grid item>

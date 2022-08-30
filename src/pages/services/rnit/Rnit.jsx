@@ -41,6 +41,14 @@ const Rnit = () => {
         errorMessage="Identification number is required"
         setIdentityNumberErrorMessage(errorMessage)
       }
+     else if(!Number(identityNumber)){
+        errorMessage="Identification must be a number"
+        setIdentityNumberErrorMessage(errorMessage)
+      }
+      else if( identityNumber.length<16 ){
+        errorMessage="NID lenght must be 16 numbers"
+        setIdentityNumberErrorMessage(errorMessage)
+      }
       else{
         setIdentityNumberErrorMessage("")
         errorMessage=""

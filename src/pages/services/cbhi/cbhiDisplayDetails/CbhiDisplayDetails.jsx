@@ -14,6 +14,12 @@ import jwt from "jsonwebtoken";
 import moment from "moment";
 import { cbhiPaidAmount } from "../cbhiPayment/CbhiPayment";
 
+import MuiAlert from "@mui/material/Alert";
+import Snackbar from "@mui/material/Snackbar";
+const Alerts = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
+
 const CbhiDisplayDetails = () => {
   const [headIdDetails, setHeadIdDetails] = useState("");
   const history = useHistory();
@@ -24,6 +30,15 @@ const CbhiDisplayDetails = () => {
   const [diplayPaymentDetails, setDisplayPaymentDetails] = useState("");
   const [amountPaid, setAmountPaid] = useState("");
 
+  const [open, setOpen] = React.useState(false);
+  const [openSnackbar,setOpenSnackbar]=React.useState(false);
+  const handleClose = (event, reason) => {
+    setOpenSnackbar(false)
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpen(false);
+  };
   const decode = (token) => {
     const JWT_SECRET = "tokensecret";
     const payload = jwt.verify(token, JWT_SECRET);
@@ -45,9 +60,12 @@ const CbhiDisplayDetails = () => {
           setDisplayPaymentDetails(cbhiPaymentDetails.details);
         }
       }
+      if( diplayPaymentDetails.status=="success"){
+        setOpenSnackbar(true)
+      }
     }
     fetchData();
-  }, [cbhiPaymentDetails.details]);
+  }, [cbhiPaymentDetails.details,diplayPaymentDetails.status]);
 
   const handleNewPayment = () => {
     history.push("/dashboard/cbhi", { push: true });
@@ -68,6 +86,29 @@ const CbhiDisplayDetails = () => {
   return (
     <div className="cbhiPayment">
       <Header />
+  
+        <Snackbar 
+        open={openSnackbar}
+         autoHideDuration={6000} 
+         onClose={handleClose}
+         anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'right'
+        }}
+         >
+            <Alerts
+              onClose={handleClose}
+              severity="success"
+              variant="outlined" 
+              color="success"
+             
+              sx={{ width: "80%",margin:"0px 80px", padding:"0 5px" }}
+            >
+             Thank you!, You have successful pay Mutuelle Service
+            </Alerts>
+          </Snackbar>
+          
+      
       <Paper
         sx={{
           p: 2,
@@ -155,12 +196,7 @@ const CbhiDisplayDetails = () => {
               </Grid>
               <Grid item xs container direction="column" spacing={2}>
                 <Grid item xs>
-                  {/* <Typography mt={1} sx={{ fontSize: "14px", fontWeight: "bold" }}  variant="body2" gutterBottom>
-              Mobicash Reference ID
-              </Typography>
-              <Typography variant="body2" sx={{ fontSize: "16px", fontWeight: "bold" }} color="text.secondary">
-              MOBICASH0000000000023
-              </Typography> */}
+                
                   <Typography
                     mt={1}
                     sx={{ fontSize: "14px", fontWeight: "bold" }}

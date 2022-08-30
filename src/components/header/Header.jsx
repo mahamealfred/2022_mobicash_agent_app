@@ -14,7 +14,7 @@ import MenuItem from '@mui/material/MenuItem';
 import HomeIcon from '@mui/icons-material/Home';
 import { useHistory,Link} from 'react-router-dom';
 import './header.css'
-const pages = ['Account', 'Client Enrollment', 'Change PIN'];
+const pages = ['Account','Profile','Services', 'Change PIN'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 const Header= () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -33,10 +33,14 @@ const Header= () => {
     if(event==="Account"){
       history.push("/dashboard/account",{ push: true })
     }
-    else if(event==="Client Enrollment"){
+    // else if(event==="Client Enrollment"){
     
-        history.push("/dashboard/client/enrollment",{ push: true })
-      }
+    //     history.push("/dashboard/client/enrollment",{ push: true })
+    //   }
+    else if(event==="Services"){
+    
+      history.push("/dashboard",{ push: true })
+    }
     else if(event==="Change PIN"){
     
       history.push("/dashboard/change-pin",{ push: true })
@@ -48,6 +52,7 @@ const Header= () => {
   const handleSettings=(event)=>{
     if(event==="Logout"){
       localStorage.removeItem("mobicashAuth");
+      sessionStorage.removeItem("mobicash-auth")
       history.push("/", { push: true });
       window.location.reload(true);
     }

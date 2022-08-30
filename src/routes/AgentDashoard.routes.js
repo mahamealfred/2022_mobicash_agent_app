@@ -24,6 +24,7 @@ import RnitPayment from "../pages/services/rnit/rnitPayment/RnitPayment";
 import RnitDisplayDetails from "../pages/services/rnit/rnitDisplayDetails/RnitDisplayDetails";
 import Cashin from "../pages/services/client/cashin/Cashin"
 import ClientEnrollment from "../pages/clientenrollment/ClientEnrollment";
+import CashinDisplayDetails from "../pages/services/client/cashinDisplayDetails/CashinDisplayDetails"
 function App() {
   const { path } = useRouteMatch();
   const decode=(token) => {
@@ -149,6 +150,7 @@ function App() {
             </>
           )}
         />
+       
          <Route
         component={({ match }) => (
           <>
@@ -217,6 +219,18 @@ function App() {
           </>
         )}
       />
+      <Route
+        component={({ match }) => (
+          <>
+            <PrivateRoute
+              exact
+              path={`${path}/client-cashin-details`}
+              component={CashinDisplayDetails}
+            />
+          </>
+        )}
+      />
+       
       <Route
         component={({ match }) => (
           <>

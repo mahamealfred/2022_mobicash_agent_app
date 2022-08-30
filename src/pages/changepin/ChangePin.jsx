@@ -19,13 +19,14 @@ import Stack from '@mui/material/Stack';
 import LoginIcon from '@mui/icons-material/Login';
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import Snackbar from "@mui/material/Snackbar";
+
 import MuiAlert from "@mui/material/Alert";
 import { changePinAction } from '../../redux/actions/changePinAction';
 import { useSelector,useDispatch } from 'react-redux';
 import Collapse from '@mui/material/Collapse';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
+import Snackbar from "@mui/material/Snackbar";
 const Alerts = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
@@ -57,8 +58,11 @@ const ChangePin = () => {
     setUsername(username)
     
   }
+  if(changePin.users.status==="success"){
+    setOpenSnackbar(true)
+  }
 
-  }, [])
+  }, [changePin.users.status])
 
  
   const btnStyle = {
@@ -126,8 +130,7 @@ const ChangePin = () => {
           <Grid align="center" sx={{fontSize:'20px', fontWeight:'bold'}}>
             Please Change Your PIN.
           </Grid>
-          {
-                changePin.error? 
+        
                    <Collapse in={open}>
                    <Alert
                    severity="error"
@@ -146,11 +149,10 @@ const ChangePin = () => {
                      }
                      sx={{ mb: 0.2 }}
                    >
-                    {changePin.error}
+                   You have changed Pin successful
                    </Alert>
                  </Collapse>
-                 :null
-                }    
+              
           <Grid style={textStyle}>
             <Formik
               initialValues={initialValues}
@@ -199,7 +201,7 @@ const ChangePin = () => {
                     // disabled={props.isSubmitting}
                   >
   
-                    {changePin.loading ? "Loading" : "Sign in"}
+                    {changePin.loading ? "Loading" : "Change Pin"}
                   </Button>
                 </Form>
     )}

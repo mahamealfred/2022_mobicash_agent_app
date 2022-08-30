@@ -32,15 +32,19 @@ const Alerts = React.forwardRef(function Alert(props, ref) {
 });
 const ClientEnrollment = () => {
   const dispatch=useDispatch()
-  const changePin=useSelector(state=>state.changePin);
-  const getClientNidDetails=useSelector(state=>state.getClientNidDetails);
+  const changePin=useSelector((state)=>state.changePin);
+  const getClientNidDetails=useSelector((state)=>state.getClientNidDetails);
+  const clientEnrollment=useSelector((state)=>state.clientEnrollment)
   const [open, setOpen] = React.useState(false);
+  const [openClientEnrollment,setOpenClientEnrollment]=useState(false)
   const [openSnackbar,setOpenSnackbar]=React.useState(false);
+  const [password,setPassword]=useState('')
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
       return;
     }
     setOpen(false);
+    setOpenClientEnrollment(false)
   };
   const isAuth = localStorage.getItem("mobicashAuth");
   const [username,setUsername]=useState('')
@@ -56,10 +60,12 @@ const ClientEnrollment = () => {
     const token =localStorage.getItem('mobicashAuth');
     if (token) {
     const {username}=decode(token);
+    const {password}=decode(token);
     setUsername(username)
+    setPassword(password)
     
   }
-
+  
   }, [])
 
  
@@ -82,43 +88,28 @@ const ClientEnrollment = () => {
 
   };
   const validationSchema = Yup.object().shape({
-    clientNid: Yup.string().required("Required"),
+    clientNid: Yup.number().required("Required"),
     nidIssuePlace: Yup.string().required("Required"),
     nidBirthDate:Yup.string().required("Required"),
     activeEmail:Yup.string().email('Invalid email').required('Required'),
     activePhone:Yup.string().required("Required")
   });
+  
 
   const onSubmit = async(values, props) => {
-   
-   await dispatch(getClientNidDetailsAction(values,username, history));
     if(getClientNidDetails.error){   
       setOpen(true)
     }
-    // if(changePin.details){
-    //   setOpenSnackbar(true)
-    // }
-    
+
+   await dispatch(getClientNidDetailsAction(values,username,password, history));
+   if(clientEnrollment.error){   
+    setOpenClientEnrollment(true)
+  }
   };
   return (
     <div className='changePin'>
       <Header/>
-      {/* {
-        getClientNidDetails.error? null:
-        <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={handleClose}>
-            <Alerts
-              onClose={handleClose}
-              severity="success"
-              variant="outlined" 
-              color="success"
-             
-              sx={{ width: "80%",margin:"0px 80px", padding:"0 5px" }}
-            >
-             {getClientNidDetails.error}
-            </Alerts>
-          </Snackbar>
-      }
-       */}
+   
       <Grid>
         <Paper elevation={4}
          sx={{
@@ -134,7 +125,7 @@ const ClientEnrollment = () => {
           Client Enrollment
           </Grid>
           {
-                getClientNidDetails.error? 
+                  !getClientNidDetails.error? null:
                    <Collapse in={open}>
                    <Alert
                    severity="error"
@@ -156,8 +147,58 @@ const ClientEnrollment = () => {
                     {getClientNidDetails.error}
                    </Alert>
                  </Collapse>
-                 :null
-                }    
+                }   
+               
+                {
+                  !clientEnrollment.error? null:
+                   <Collapse in={openClientEnrollment}>
+                   <Alert
+                   severity="error"
+                     action={
+                       <IconButton
+                         aria-label="close"
+                         color="inherit"
+                         size="small"
+                         onClick={handleClose}
+                        //  onClick={() => {
+                        //    setOpen(false);
+                        //  }}
+                       >
+                         <CloseIcon fontSize="inherit" />
+                       </IconButton>
+                     }
+                     sx={{ mb: 0.2 }}
+                   >
+                    { clientEnrollment.error}
+
+                   </Alert>
+                 </Collapse>
+                } 
+                {
+                  !clientEnrollment.details? null:
+                   <Collapse in={open}>
+                   <Alert
+                   severity="success"
+                     action={
+                       <IconButton
+                         aria-label="close"
+                         color="inherit"
+                         size="small"
+                         onClick={handleClose}
+                        //  onClick={() => {
+                        //    setOpen(false);
+                        //  }}
+                       >
+                         <CloseIcon fontSize="inherit" />
+                       </IconButton>
+                     }
+                     sx={{ mb: 0.2 }}
+                   >
+                    { clientEnrollment.details}
+                    
+                   </Alert>
+                 </Collapse>
+                } 
           <Grid style={textStyle}>
             <Formik
               initialValues={initialValues}
@@ -186,12 +227,14 @@ const ClientEnrollment = () => {
                     required
                     helperText={<ErrorMessage name="nidIssuePlace" />}
                   />
+                  <Typography>Select NID Date of Birth</Typography>
                   <Field
                     as={TextField}
-                    label="Enter NID Date of Birth"
+                    
                     name="nidBirthDate"
-                    placeholder="Enter NID Date of Birth"
+                    placeholder="Select NID Date of Birth"
                     variant="standard"
+                    type="date"
                     fullWidth
                     required
                     helperText={<ErrorMessage name="nidBirthDate" />}

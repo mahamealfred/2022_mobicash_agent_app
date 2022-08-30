@@ -13,8 +13,15 @@ import { useHistory } from 'react-router-dom';
 import {useSelector,useDispatch} from 'react-redux';
 import jwt from "jsonwebtoken";
 import CbhiList from '../../cbhi/cbhiList/CbhiList';
-
 import moment from "moment";
+import MuiAlert from "@mui/material/Alert";
+import Collapse from '@mui/material/Collapse';
+import Snackbar from "@mui/material/Snackbar";
+const Alerts = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
+
+
 const Img = styled('img')({
     margin: 'auto',
     display: 'block',
@@ -30,6 +37,15 @@ const RraDisplayDetails = () => {
   const [payerName,setPayerName]=useState('');
   const [amountPaid,setAmountPaid]=useState('');
     const history=useHistory();
+    const [open, setOpen] = React.useState(false);
+  const [openSnackbar,setOpenSnackbar]=React.useState(false);
+  const handleClose = (event, reason) => {
+    setOpenSnackbar(false)
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpen(false);
+  };
 
     const decode = (token) => {
       const JWT_SECRET = "tokensecret";
@@ -52,9 +68,13 @@ const RraDisplayDetails = () => {
         
           }
         }
+        if( displayRraPaymentDetails.status=="success"){
+          setOpenSnackbar(true)
+        }
+      
       }
       fetchData();
-    }, [rraPaymentDetails.details]);
+    }, [rraPaymentDetails.details,displayRraPaymentDetails.status]);
 
     useEffect(() => {
       async function fetchData() {
@@ -75,6 +95,28 @@ history.push('/dashboard/rra',{push:true})
   return (
     <div className='electricityDisplayContainer'>
     <Header/>
+    <Snackbar
+     open={openSnackbar} 
+     autoHideDuration={6000}
+      onClose={handleClose}
+      anchorOrigin={{
+        vertical: 'bottom',
+        horizontal: 'right'
+      }}
+      
+      >
+            <Alerts
+              onClose={handleClose}
+              severity="success"
+              variant="outlined" 
+              color="success"
+             
+              sx={{ width: "80%",margin:"0px 80px", padding:"0 5px" }}
+            >
+             Thank you!, You have successful pay RRA Service
+            </Alerts>
+          </Snackbar>
+          
     <Paper
         sx={{
           p: 2,

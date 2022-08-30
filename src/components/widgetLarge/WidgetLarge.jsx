@@ -86,12 +86,12 @@ const handleRnit=()=>{
             <img src="../../../Assets/images/rssb.png" alt=''className="images" />
               </Button>
             </Grid>
-            <Grid  item>
+            {/* <Grid  item>
           <Button className="btnImage" >
             <img src="../../../Assets/images/canal.png" alt='' className="images"  />
             
               </Button>
-            </Grid>
+            </Grid> */}
             <Grid  item>
           <Button className="btnImage" >
             <img src="../../../Assets/images/startime.png"  className="images"alt='' />

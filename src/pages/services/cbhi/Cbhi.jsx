@@ -58,10 +58,15 @@ const handelSubmit= async()=>{
     errorMessage="HouseHold NID is required"
     setNIdErrorMessage(errorMessage)
   }
-  else if(houseHoldNID.length<8 || houseHoldNID.length>16 ){
-    errorMessage="NID lenght muster between 8 to 16 numbers"
+  else if(!Number(houseHoldNID)){
+    errorMessage="NID must be a number"
     setNIdErrorMessage(errorMessage)
   }
+  else if( houseHoldNID.length<16 ){
+    errorMessage="NID lenght must be 16 numbers"
+    setNIdErrorMessage(errorMessage)
+  }
+  
   else if(paymentYear==""){
     errorMessage="Please select year of payment"
     setPaymentYearErrorMessage(errorMessage)
@@ -119,7 +124,7 @@ const handleCancel=()=>{
         >
           <Grid item xs={12}  spacing={2}>
             <Typography mt={2} sx={{ fontSize: "28px", fontWeight: "bold" }}>
-              MUTUWEL SERVICE
+              MUTUELLE SERVICE
             </Typography>
             <Box
                     sx={{

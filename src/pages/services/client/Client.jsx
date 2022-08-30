@@ -54,9 +54,13 @@ const Client = () => {
     
       }, []);
     const handelSubmit= async()=>{
+      
       let errorMessage=""
       if(identityNumber==""){
         errorMessage="Identity Number is required"
+        setIdentityNumberErrorMessage(errorMessage)
+      } else if(!Number(identityNumber)){
+        errorMessage="Identity Number must be a number"
         setIdentityNumberErrorMessage(errorMessage)
       }
       else if(password==""){
@@ -65,15 +69,14 @@ const Client = () => {
       }
       else{
         setIdentityNumberErrorMessage("")
-        errorMessage=""
-       
+        errorMessage="" 
         await dispach(getClientDetailsAction(identityNumber,username,password,history))
         //await dispach(getDocDetailsAction({identityNumber},password,username,history));
       }
-     
       if(getClientDetails.error){
         setOpen(true)
       }
+    
     }
     const handleClose=()=>{
       setOpen(false)

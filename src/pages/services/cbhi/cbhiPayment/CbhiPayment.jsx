@@ -107,6 +107,10 @@ const CbhiPayment = () => {
       errorMessage="Amount is required"
       setAmountErroMessage(errorMessage)
     }
+    else if(!Number(amountPaid)){
+      errorMessage="Amount must be a number"
+      setAmountErroMessage(errorMessage)
+    }
     else if(amountPaid%1000!==0){
       errorMessage="Amount must be divisible by 1000"
       setAmountErroMessage(errorMessage)
@@ -165,7 +169,7 @@ if(cbhiPayment.error){
        >
       <Grid item xs={12}  spacing={2}>
             <Typography mt={2} sx={{ fontSize: "28px", fontWeight: "bold" }}>
-              MUTUWEL SERVICE
+              MUTUELLE SERVICE
             </Typography>
             <Box
                     sx={{
@@ -376,7 +380,7 @@ if(cbhiPayment.error){
                       {cbhiPayment.loading ? <Stack sx={{ color: 'grey.500'}} spacing={1} direction="row">
       <CircularProgress size={20} color="inherit" height="10px" width="10px" />
      
-    </Stack> : "Send"}   
+    </Stack> : "Make Payment"}   
                       </Button>
                     </ButtonGroup>
                   </Box>

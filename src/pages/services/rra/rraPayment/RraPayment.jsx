@@ -297,7 +297,7 @@ const [userGroup,setUserGroup]=useState('');
                       {rraPayment.loading ? <Stack sx={{ color: 'grey.500'}} spacing={1} direction="row">
       <CircularProgress size={20} color="inherit" height="10px" width="10px" />
      
-    </Stack> : "Send"}    
+    </Stack> : "Make Payment"}    
                       </Button>
                     </ButtonGroup>
                   </Box>

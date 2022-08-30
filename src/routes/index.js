@@ -23,13 +23,13 @@ export default class index extends Component {
         return (
           
           <Switch>
-          <Route exact path="/" component={Hero}/>
+          <Route exact path="/" component={Login}/>
              <Route path="/dashboard">
              <AgentDashboardRoute />
               </Route>
-          <Route path="/login">
+          {/* <Route path="/login">
             <Login />
-          </Route>
+          </Route> */}
           <Route path="/forgot-pin">
           <ForgotPassword/>
           </Route>

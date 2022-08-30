@@ -39,16 +39,15 @@ export const changePinAction = (user,username,history) => async (dispatch) => {
     const {data} = await res;
       if(res.data.code===200){
         dispatch(changePinSuccess(data));
+          history.push('/',{push:true})
       }
       
-     // history.push('/dashboard',{push:true})
+    
       
    
   } catch (err) {
     if (err.response) {
-      //const errorMessage = await err.response.data.responseMessage;
-      // let errorMessage = ''
-      //   errorMessage="Please provide valid Pin"
+      
       const errorMessage = 'Please provide valid Pin'
        // errorMessage=await err.response.data.message
         dispatch(changePinFailure(errorMessage));

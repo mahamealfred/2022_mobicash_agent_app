@@ -103,6 +103,10 @@ const Cashin = () => {
       errorMessage="Amount is required"
       setAmountErroMessage(errorMessage)
     } 
+    if(!Number(amountPaid)){
+      errorMessage="Amount must be a number"
+      setAmountErroMessage(errorMessage)
+    } 
    else if(!password){
       errorMessage="Pin is required"
       setPinErrorMessage(errorMessage) 
@@ -284,7 +288,7 @@ if(cashIn.error){
                       {cashIn.loading ? <Stack sx={{ color: 'grey.500'}} spacing={1} direction="row">
       <CircularProgress size={20} color="inherit" height="10px" width="10px" />
      
-    </Stack> : "Send"}   
+    </Stack> : "Make Deposit"}   
                       </Button>
                     </ButtonGroup>
                   </Box>

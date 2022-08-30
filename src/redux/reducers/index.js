@@ -15,6 +15,7 @@ import getClientDetailsReducer from "./getClientDetailsReducer";
 import rnitPaymentReducer from "./rnitPaymentReducer";
 import chashinReducer from "./cashInReducer";
 import getClientNidDetailsReducer from "./getClientNidDetailsReducer";
+import clientEnrollmentReducer from "./clientEnrollmentReducer";
 const allReducers = combineReducers({
     login:loginReducer,
     changePin: changePinReducer,
@@ -44,6 +45,7 @@ const allReducers = combineReducers({
     getClientDetails:getClientDetailsReducer,
     cashIn:chashinReducer,
     getClientNidDetails:getClientNidDetailsReducer,
+    clientEnrollment: clientEnrollmentReducer,
 });
 
 export default allReducers;

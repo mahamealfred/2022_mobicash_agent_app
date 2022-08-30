@@ -338,18 +338,11 @@ function CbhiList() {
           <TableContainer component={Paper}>
             <Table aria-label="caption table">
               <caption className="textTitle">Agent Transactions</caption>
-              {/* <Button
-                  variant="contained"
-                  sx={{ backgroundColor: "#F9842C" }}
-                  className="buttonGroup"
-                  onClick={generatePdfs}
-                  >
-                  Print
-                  </Button> */}
+             
               
               <TableHead>
                 <TableRow>
-                  <TableCell align="center">ID</TableCell>
+                  <TableCell align="center">TRANSACTION REFERENCE</TableCell>
                   <TableCell>OPERATION DATE</TableCell>
                   <TableCell align="center">AMOUNT</TableCell>
                   <TableCell align="center">DESCRIPTION</TableCell>
@@ -382,7 +375,7 @@ function CbhiList() {
                     generatePdfs(details.id)
                    }}
                   >
-                  Print
+                  Receipt
                   </Button>
                     </TableCell>
                   </TableRow>
@@ -412,7 +405,7 @@ function CbhiList() {
                     generatePdfs(details.id)
                    }}
                   >
-                  Print
+                  Receipt
                   </Button>
                     </TableCell>
                   </TableRow>

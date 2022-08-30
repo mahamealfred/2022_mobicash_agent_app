@@ -15,12 +15,19 @@ import jwt from "jsonwebtoken";
 import CbhiList from '../../cbhi/cbhiList/CbhiList';
 import { rrnitPaidAmount } from '../rnitPayment/RnitPayment';
 import moment from "moment";
+import MuiAlert from "@mui/material/Alert";
+import Snackbar from "@mui/material/Snackbar";
+const Alerts = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
+
 const Img = styled('img')({
     margin: 'auto',
     display: 'block',
     maxWidth: '100%',
     maxHeight: '100%',
   });
+
 const RnitDisplayDetails = () => {
   const dispatch=useDispatch();
   const getDocDetails = useSelector((state) => state.getDocDetails);
@@ -32,8 +39,18 @@ const RnitDisplayDetails = () => {
   const [agentName,setAgentName]=useState('');
   const [payerName,setPayerName]=useState('');
   const [amountPaid,setAmountPaid]=useState('');
-  console.log("amount rnit paid",rrnitPaidAmount)
+
     const history=useHistory();
+
+    const [open, setOpen] = React.useState(false);
+    const [openSnackbar,setOpenSnackbar]=React.useState(false);
+    const handleClose = (event, reason) => {
+      setOpenSnackbar(false)
+      if (reason === "clickaway") {
+        return;
+      }
+      setOpen(false);
+    };
     const decode = (token) => {
       const JWT_SECRET = "tokensecret";
       const payload = jwt.verify(token, JWT_SECRET);
@@ -55,9 +72,12 @@ const RnitDisplayDetails = () => {
         
           }
         }
+        if( displayRnitPaymentDetails.status=="success"){
+          setOpenSnackbar(true)
+        }
       }
       fetchData();
-    }, [rnitPaymentDetails.details]);
+    }, [rnitPaymentDetails.details,displayRnitPaymentDetails.status]);
 
     useEffect(() => {
       async function fetchData() {
@@ -77,6 +97,27 @@ history.push('/dashboard/rnit',{push:true})
   return (
     <div className='rnitDisplayContainer'>
     <Header/>
+    <Snackbar 
+        open={openSnackbar}
+         autoHideDuration={6000} 
+         onClose={handleClose}
+         anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'right'
+        }}
+         >
+            <Alerts
+              onClose={handleClose}
+              severity="success"
+              variant="outlined" 
+              color="success"
+             
+              sx={{ width: "80%",margin:"0px 80px", padding:"0 5px" }}
+            >
+             Thank you!, You have successful pay Rnit Service
+            </Alerts>
+          </Snackbar>
+          
     <Paper
         sx={{
           p: 2,
