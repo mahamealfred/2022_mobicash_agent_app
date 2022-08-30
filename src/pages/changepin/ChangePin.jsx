@@ -39,6 +39,7 @@ const ChangePin = () => {
     if (reason === "clickaway") {
       return;
     }
+    setOpenSnackbar(false)
     setOpen(false);
   };
   const isAuth = localStorage.getItem("mobicashAuth");
@@ -89,9 +90,7 @@ const ChangePin = () => {
 
   const onSubmit = async(values, props) => {
     await dispatch(changePinAction(values,username, history));
-    if(changePin.users){
-      setOpenSnackbar(true)
-    }
+   
     if(changePin.error){
       setOpen(true)
     }
@@ -100,8 +99,7 @@ const ChangePin = () => {
   return (
     <div className='changePin'>
       <Header/>
-      {
-        changePin.error? null:
+    
         <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={handleClose}>
             <Alerts
               onClose={handleClose}
@@ -111,10 +109,10 @@ const ChangePin = () => {
              
               sx={{ width: "80%",margin:"0px 80px", padding:"0 5px" }}
             >
-             Pin Changed successfull
+              You have changed Pin successful
             </Alerts>
           </Snackbar>
-      }
+ 
       
       <Grid>
         <Paper elevation={4}
@@ -131,9 +129,12 @@ const ChangePin = () => {
             Please Change Your PIN.
           </Grid>
         
+          {
+                  !changePin.error? null:
                    <Collapse in={open}>
                    <Alert
                    severity="error"
+                   sx={{mb: 0.2 }}
                      action={
                        <IconButton
                          aria-label="close"
@@ -147,11 +148,11 @@ const ChangePin = () => {
                          <CloseIcon fontSize="inherit" />
                        </IconButton>
                      }
-                     sx={{ mb: 0.2 }}
                    >
-                   You have changed Pin successful
+                    {changePin.error}
                    </Alert>
                  </Collapse>
+                }               
               
           <Grid style={textStyle}>
             <Formik
@@ -177,6 +178,7 @@ const ChangePin = () => {
                     name="newPassword"
                     placeholder="Enter New PIN"
                     variant="standard"
+                    type="password"
                     fullWidth
                     required
                     helperText={<ErrorMessage name="newPassword" />}
@@ -186,6 +188,7 @@ const ChangePin = () => {
                     label="Confirm New PIN"
                     name="newPasswordConfirmation"
                     placeholder="Confirm New PIN"
+                    type="password"
                     variant="standard"
                     fullWidth
                     required

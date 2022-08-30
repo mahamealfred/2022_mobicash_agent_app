@@ -39,10 +39,12 @@ export const changePinAction = (user,username,history) => async (dispatch) => {
     const {data} = await res;
       if(res.data.code===200){
         dispatch(changePinSuccess(data));
+          localStorage.removeItem("mobicashAuth");
+           sessionStorage.removeItem("mobicash-auth")
           history.push('/',{push:true})
+          window.location.reload(true);
+
       }
-      
-    
       
    
   } catch (err) {

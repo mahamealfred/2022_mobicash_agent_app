@@ -25,6 +25,8 @@ import RnitDisplayDetails from "../pages/services/rnit/rnitDisplayDetails/RnitDi
 import Cashin from "../pages/services/client/cashin/Cashin"
 import ClientEnrollment from "../pages/clientenrollment/ClientEnrollment";
 import CashinDisplayDetails from "../pages/services/client/cashinDisplayDetails/CashinDisplayDetails"
+import Profile from "../pages/profile/Profile"
+
 function App() {
   const { path } = useRouteMatch();
   const decode=(token) => {
@@ -37,13 +39,14 @@ function App() {
   }
   const history= useHistory();
   useEffect(() => {
-   // window.addEventListener('beforeunload', handleCloseWindows);
+  //  window.addEventListener('beforeunload', handleCloseWindows);
     const token =sessionStorage.getItem('mobicash-auth');
     if (token) {
     const {exp}=decode(token);
     if(Date.now()>=exp*1000){
-      sessionStorage.removeItem("mobicash-auth")
       localStorage.removeItem("mobicashAuth")
+      sessionStorage.removeItem("mobicash-auth")
+    
      return history.push('/', { push: true })
     }
     else{
@@ -62,6 +65,17 @@ function App() {
             </>
           )}
         />
+         <Route
+        component={({ match }) => (
+          <>
+            <PrivateRoute
+              exact
+              path={`${path}/profile`}
+              component={Profile}
+            />
+          </>
+        )}
+      />
         <Route
           component={({ match }) => (
             <>

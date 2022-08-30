@@ -13,8 +13,9 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import HomeIcon from '@mui/icons-material/Home';
 import { useHistory,Link} from 'react-router-dom';
+import Profile from "../../pages/profile/Profile"
 import './header.css'
-const pages = ['Account','Profile','Services', 'Change PIN'];
+const pages = ['Profile','Services', 'Change PIN'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 const Header= () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -30,8 +31,8 @@ const Header= () => {
     setAnchorElNav(null);
   };
   const handleMenu=(event)=>{
-    if(event==="Account"){
-      history.push("/dashboard/account",{ push: true })
+    if(event==="Profile"){
+      history.push("/dashboard/profile",{ push: true })
     }
     // else if(event==="Client Enrollment"){
     
@@ -41,6 +42,7 @@ const Header= () => {
     
       history.push("/dashboard",{ push: true })
     }
+  
     else if(event==="Change PIN"){
     
       history.push("/dashboard/change-pin",{ push: true })
@@ -90,6 +92,7 @@ const Header= () => {
             </Link>
          
           </Typography>
+          {/* <Profile/> */}
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
             <IconButton
               size="large"
